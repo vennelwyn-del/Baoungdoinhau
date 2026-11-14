@@ -46,9 +46,12 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; user-select: none; }
     input, textarea { user-select: text; -webkit-user-select: text; }
     body, html { width: 100%; height: 100%; height: 100dvh; overflow: hidden; background-color: var(--c-darkest); color: var(--c-lightest); transition: background-color 0.5s, color 0.5s; }
-    ::-webkit-scrollbar { width: 5px; height: 5px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: rgba(79, 165, 216, 0.4); border-radius: 10px; }
+    
+    * { scrollbar-width: thin; scrollbar-color: rgba(79, 165, 216, 0.75) rgba(1, 13, 85, 0.35); }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(1, 13, 85, 0.3); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: rgba(79, 165, 216, 0.7); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(219, 235, 248, 0.9); }
 
     .water-bg-layer { position: fixed; inset: -15px; background-color: var(--c-dark); background-position: center center; background-size: cover; background-repeat: no-repeat; filter: saturate(1.1) contrast(1.15); z-index: 1; animation: waterUndulate 12s ease-in-out infinite alternate; pointer-events: none; transition: all 0.5s ease; }
     .light-mode .water-bg-layer { filter: saturate(1) contrast(1) brightness(1.1); opacity: 0.85; }
@@ -94,7 +97,7 @@
       position: fixed;
       inset: 0;
       z-index: 15;
-      overflow-y: auto;
+      overflow-y: scroll;
       overflow-x: hidden;
       -webkit-overflow-scrolling: touch;
     }
@@ -796,28 +799,28 @@
     /* ==========================================================================
        ✦ MODAL CREATORS SHOWCASE (NỀN BLOCK TRÙNG AVATAR CREATOR) ✦
        ========================================================================== */
-    .creators-modal-box {
+   .creators-modal-box {
       background: var(--ice-bg); border: 1px solid var(--glass-border); border-radius: 20px;
       padding: 25px; max-width: 1000px; width: 95vw; max-height: 90vh; max-height: 90dvh;
       position: relative; display: flex; flex-direction: column; overflow: hidden;
     }
     .creators-modal-header { text-align: center; margin-bottom: 20px; flex-shrink: 0; padding: 0 38px; position: relative; z-index: 2; }
     .creators-modal-title { font-family: var(--font-brand); color: var(--c-lightest); font-size: clamp(1.25rem, 4vw, 2rem); letter-spacing: 2px; }
-    .creators-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); gap: 20px; width: 100%; max-width: 1000px; flex: 1; min-height: 0; overflow-y: auto; padding: 6px; -webkit-overflow-scrolling: touch; position: relative; z-index: 2; }
-    .creator-card { position: relative; overflow: hidden; background: rgba(1, 3, 44, 0.6); border: 1px solid var(--glass-border); border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.3); display: flex; flex-direction: column; min-width: 0; color: #dbebf8; }
+    .creators-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); align-content: start; gap: 20px; width: 100%; max-width: 1000px; flex: 1; min-height: 0; overflow-y: auto; padding: 6px; -webkit-overflow-scrolling: touch; position: relative; z-index: 2; }
+    .creator-card { position: relative; overflow: hidden; background: rgba(1, 3, 44, 0.6); border: 1px solid var(--glass-border); border-radius: 12px; padding: 18px 16px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.3); display: flex; flex-direction: column; min-width: 0; min-height: max-content; color: #dbebf8; }
     .creator-card > *:not(.block-avatar-bg):not(.block-avatar-overlay) { position: relative; z-index: 2; }
-    .creator-banner { width: 100%; height: 160px; border-radius: 8px; margin-bottom: 15px; overflow: hidden; border: 1px solid rgba(219, 235, 248, 0.3); }
+    .creator-banner { width: 100%; height: 160px; flex-shrink: 0; border-radius: 8px; margin-bottom: 15px; overflow: hidden; border: 1px solid rgba(219, 235, 248, 0.3); }
     .creator-banner img { width: 100%; height: 100%; object-fit: cover; }
-    .c-name { font-family: var(--font-top-tag); font-size: clamp(1.2rem, 3vw, 1.5rem); font-weight: 600; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; overflow-wrap: break-word; color: #fff; }
-    .c-sign { font-family: var(--font-ui); font-size: 0.75rem; color: #4fa5d8; margin-bottom: 15px; letter-spacing: 1px;}
-    .c-quote { font-family: var(--font-quote); font-style: italic; font-size: 1.15rem; margin-bottom: 15px; opacity: 0.95;}
-    .c-bio { font-family: var(--font-char-text); font-size: 1rem; margin-bottom: 20px; opacity: 0.85; line-height: 1.4; flex-grow: 1; overflow-wrap: break-word;}
+    .c-name { font-family: var(--font-top-tag); font-size: clamp(1.15rem, 3vw, 1.45rem); font-weight: 600; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; overflow-wrap: break-word; color: #fff; flex-shrink: 0; }
+    .c-sign { font-family: var(--font-ui); font-size: 0.75rem; color: #4fa5d8; margin-bottom: 15px; letter-spacing: 1px; flex-shrink: 0; }
+    .c-quote { font-family: var(--font-quote); font-style: italic; font-size: 1.15rem; margin-bottom: 15px; opacity: 0.95; flex-shrink: 0; }
+    .c-bio { font-family: var(--font-char-text); font-size: 1rem; margin-bottom: 20px; opacity: 0.85; line-height: 1.4; flex-grow: 1; flex-shrink: 0; overflow-wrap: break-word; }
     
-    .creator-actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;}
+    .creator-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: nowrap; flex-shrink: 0; }
     .carrd-btn { 
-        padding: 8px 18px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.3); 
-        background: rgba(1, 3, 44, 0.35); font-family: var(--font-ui); font-size: 0.75rem; 
-        color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: 0.3s;
+        padding: 7px 11px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.3); 
+        background: rgba(1, 3, 44, 0.35); font-family: var(--font-ui); font-size: 0.72rem; 
+        color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: 0.3s; white-space: nowrap;
     }
     .carrd-btn:hover { background: rgba(255, 255, 255, 0.15); border-color: #fff; }
 
