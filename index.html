@@ -998,13 +998,37 @@
           overflow: visible;
         }
     }
-    
+
     .c-layout-name { font-family: var(--font-char-name); font-size: clamp(2rem, 6vw, 3.5rem); color: #ffffff; line-height: 1.15; letter-spacing: 1px; overflow-wrap: break-word; }
     .c-layout-creator { margin-top: 8px; font-family: var(--font-char-text); font-size: 1.15rem; color: #d4d7db; cursor: pointer; transition: 0.3s;}
     .c-layout-creator:hover { text-shadow: 0 0 10px rgba(255,255,255,0.7); }
     .c-layout-divider { font-size: 0.9rem; color: rgba(255,255,255,0.45); margin: 18px 0; letter-spacing: 4px;}
     .c-layout-img-wrapper { width: 100%; max-width: 280px; margin: 0 auto; position: relative; border-radius: 12px; overflow: hidden; box-shadow: 0 14px 32px rgba(0,0,0,0.45); border: 1px solid rgba(247, 247, 249, 0.25); }
     .c-layout-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; border-radius: 12px;}
+    .c-img-source-badge {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      z-index: 3;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(20, 23, 28, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      color: rgba(247, 247, 249, 0.88);
+      font-family: var(--font-ui);
+      font-size: 0.72rem;
+      font-weight: 500;
+      text-decoration: none;
+      letter-spacing: 0.4px;
+      transition: 0.25s ease;
+    }
+    .c-img-source-badge:hover {
+      background: rgba(20, 23, 28, 0.65);
+      border-color: rgba(255, 255, 255, 0.6);
+      color: #ffffff;
+    }
     .c-layout-quote { font-family: var(--font-quote); font-style: italic; font-size: 1.2rem; color: #ffffff; margin-top: 22px; line-height: 1.45; padding: 0 10px;}
 
     @media (max-width: 600px) {
@@ -1513,6 +1537,7 @@
   <div class="mention-popup" id="mentionPopup"></div>
   <!-- KHUNG CHỌN ICON BÌNH LUẬN -->
   <div class="icon-picker-popup" id="iconPickerPopup"></div>
+  <script src="./characters.js"></script>
   <script>
     /* ==========================================================================
        ✦ CẤU HÌNH DỮ LIỆU TÁCH BIỆT (BẢN V8) ✦
@@ -1525,10 +1550,10 @@
       
       /* 👉 MỤC 1: LINK ẢNH HỆ THỐNG - THAY LINK Ở ĐÂY NẾU MUỐN */
       ASSETS: {
-          bgImg: 'https://i.pinimg.com/736x/7a/27/05/7a270525bcfd0b74fdbb7875769b5e05.jpg',
-          cardImg: 'https://i.pinimg.com/736x/00/b2/20/00b2201947ffa671cd2d2696f9eed7b8.jpg',
-          musicMp3: 'https://i.pinimg.com/736x/e4/7b/04/e47b041ddd8290a85ca4048b3c19f18d.jpg',
-          flowerImg: 'https://media.discordapp.net/attachments/1557426047933218948/1571205828512456774/hat-giong-hoa-hong-trang-7-removebg-preview.png?ex=6af9e2f5&is=6af89175&hm=e3abf2faed9f93177be0b2af2f85c470d269a259ca1284d2ef5ef8958041216c&format=webp&quality=lossless'
+          bgImg: './assets/System/background.jpg',
+          cardImg: './assets/System/bgcenter.jpg',
+          musicMp3: './assets/System/radio.jpg',
+          flowerImg: './assets/System/flower.jpg',
       },
 
       /* 👉 MỤC 1B: DANH SÁCH SPOTIFY (CHỈ CẦN DÁN LINK open.spotify.com/track/... HOẶC playlist/... LÀ CHẠY)
@@ -1545,43 +1570,36 @@
 
       /* 👉 MỤC 2: TÀI KHOẢN ĐĂNG NHẬP (ĐÃ SET LẠI PASS MỚI) */
       loginAccs: {
-        "Rz": { pass: "040510", image: "https://media.discordapp.net/attachments/1255689844584087583/1571206192011812935/IMG_20261114_235216_940.png?ex=6af9e34b&is=6af891cb&hm=58c9d19423816d08baee82864762c7840db48cc0639ef49c43e8464a5d03b7e7&format=webp&quality=lossless" },
-        "SD": { pass: "242114", image: "https://media.discordapp.net/attachments/1557426047933218948/1571206616194355390/TA-2026-11-12-00-58-31-Masterpie-4052926891.png?ex=6af9e3b0&is=6af89230&hm=8abaab007c9f8cd7bec75cf54cb353917a955f403a87966cf8f382c21c470241&format=webp&quality=lossless" },
-        "ysz": { pass: "170726", image: "https://media.discordapp.net/attachments/1255689844584087583/1571206469473411173/413C0359-CD0B-4619-B9BC-D9F9A9376C87.png?ex=6af9e38d&is=6af8920d&hm=d2d976cc8e420457d9e61aac83a692182ae9573d8aa0047c88258164f49542d6&format=webp&quality=lossless&width=340&height=512" }
+        "Rz": { pass: "040510", image: "./assets/Avatars/rzavt.webp" },
+        "SD": { pass: "242114", image: "./assets/Avatars/sdavt.webp" },
+        "ysz": { pass: "170726", image: "./assets/Avatars/yszavt.jpg" }
       },
 
       /* 👉 MỤC 3: HỒ SƠ CREATORS (Hiển thị ở bảng "Creators of Báo Ứng") */
       creatorsShowcase: [
           {
-              id: "Rz", nameDisplay: "↤ ✢ Lavallee De Dahli ✢ ↦", sign: "rz ୨ৎ libra", quote: "“Người tạo tên, tên chỉ người”", 
+              id: "Rz", nameDisplay: "↤ ✢ Lavallee De Dahli ✢ ↦", sign: "rz ୨ৎ libra", quote: "“Người tạo tên, tên chỉ người”",
               bio: "Một ngày ngọt ngào, cảm ơn vì đã tới.<br><br>Mong rằng người đến trao cho tôi sự tôn trọng. Lời tạm biệt sẽ được gửi đến nếu tôi thấy bị kéo vào drama. Rz yêu hoà bình.",
-              banner: "https://media.discordapp.net/attachments/1255689844584087583/1571206192011812935/IMG_20261114_235216_940.png?ex=6af9e34b&is=6af891cb&hm=58c9d19423816d08baee82864762c7840db48cc0639ef49c43e8464a5d03b7e7&format=webp&quality=lossless",
-              buttons: [ { text: "♡ Gửi người thông tin", url: "https://rrraizze.carrd.co/ " }, { text: "Nguồn ảnh", url: "#" } ]
+              banner: "./assets/Avatars/rzavt.webp",
+              buttons: [ { text: "♡ Gửi người thông tin", url: "https://rrraizze.carrd.co/ " }, { text: "Nguồn ảnh", url: "https://tensor.art/images/1061750294905385616?post_id=1061750279872973120&source_id=mDS3pl7kl0Wzp_Iqb3zx-hInCCTc" } ]
           },
           {
               id: "SD", nameDisplay: "S.Dewitt", sign: "SD [☫] Aquarius ♒︎", quote: "“And if you gaze long enough into an abyss, the abyss will gaze back into you.”", 
               bio: "Đù má vợ yêu à, 😣 lần đầu tiên 👍🏻 lướt fb và thấy một nhan sắc 🌹 tuyệt trần 💔 như vậy. 😍.<br><br>Tôi đã yêu em 👩‍❤️‍💋‍👩, yêu ngay cái nhìn 👀 đầu tiên ✨, sự ngây thơ 👶🏻, hồn nhiên 😋 với trái tim 💖 ấm nồng 🔥 của em 😔 đã chinh phục 🎖️ tôi 🧏🏻‍♀️. Tôi yêu em.",
-              banner: "https://media.discordapp.net/attachments/1557426047933218948/1571206616194355390/TA-2026-11-12-00-58-31-Masterpie-4052926891.png?ex=6af9e3b0&is=6af89230&hm=8abaab007c9f8cd7bec75cf54cb353917a955f403a87966cf8f382c21c470241&format=webp&quality=lossless",
+              banner: "./assets/Avatars/sdavt.webp",
               buttons: [ { text: "♡ Bảo bối, quẹt thẻ đi", url: "https://sdpro5.carrd.co/" }, { text: "Nguồn ảnh", url: "https://tensor.art/images/1048077114047237707?post_id=1048077107604765617" } ]
           },
           {
               id: "ysz", nameDisplay: "( Yan Sizheng マ ꠹ ", sign: "ᥫ᭡.ִֶָ𓂃ysz | Sagitt", quote: "“Nguyện trao cho người tất thảy dịu dàng trên thế gian.”", 
               bio: "Em là Tư Tranh đây ạ (˶˃ ᵕ ˂˶) .ᐟ.ᐟ <br><br> Em tạo chatbot dựa trên cảm hứng là chính, không có lịch cố định và cũng chẳng có một gu cụ thể nào.<br><br>Em là một kẻ vụng về, đôi lúc nếu em trót thương người sai sách, xin người hãy nhẹ nhàng thì thầm với em nhé…",
-              banner: "https://media.discordapp.net/attachments/1569989641325650012/1570907595596632064/413C0359-CD0B-4619-B9BC-D9F9A9376C87.png?ex=6af975f4&is=6af82474&hm=e5a1c482b84527f55e373adc1dfe9914cad0db22e02a8a0d9369029c21c6f4c3&format=webp&quality=lossless&width=511&height=768",
+              banner: "./assets/Avatars/yszavt.jpg",
               buttons: [ { text: "♡ Ổ chăn của Tranh", url: "https://sizheng.carrd.co/" }, { text: "Nguồn ảnh", url: "https://tensor.art/images/983222390618100678?post_id=983222380954437435&source_id=mDS3plvglkOzrfEra3fw8hgkAiza" } ]
-          }
+          }  
       ],
       /* 👉 MỤC 4: NHÂN VẬT */
       allTags: ["#All-in-One", "#R18", "#Healing", "#Ngược", "#Cổ Trang", "#BL", "#GL", "#BG", "#Fantasy", "#Warning", "#Ngọt", "#Harem"],
 
-      characters: [
-        {
-          name: "The Showrunner", title: "The Rider xuất hiện. Hắn không giết người trong bóng tối; hắn biến tội ác thành một chương trình truyền hình nhiều tập. Bằng những cuộn băng từ VHS-C đen trắng tỉ lệ 4:3 và những cỗ máy hành quyết cơ học tinh vi, hắn gõ cửa từng nhà để tuyên án sự mục rỗng của thị trấn:", type: "Open World", creator: "Rz", tags: ["#Trinh thám", "#Neo-Noir", "#Analog Horror", "Tâm lý học tội phạm"], warning: "Chứa yếu tố giêt người, bạo lực, phản địa đàng.", lore: "Sứ giả mang tin dữ, sự chuyển động không ngừng trên sóng vô tuyến, kẻ gõ cửa định mệnh luôn đi trước cảnh sát một bước.", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=500&q=80", imgSource: "#", ggaiLink: "#"
-        },
-        {
-          name: "Nhất Xuyên", title: "Trường trung học Nhất Xuyên (St. Vanguard Academy - 圣先锋学院)", type: "Open World", creator: ["Rz", "ysz", "SD"], tags: ["#Open World", "#ABO", "#Học đường", "#Slice of life"], lore: "“Tiên phong về Trí tuệ, Pháo đài của Kỷ luật.”<br><br>(Vanguard of Intellect, Citadel of Discipline) — Khẩu hiệu khắc trên phiến đá cẩm thạch tại Cổng chính Học viện.", img: "https://media.discordapp.net/attachments/1569770503973896313/1569770504158453980/18289751-5b47-4f74-890e-caceac3c1a8b.png?ex=6af9f035&is=6af89eb5&hm=8dcb0bfd21b4c0a0b0c6e4f78575048742ee1fe81d549e50db2789b8fb85b51b&format=webp&quality=lossless", ggaiLink: "#"
-        }
-      ]
+      characters: window.CHAR_LIST || [],
     };
 
     // Khởi tạo & đồng bộ Avatar giữa loginAccs và creatorsShowcase
@@ -2272,6 +2290,7 @@
       const isSessionLiked = window.sessionLikes.has(safeId);
       const creatorDisp = Array.isArray(c.creator) ? c.creator.join(' × ') : c.creator;
       const creatorFirst = Array.isArray(c.creator) ? c.creator[0] : c.creator;
+      const imgSourceHref = (c.imgSource && c.imgSource !== '#') ? c.imgSource : c.img;
 
       let warningHtml = c.warning ? '<div><div class="c-section-title" style="color: #ff6b8b;">゛WARNING ˎˊ˗</div><div class="c-warning-content">↳ «' + c.warning + '»</div></div>' : "";
       let tagsHtml = (c.tags || []).map(t => '<span class="c-tag-item">' + t + '</span>').join('');
@@ -2298,6 +2317,7 @@
                 '<div class="c-layout-divider">- ˋˏ ༻ ❁ ༺ ˎˊ -</div>' +
                 '<div class="c-layout-img-wrapper">' +
                     '<img src="' + c.img + '" class="c-layout-img">' +
+                    '<a href="' + imgSourceHref + '" target="_blank" rel="noopener noreferrer" class="c-img-source-badge">Nguồn hàng ♐︎</a>' +
                 '</div>' +
                 '<div class="c-layout-quote">' + c.title + '</div>' +
             '</div>' +
