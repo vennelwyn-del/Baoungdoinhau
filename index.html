@@ -63,31 +63,31 @@
     /* ==========================================================================
        ✦ LỚP NỀN MỜ TRÙNG AVATAR CHO CÁC BLOCK ✦
        ========================================================================== */
-    .block-avatar-bg {
+.block-avatar-bg {
       position: absolute;
       inset: 0;
       z-index: 0;
       background-size: cover;
       background-position: center;
-      filter: blur(24px) saturate(1.2) brightness(0.45);
-      transform: scale(1.16);
+      filter: blur(26px) saturate(1.75) brightness(0.85);
+      transform: scale(1.18);
       pointer-events: none;
-      transition: background-image 0.4s ease;
+      transition: background-image 0.45s ease;
     }
     .block-avatar-overlay {
       position: absolute;
       inset: 0;
       z-index: 1;
-      background: linear-gradient(155deg, rgba(1, 13, 85, 0.72) 0%, rgba(2, 8, 30, 0.86) 100%);
+      background: linear-gradient(155deg, rgba(2, 8, 30, 0.36) 0%, rgba(2, 8, 30, 0.62) 100%);
       pointer-events: none;
     }
     body.light-mode .ui-modal-box .block-avatar-bg,
     body.light-mode .sp-modal-box .block-avatar-bg {
-      filter: blur(26px) saturate(1.1) brightness(0.95);
+      filter: blur(28px) saturate(1.6) brightness(1.05);
     }
     body.light-mode .ui-modal-box .block-avatar-overlay,
     body.light-mode .sp-modal-box .block-avatar-overlay {
-      background: linear-gradient(155deg, rgba(240, 248, 255, 0.78) 0%, rgba(225, 245, 254, 0.9) 100%);
+      background: linear-gradient(155deg, rgba(240, 248, 255, 0.42) 0%, rgba(225, 245, 254, 0.66) 100%);
     }
 
     /* ==========================================================================
@@ -755,6 +755,7 @@
     .char-tags-mini span { font-family: var(--font-ui); font-size: 0.6rem; background: rgba(1, 3, 44, 0.4); padding: 3px 6px; border-radius: 8px; border: 1px solid var(--glass-border); }
     
     @media (max-width: 600px) {
+      .creator-actions { flex-wrap: wrap; }
       .character-grid { grid-template-columns: 1fr; gap: 12px; }
       .char-card { flex-direction: row; gap: 14px; padding: 12px; align-items: center; }
       .char-img-box { width: 85px; height: 110px; margin-bottom: 0; flex-shrink: 0; }
@@ -1329,10 +1330,10 @@
       
       /* 👉 MỤC 1: LINK ẢNH HỆ THỐNG - THAY LINK Ở ĐÂY NẾU MUỐN */
       ASSETS: {
-          bgImg: 'https://images.unsplash.com/photo-1518837695005-2083093ee35b?q=80&w=1920&auto=format&fit=crop',
-          cardImg: 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=500&auto=format&fit=crop',
-          musicMp3: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3',
-          flowerImg: '' // Để trống sẽ vẽ hoa, thêm link ảnh .png sẽ rơi ảnh.
+          bgImg: 'https://i.pinimg.com/736x/7a/27/05/7a270525bcfd0b74fdbb7875769b5e05.jpg',
+          cardImg: 'https://i.pinimg.com/736x/00/b2/20/00b2201947ffa671cd2d2696f9eed7b8.jpg',
+          musicMp3: 'https://i.pinimg.com/736x/e4/7b/04/e47b041ddd8290a85ca4048b3c19f18d.jpg',
+          flowerImg: 'https://media.discordapp.net/attachments/1557426047933218948/1571205828512456774/hat-giong-hoa-hong-trang-7-removebg-preview.png?ex=6af9e2f5&is=6af89175&hm=e3abf2faed9f93177be0b2af2f85c470d269a259ca1284d2ef5ef8958041216c&format=webp&quality=lossless'
       },
 
       /* 👉 MỤC 1B: DANH SÁCH SPOTIFY (CHỈ CẦN DÁN LINK open.spotify.com/track/... HOẶC playlist/... LÀ CHẠY)
@@ -1349,9 +1350,9 @@
 
       /* 👉 MỤC 2: TÀI KHOẢN ĐĂNG NHẬP (ĐÃ SET LẠI PASS MỚI) */
       loginAccs: {
-        "Rz": { pass: "040510", image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200" },
-        "SD": { pass: "242114", image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=200" },
-        "ysz": { pass: "170726", image: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=200" }
+        "Rz": { pass: "040510", image: "https://media.discordapp.net/attachments/1255689844584087583/1571206192011812935/IMG_20261114_235216_940.png?ex=6af9e34b&is=6af891cb&hm=58c9d19423816d08baee82864762c7840db48cc0639ef49c43e8464a5d03b7e7&format=webp&quality=lossless" },
+        "SD": { pass: "242114", image: "https://media.discordapp.net/attachments/1557426047933218948/1571206616194355390/TA-2026-11-12-00-58-31-Masterpie-4052926891.png?ex=6af9e3b0&is=6af89230&hm=8abaab007c9f8cd7bec75cf54cb353917a955f403a87966cf8f382c21c470241&format=webp&quality=lossless" },
+        "ysz": { pass: "170726", image: "https://media.discordapp.net/attachments/1255689844584087583/1571206469473411173/413C0359-CD0B-4619-B9BC-D9F9A9376C87.png?ex=6af9e38d&is=6af8920d&hm=d2d976cc8e420457d9e61aac83a692182ae9573d8aa0047c88258164f49542d6&format=webp&quality=lossless&width=340&height=512" }
       },
 
       /* 👉 MỤC 3: HỒ SƠ CREATORS (Hiển thị ở bảng "Creators of Báo Ứng") */
@@ -1363,13 +1364,13 @@
               buttons: [ { text: "♡ Gửi người thông tin", url: "https://rrraizze.carrd.co/ " }, { text: "Nguồn ảnh", url: "#" } ]
           },
           {
-              id: "SD", nameDisplay: "↤ ✢ THƯƠNG LAN ✢ ↦", sign: "✦ SCORPIO • THIÊN YẾT", quote: "“Khối băng ngàn năm cũng có ngày tan vì một lời thề.”", 
+              id: "SD", nameDisplay: "Báo ứng from Trình Family", sign: "✃᭙𞋎᭙ Aquarius ♒︎", quote: "“And if you gaze long enough into an abyss, the abyss will gaze back into you.”", 
               bio: "Chấp bút những khúc ca bi tráng và những cuộc tương phùng báo ứng, khắc sâu dấu vết của thời gian lên từng tạo tác.",
-              banner: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800",
-              buttons: [ { text: "♡ CARRD", url: "#" } ]
+              banner: "https://media.discordapp.net/attachments/1557426047933218948/1571206616194355390/TA-2026-11-12-00-58-31-Masterpie-4052926891.png?ex=6af9e3b0&is=6af89230&hm=8abaab007c9f8cd7bec75cf54cb353917a955f403a87966cf8f382c21c470241&format=webp&quality=lossless",
+              buttons: [ { text: "♡ Bảo bối, quẹt thẻ đibgImg:", url: "https://sdpro5.carrd.co/" } ]
           },
           {
-              id: "ysz", nameDisplay: "Yan Sizheng マ", sign: "ᥫ᭡.ִֶָ𓂃ysz | Sagitt", quote: "“Ngọn đèn trong đêm bão chưa từng vì ai mà tắt lịm。”", 
+              id: "ysz", nameDisplay: "( Yan Sizheng マ ꠹ ", sign: "ᥫ᭡.ִֶָ𓂃ysz | Sagitt", quote: "““Nguyện trao cho người tất thảy dịu dàng trên thế gian.””", 
               bio: "Em là Tư Tranh đây ạ (˶˃ ᵕ ˂˶) .ᐟ.ᐟ Em xin phép bỏ túi vài giây của người nhé.<br><br>Chatbot của em rất thập cẩm, trải dài (cũng không dài lắm) từ Open World đến Character. Em tạo chatbot dựa trên cảm hứng là chính, không có lịch cố định và cũng chẳng có một gu cụ thể nào.<br><br>Em là một kẻ vụng về, đôi lúc nếu em trót thương người sai sách, xin người hãy nhẹ nhàng thì thầm với em nhé…",
               banner: "https://media.discordapp.net/attachments/1569989641325650012/1570907595596632064/413C0359-CD0B-4619-B9BC-D9F9A9376C87.png?ex=6af975f4&is=6af82474&hm=e5a1c482b84527f55e373adc1dfe9914cad0db22e02a8a0d9369029c21c6f4c3&format=webp&quality=lossless&width=511&height=768",
               buttons: [ { text: "♡ Ổ chăn của Tranh", url: "https://sizheng.carrd.co/" }, { text: "Nguồn ảnh", url: "https://tensor.art/images/983222390618100678?post_id=983222380954437435&source_id=mDS3plvglkOzrfEra3fw8hgkAiza" } ]
@@ -1389,8 +1390,20 @@
       ]
     };
 
-    // Khởi tạo DB Version 8 (Fix lỗi xung đột comment)
+    // Khởi tạo & đồng bộ Avatar giữa loginAccs và creatorsShowcase
     if(!localStorage.getItem('sysDB_Login_v8')) localStorage.setItem('sysDB_Login_v8', JSON.stringify(MY_CONFIG.loginAccs));
+    let dbLoginInit = JSON.parse(localStorage.getItem('sysDB_Login_v8'));
+    Object.keys(MY_CONFIG.loginAccs).forEach(id => {
+      const creatorMatch = MY_CONFIG.creatorsShowcase.find(c => c.id === id);
+      const codeImg = creatorMatch ? creatorMatch.banner : MY_CONFIG.loginAccs[id].image;
+      if (!dbLoginInit[id]) {
+        dbLoginInit[id] = { pass: MY_CONFIG.loginAccs[id].pass, image: codeImg };
+      } else if (!dbLoginInit[id]._isCustom) {
+        dbLoginInit[id].image = codeImg;
+        dbLoginInit[id].pass = MY_CONFIG.loginAccs[id].pass;
+      }
+    });
+    localStorage.setItem('sysDB_Login_v8', JSON.stringify(dbLoginInit));
     if(!localStorage.getItem('sysDB_Notifs_v8')) localStorage.setItem('sysDB_Notifs_v8', JSON.stringify({"Rz":[], "SD":[], "ysz":[]}));
     
     let dbLogin = JSON.parse(localStorage.getItem('sysDB_Login_v8'));
@@ -1438,28 +1451,32 @@
     /* ==========================================================================
        ✦ RENDER BẢNG CREATORS (NỀN BLOCK TRÙNG AVATAR CREATOR) ✦
        ========================================================================== */
-    const creatorsGrid = document.getElementById('creatorsGrid');
+ const creatorsGrid = document.getElementById('creatorsGrid');
     const creatorFilterGroup = document.getElementById('creatorFilter');
-    creatorFilterGroup.innerHTML = `<button class="toggle-btn active" data-val="All"> Full báo ứng </button>`;
 
-    MY_CONFIG.creatorsShowcase.forEach(c => {
-      let buttonsHtml = c.buttons.map(btn => `<a href="${btn.url}" class="carrd-btn">${btn.text}</a>`).join('');
-      creatorsGrid.innerHTML += `
-        <div class="creator-card">
-          <div class="block-avatar-bg" style="background-image: url('${c.banner}');"></div>
-          <div class="block-avatar-overlay"></div>
-          <div class="creator-banner"><img src="${c.banner}"></div>
-          <h3 class="c-name">${c.nameDisplay}</h3>
-          <div class="c-sign">${c.sign}</div>
-          <div class="c-quote">${c.quote}</div>
-          <p class="c-bio">${c.bio}</p>
-          <div class="creator-actions">${buttonsHtml}</div>
-        </div>
-      `;
-      creatorFilterGroup.innerHTML += `<button class="toggle-btn" data-val="${c.id}">${c.id}</button>`;
-    });
-
-    document.getElementById('btnOpenCreators').addEventListener('click', () => document.getElementById('creatorsOverlay').classList.add('active'));
+    function renderCreators() {
+      creatorsGrid.innerHTML = '';
+      creatorFilterGroup.innerHTML = `<button class="toggle-btn active" data-val="All"> Full báo ứng </button>`;
+      MY_CONFIG.creatorsShowcase.forEach(c => {
+        const avatarImg = (dbLogin[c.id] && dbLogin[c.id].image) ? dbLogin[c.id].image : c.banner;
+        let buttonsHtml = c.buttons.map(btn => `<a href="${btn.url}" class="carrd-btn">${btn.text}</a>`).join('');
+        creatorsGrid.innerHTML += `
+          <div class="creator-card">
+            <div class="block-avatar-bg" style="background-image: url('${avatarImg}');"></div>
+            <div class="block-avatar-overlay"></div>
+            <div class="creator-banner"><img src="${avatarImg}"></div>
+            <h3 class="c-name">${c.nameDisplay}</h3>
+            <div class="c-sign">${c.sign}</div>
+            <div class="c-quote">${c.quote}</div>
+            <p class="c-bio">${c.bio}</p>
+            <div class="creator-actions">${buttonsHtml}</div>
+          </div>
+        `;
+        creatorFilterGroup.innerHTML += `<button class="toggle-btn" data-val="${c.id}">${c.id}</button>`;
+      });
+      if (typeof setupFilter === 'function') setupFilter('creatorFilter', 'creator');
+    }
+    renderCreators();
 
     /* ==========================================================================
        ✦ LỌC & RENDER NHÂN VẬT ✦
@@ -1549,20 +1566,37 @@
             authBtnText.textContent = "Login";
             authMiniAvatar.style.display = 'none';
             loginIcon.style.display = 'inline-block';
-            btnLogin.onclick = () => document.getElementById('sysLoginSelect').classList.add('active');
+btnLogin.onclick = () => { renderAuthGrid(); document.getElementById('sysLoginSelect').classList.add('active'); }
         }
     }
 
-    const authGridList = document.getElementById('authGridList');
-    Object.keys(dbLogin).forEach(id => {
+  const authGridList = document.getElementById('authGridList');
+    const loginSelectBg = document.getElementById('loginSelectBg');
+
+    window.previewLoginBg = function(id) {
+      if (loginSelectBg && dbLogin[id]) {
+        loginSelectBg.style.backgroundImage = `url('${dbLogin[id].image}')`;
+      }
+    };
+
+    function renderAuthGrid() {
+      authGridList.innerHTML = '';
+      const ids = Object.keys(dbLogin);
+      if (ids.length > 0) {
+        const defaultId = (sysCurrentUser && dbLogin[sysCurrentUser]) ? sysCurrentUser : ids[0];
+        previewLoginBg(defaultId);
+      }
+      ids.forEach(id => {
         let c = dbLogin[id];
         authGridList.innerHTML += `
-            <div class="auth-item" onclick="promptLogin('${id}')">
-                <img src="${c.image}" class="auth-img">
-                <div class="auth-name">${id}</div>
-            </div>
+          <div class="auth-item" onmouseenter="previewLoginBg('${id}')" ontouchstart="previewLoginBg('${id}')" onclick="promptLogin('${id}')">
+            <img src="${c.image}" class="auth-img">
+            <div class="auth-name">${id}</div>
+          </div>
         `;
-    });
+      });
+    }
+    renderAuthGrid();
 
     window.promptLogin = function(id) {
         document.getElementById('sysLoginSelect').classList.remove('active');
@@ -1622,15 +1656,18 @@
         }
     }
 
-    window.sysSaveProfile = function() {
+  window.sysSaveProfile = function() {
         let c = dbLogin[sysCurrentUser];
         c.image = document.getElementById('setImage').value || c.image;
+        c._isCustom = true;
         let newPass = document.getElementById('setPass').value;
         if(newPass.trim() !== "") c.pass = newPass;
 
         localStorage.setItem('sysDB_Login_v8', JSON.stringify(dbLogin));
         document.getElementById('dashBgImg').style.backgroundImage = `url('${c.image}')`;
         document.getElementById('dashAvt').src = c.image;
+        renderCreators();
+        renderAuthGrid();
         alert("Đã cập nhật Avatar cá nhân thành công!");
         sysUpdateLoginUI();
     }
