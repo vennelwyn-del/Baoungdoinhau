@@ -1098,6 +1098,54 @@
       .dash-tab { padding: 6px 12px; font-size: 0.8rem; }
     }
   </style>
+  /* ==========================================================================
+       ✦ KHUNG ĐỀ XUẤT @TAG CREATOR KHI BÌNH LUẬN ✦
+       ========================================================================== */
+    .mention-popup {
+      position: fixed;
+      z-index: 350;
+      min-width: 220px;
+      max-width: min(300px, 90vw);
+      max-height: 210px;
+      overflow-y: auto;
+      background: rgba(24, 27, 33, 0.96);
+      border: 1px solid rgba(212, 215, 219, 0.38);
+      border-radius: 12px;
+      padding: 6px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .mention-popup.open { display: flex; }
+    .mention-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #f7f7f9;
+      font-family: var(--font-ui);
+      transition: background 0.15s;
+    }
+    .mention-item:hover,
+    .mention-item.active {
+      background: rgba(212, 215, 219, 0.2);
+    }
+    .mention-avt {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      flex-shrink: 0;
+    }
+    .mention-info { min-width: 0; flex: 1; }
+    .mention-id { font-size: 0.85rem; font-weight: 600; color: #ffffff; }
+    .mention-sub { font-size: 0.72rem; color: #d4d7db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 </head>
 <body>
 
@@ -1400,6 +1448,8 @@
         </div>
     </div>
   </div>
+  <!-- KHUNG GỢI Ý @TAG CREATOR -->
+  <div class="mention-popup" id="mentionPopup"></div>
   <script>
     /* ==========================================================================
        ✦ CẤU HÌNH DỮ LIỆU TÁCH BIỆT (BẢN V8) ✦
@@ -1916,7 +1966,7 @@ function updateTopNotifBadge() {
         }
     }
 
-    window.addTreeComment = async function(safeId, charCreatorName, charRealName, parentId = null) {
+    window.addTreeComment = function(safeId, charCreatorName, charRealName, parentId = null) {
         const randNum = Math.floor(1000 + Math.random() * 9000);
         let name = `Ẩn danh (${randNum})`;
         let avatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
@@ -1935,20 +1985,10 @@ function updateTopNotifBadge() {
             if(nVal) name = nVal;
         }
 
+        let newCmt = { id: Date.now().toString() + '_' + randNum, name, avatar, isCreator, text, date: new Date().toLocaleString('vi-VN'), likes: 0, replies: [] };
+
+        // 1. Hiện ngay lập tức lên màn hình cho mượt
         let cmts = getCmtsTree(safeId);
-        const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
-        if (fb) {
-            try {
-                const res = await fetch(`${fb}/comments/${safeId}.json`);
-                if (res.ok) {
-                    const remoteData = await res.json();
-                    if (remoteData) cmts = normalizeCmtList(remoteData);
-                }
-            } catch (e) {}
-        }
-
-        let newCmt = { id: Date.now().toString(), name, avatar, isCreator, text, date: new Date().toLocaleString('vi-VN'), likes: 0, replies: [] };
-
         if(parentId) {
             let parent = cmts.find(c => c.id === parentId);
             if(parent) {
@@ -1958,10 +1998,34 @@ function updateTopNotifBadge() {
         } else {
             cmts.push(newCmt);
         }
-        
-        saveCmtsTree(safeId, cmts);
+        localStorage.setItem('sysTreeCmt_v8_' + safeId, JSON.stringify(normalizeCmtList(cmts)));
         if (textEl) textEl.value = '';
-        
+        sysRenderCommentsUI(safeId, charCreatorName, charRealName);
+
+        // 2. Đồng bộ ngầm lên Firebase (gộp với comment của người khác nếu có)
+        const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
+        if (fb) {
+            fetch(`${fb}/comments/${safeId}.json`)
+                .then(r => r.ok ? r.json() : null)
+                .then(remoteData => {
+                    let merged = remoteData ? normalizeCmtList(remoteData) : [];
+                    if (parentId) {
+                        let p = merged.find(c => c.id === parentId);
+                        if (p) {
+                            if (!p.replies.some(r => r.id === newCmt.id)) p.replies.push(newCmt);
+                        } else {
+                            merged = cmts;
+                        }
+                    } else {
+                        if (!merged.some(c => c.id === newCmt.id)) merged.push(newCmt);
+                    }
+                    saveCmtsTree(safeId, merged);
+                    sysRenderCommentsUI(safeId, charCreatorName, charRealName);
+                })
+                .catch(() => { saveCmtsTree(safeId, cmts); });
+        }
+
+        // 3. Gửi thông báo cho các tác giả & người được @tag
         String(charCreatorName || '').split(',').map(s => s.trim()).filter(Boolean).forEach(targetId => {
             if (sysCurrentUser !== targetId) {
                 sendNotif(targetId, `<b>${name}</b> vừa gửi lời nhắn vào <b>${charRealName}</b>`, charRealName);
@@ -1972,6 +2036,7 @@ function updateTopNotifBadge() {
                 sendNotif(accID, `<b>${name}</b> đã nhắc tới bạn trong hồ sơ <b>${charRealName}</b>`, charRealName);
             }
         });
+    }
 
         sysRenderCommentsUI(safeId, charCreatorName, charRealName);
     }
@@ -2635,6 +2700,144 @@ function updateTopNotifBadge() {
     });
 
     updatePlayerUI();
+     /* ==========================================================================
+       ✦ GỢI Ý @TAG CREATOR KHI GÕ @ TRONG COMMENT ✦
+       ========================================================================== */
+    const mentionPopup = document.getElementById('mentionPopup');
+    let activeMentionInput = null;
+    let mentionMatches = [];
+    let mentionActiveIdx = 0;
+    let mentionStartPos = -1;
+    function closeMentionPopup() {
+      mentionPopup.classList.remove('open');
+      mentionPopup.innerHTML = '';
+      activeMentionInput = null;
+      mentionMatches = [];
+      mentionStartPos = -1;
+    }
+
+    function positionMentionPopup(textarea) {
+      const rect = textarea.getBoundingClientRect();
+      const width = Math.min(300, Math.max(220, rect.width));
+      const left = Math.max(10, Math.min(rect.left, window.innerWidth - width - 10));
+      mentionPopup.style.width = width + 'px';
+      mentionPopup.style.left = left + 'px';
+
+      if (rect.top > 185) {
+        mentionPopup.style.top = 'auto';
+        mentionPopup.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
+      } else {
+        mentionPopup.style.bottom = 'auto';
+        mentionPopup.style.top = (rect.bottom + 6) + 'px';
+      }
+    }
+
+    function insertMention(accId) {
+      if (!activeMentionInput || mentionStartPos < 0) return;
+      const val = activeMentionInput.value;
+      const cursor = activeMentionInput.selectionStart;
+      const before = val.slice(0, mentionStartPos);
+      const after = val.slice(cursor);
+      const inserted = `@${accId} `;
+      activeMentionInput.value = before + inserted + after;
+      const newPos = before.length + inserted.length;
+      activeMentionInput.focus();
+      activeMentionInput.setSelectionRange(newPos, newPos);
+      closeMentionPopup();
+    }
+
+    function renderMentionPopup() {
+      if (!mentionMatches.length || !activeMentionInput) {
+        closeMentionPopup();
+        return;
+      }
+      mentionPopup.innerHTML = mentionMatches.map((m, idx) => `
+        <div class="mention-item ${idx === mentionActiveIdx ? 'active' : ''}" data-id="${m.id}">
+          <img src="${m.image}" class="mention-avt">
+          <div class="mention-info">
+            <div class="mention-id">@${m.id}</div>
+            <div class="mention-sub">${m.displayName}</div>
+          </div>
+        </div>
+      `).join('');
+
+      mentionPopup.querySelectorAll('.mention-item').forEach(el => {
+        el.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          insertMention(el.getAttribute('data-id'));
+        });
+      });
+
+      positionMentionPopup(activeMentionInput);
+      mentionPopup.classList.add('open');
+    }
+
+    function checkMentionTrigger(textarea) {
+      const cursor = textarea.selectionStart;
+      const textBefore = textarea.value.slice(0, cursor);
+      const match = textBefore.match(/(^|\s)@([^\s@]*)$/);
+      if (!match) {
+        closeMentionPopup();
+        return;
+      }
+      const query = match[2].toLowerCase();
+      mentionStartPos = cursor - match[2].length - 1;
+      activeMentionInput = textarea;
+
+      const list = Object.keys(dbLogin).map(id => {
+        const cInfo = (MY_CONFIG.creatorsShowcase || []).find(c => c.id === id);
+        return {
+          id,
+          image: dbLogin[id].image,
+          displayName: cInfo ? cInfo.nameDisplay : id
+        };
+      });
+
+      mentionMatches = list.filter(m =>
+        m.id.toLowerCase().includes(query) || m.displayName.toLowerCase().includes(query)
+      );
+      mentionActiveIdx = 0;
+      renderMentionPopup();
+    }
+
+    document.addEventListener('input', (e) => {
+      if (e.target && e.target.classList && e.target.classList.contains('cmt-textarea')) {
+        checkMentionTrigger(e.target);
+      }
+    });
+
+    document.addEventListener('click', (e) => {
+      if (e.target && e.target.classList && e.target.classList.contains('cmt-textarea')) {
+        checkMentionTrigger(e.target);
+      } else if (!e.target.closest('#mentionPopup')) {
+        closeMentionPopup();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!mentionPopup.classList.contains('open') || !activeMentionInput) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        mentionActiveIdx = (mentionActiveIdx + 1) % mentionMatches.length;
+        renderMentionPopup();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        mentionActiveIdx = (mentionActiveIdx - 1 + mentionMatches.length) % mentionMatches.length;
+        renderMentionPopup();
+      } else if (e.key === 'Enter' || e.key === 'Tab') {
+        e.preventDefault();
+        insertMention(mentionMatches[mentionActiveIdx].id);
+      } else if (e.key === 'Escape') {
+        closeMentionPopup();
+      }
+    });
+
+    document.addEventListener('scroll', (e) => {
+      if (e.target !== mentionPopup && mentionPopup.classList.contains('open')) {
+        closeMentionPopup();
+      }
+    }, true);
   </script>
 </body>
 </html>
