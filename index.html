@@ -998,7 +998,6 @@
           overflow: visible;
         }
     }
-
     .c-layout-name { font-family: var(--font-char-name); font-size: clamp(2rem, 6vw, 3.5rem); color: #ffffff; line-height: 1.15; letter-spacing: 1px; overflow-wrap: break-word; }
     .c-layout-creator { margin-top: 8px; font-family: var(--font-char-text); font-size: 1.15rem; color: #d4d7db; cursor: pointer; transition: 0.3s;}
     .c-layout-creator:hover { text-shadow: 0 0 10px rgba(255,255,255,0.7); }
@@ -1007,26 +1006,26 @@
     .c-layout-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; border-radius: 12px;}
     .c-img-source-badge {
       position: absolute;
-      bottom: 10px;
-      right: 10px;
+      left: 0;
+      right: 0;
+      bottom: 0;
       z-index: 3;
-      padding: 5px 12px;
-      border-radius: 999px;
-      background: rgba(20, 23, 28, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      color: rgba(247, 247, 249, 0.88);
+      padding: 4px 10px;
+      text-align: center;
+      background: rgba(20, 23, 28, 0.22);
+      border-top: 1px solid rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      color: rgba(247, 247, 249, 0.82);
       font-family: var(--font-ui);
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       font-weight: 500;
       text-decoration: none;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.5px;
       transition: 0.25s ease;
     }
     .c-img-source-badge:hover {
-      background: rgba(20, 23, 28, 0.65);
-      border-color: rgba(255, 255, 255, 0.6);
+      background: rgba(20, 23, 28, 0.62);
       color: #ffffff;
     }
     .c-layout-quote { font-family: var(--font-quote); font-style: italic; font-size: 1.2rem; color: #ffffff; margin-top: 22px; line-height: 1.45; padding: 0 10px;}
