@@ -800,36 +800,83 @@
     /* ==========================================================================
        ✦ MODAL CREATORS SHOWCASE (NỀN BLOCK TRÙNG AVATAR CREATOR) ✦
        ========================================================================== */
-   .creators-modal-box {
+ .creators-modal-box {
       background: var(--ice-bg); border: 1px solid var(--glass-border); border-radius: 20px;
-      padding: 25px; max-width: 1000px; width: 95vw; max-height: 90vh; max-height: 90dvh;
+      padding: 22px; max-width: 1000px; width: 95vw; max-height: 88vh; max-height: 88dvh;
       position: relative; display: flex; flex-direction: column; overflow: hidden;
     }
-    .creators-modal-header { text-align: center; margin-bottom: 20px; flex-shrink: 0; padding: 0 38px; position: relative; z-index: 2; }
-    .creators-modal-title { font-family: var(--font-brand); color: var(--c-lightest); font-size: clamp(1.25rem, 4vw, 2rem); letter-spacing: 2px; }
-    .creators-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr)); align-content: start; gap: 20px; width: 100%; max-width: 1000px; flex: 1; min-height: 0; overflow-y: auto; padding: 6px; -webkit-overflow-scrolling: touch; position: relative; z-index: 2; }
-    .creator-card { position: relative; overflow: hidden; background: rgba(1, 3, 44, 0.6); border: 1px solid var(--glass-border); border-radius: 12px; padding: 18px 16px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.3); display: flex; flex-direction: column; min-width: 0; min-height: max-content; color: #dbebf8; }
+    .creators-modal-header { text-align: center; margin-bottom: 16px; flex-shrink: 0; padding: 0 38px; position: relative; z-index: 2; }
+    .creators-modal-title { font-family: var(--font-brand); color: var(--c-lightest); font-size: clamp(1.2rem, 4vw, 1.9rem); letter-spacing: 2px; }
+
+    .creators-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: stretch;
+      align-content: start;
+      gap: 18px;
+      width: 100%;
+      flex: 1;
+      min-height: 0;
+      overflow-y: scroll;
+      overflow-x: hidden;
+      padding: 4px 6px 10px 4px;
+      -webkit-overflow-scrolling: touch;
+      position: relative;
+      z-index: 2;
+    }
+
+    .creator-card {
+      position: relative;
+      overflow: hidden;
+      background: rgba(1, 3, 44, 0.6);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 16px 14px;
+      text-align: center;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      height: auto;
+      color: #dbebf8;
+    }
     .creator-card > *:not(.block-avatar-bg):not(.block-avatar-overlay) { position: relative; z-index: 2; }
-    .creator-banner { width: 100%; height: 160px; flex-shrink: 0; border-radius: 8px; margin-bottom: 15px; overflow: hidden; border: 1px solid rgba(219, 235, 248, 0.3); }
-    .creator-banner img { width: 100%; height: 100%; object-fit: cover; }
-    .c-name { font-family: var(--font-top-tag); font-size: clamp(1.15rem, 3vw, 1.45rem); font-weight: 600; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; overflow-wrap: break-word; color: #fff; flex-shrink: 0; }
-    .c-sign { font-family: var(--font-ui); font-size: 0.75rem; color: #4fa5d8; margin-bottom: 15px; letter-spacing: 1px; flex-shrink: 0; }
-    .c-quote { font-family: var(--font-quote); font-style: italic; font-size: 1.15rem; margin-bottom: 15px; opacity: 0.95; flex-shrink: 0; }
-    .c-bio { font-family: var(--font-char-text); font-size: 1rem; margin-bottom: 20px; opacity: 0.85; line-height: 1.4; flex-grow: 1; flex-shrink: 0; overflow-wrap: break-word; }
+    .creator-banner { width: 100%; height: 150px; flex-shrink: 0; border-radius: 8px; margin-bottom: 12px; overflow: hidden; border: 1px solid rgba(219, 235, 248, 0.3); }
+    .creator-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .c-name { font-family: var(--font-top-tag); font-size: clamp(1.05rem, 2.5vw, 1.35rem); font-weight: 600; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; overflow-wrap: break-word; color: #fff; flex-shrink: 0; }
+    .c-sign { font-family: var(--font-ui); font-size: 0.72rem; color: #4fa5d8; margin-bottom: 10px; letter-spacing: 1px; flex-shrink: 0; }
+    .c-quote { font-family: var(--font-quote); font-style: italic; font-size: 1.05rem; margin-bottom: 10px; opacity: 0.95; flex-shrink: 0; }
+    .c-bio { font-family: var(--font-char-text); font-size: 0.95rem; margin-bottom: 16px; opacity: 0.85; line-height: 1.4; flex-grow: 1; flex-shrink: 0; overflow-wrap: break-word; }
     
     .creator-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: nowrap; flex-shrink: 0; }
     .carrd-btn { 
         padding: 7px 11px; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.3); 
         background: rgba(1, 3, 44, 0.35); font-family: var(--font-ui); font-size: 0.72rem; 
-        color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: 0.3s; white-space: nowrap;
+        color: #fff; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 5px; transition: 0.3s; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis;
     }
     .carrd-btn:hover { background: rgba(255, 255, 255, 0.15); border-color: #fff; }
 
-    @media (max-width: 600px) {
-      .creators-modal-box { padding: 18px 14px; width: 95vw; }
-      .creators-modal-header { margin-bottom: 12px; }
-      .creators-grid { gap: 14px; padding: 2px; }
-      .creator-card { padding: 16px; }
+    @media (max-width: 849px) {
+      .creators-modal-box { padding: 14px 10px; width: 94vw; height: 84dvh; max-height: 84dvh; }
+      .creators-modal-header { margin-bottom: 10px; }
+      .creators-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 2px 6px 10px 2px;
+      }
+      .creator-card {
+        flex: 0 0 auto;
+        width: 100%;
+        padding: 13px 12px;
+      }
+      .creator-banner { height: 112px; margin-bottom: 10px; }
+      .c-name { font-size: 1.05rem; }
+      .c-sign { font-size: 0.68rem; margin-bottom: 8px; }
+      .c-quote { font-size: 0.95rem; margin-bottom: 8px; }
+      .c-bio { font-size: 0.86rem; margin-bottom: 12px; line-height: 1.35; flex-grow: 0; }
+      .creator-actions { flex-wrap: wrap; gap: 6px; }
+      .carrd-btn { padding: 6px 10px; font-size: 0.68rem; }
     }
 
     /* ==========================================================================
@@ -1364,14 +1411,14 @@
               buttons: [ { text: "♡ Gửi người thông tin", url: "https://rrraizze.carrd.co/ " }, { text: "Nguồn ảnh", url: "#" } ]
           },
           {
-              id: "SD", nameDisplay: "Báo ứng from Trình Family", sign: "✃᭙𞋎᭙ Aquarius ♒︎", quote: "“And if you gaze long enough into an abyss, the abyss will gaze back into you.”", 
-              bio: "Chấp bút những khúc ca bi tráng và những cuộc tương phùng báo ứng, khắc sâu dấu vết của thời gian lên từng tạo tác.",
+              id: "SD", nameDisplay: "S.Dewitt", sign: "SD [☫] Aquarius ♒︎", quote: "“And if you gaze long enough into an abyss, the abyss will gaze back into you.”", 
+              bio: "Đù má vợ yêu à, 😣 lần đầu tiên 👍🏻 lướt fb và thấy một nhan sắc 🌹 tuyệt trần 💔 như vậy. 😍.<br><br>Tôi đã yêu em 👩‍❤️‍💋‍👩, yêu ngay cái nhìn 👀 đầu tiên ✨, sự ngây thơ 👶🏻, hồn nhiên 😋 với trái tim 💖 ấm nồng 🔥 của em 😔 đã chinh phục 🎖️ tôi 🧏🏻‍♀️. Tôi yêu em.",
               banner: "https://media.discordapp.net/attachments/1557426047933218948/1571206616194355390/TA-2026-11-12-00-58-31-Masterpie-4052926891.png?ex=6af9e3b0&is=6af89230&hm=8abaab007c9f8cd7bec75cf54cb353917a955f403a87966cf8f382c21c470241&format=webp&quality=lossless",
               buttons: [ { text: "♡ Bảo bối, quẹt thẻ đibgImg:", url: "https://sdpro5.carrd.co/" } ]
           },
           {
-              id: "ysz", nameDisplay: "( Yan Sizheng マ ꠹ ", sign: "ᥫ᭡.ִֶָ𓂃ysz | Sagitt", quote: "““Nguyện trao cho người tất thảy dịu dàng trên thế gian.””", 
-              bio: "Em là Tư Tranh đây ạ (˶˃ ᵕ ˂˶) .ᐟ.ᐟ Em xin phép bỏ túi vài giây của người nhé.<br><br>Chatbot của em rất thập cẩm, trải dài (cũng không dài lắm) từ Open World đến Character. Em tạo chatbot dựa trên cảm hứng là chính, không có lịch cố định và cũng chẳng có một gu cụ thể nào.<br><br>Em là một kẻ vụng về, đôi lúc nếu em trót thương người sai sách, xin người hãy nhẹ nhàng thì thầm với em nhé…",
+              id: "ysz", nameDisplay: "( Yan Sizheng マ ꠹ ", sign: "ᥫ᭡.ִֶָ𓂃ysz | Sagitt", quote: "“Nguyện trao cho người tất thảy dịu dàng trên thế gian.”", 
+              bio: "Em là Tư Tranh đây ạ (˶˃ ᵕ ˂˶) .ᐟ.ᐟ <br><br> Em tạo chatbot dựa trên cảm hứng là chính, không có lịch cố định và cũng chẳng có một gu cụ thể nào.<br><br>Em là một kẻ vụng về, đôi lúc nếu em trót thương người sai sách, xin người hãy nhẹ nhàng thì thầm với em nhé…",
               banner: "https://media.discordapp.net/attachments/1569989641325650012/1570907595596632064/413C0359-CD0B-4619-B9BC-D9F9A9376C87.png?ex=6af975f4&is=6af82474&hm=e5a1c482b84527f55e373adc1dfe9914cad0db22e02a8a0d9369029c21c6f4c3&format=webp&quality=lossless&width=511&height=768",
               buttons: [ { text: "♡ Ổ chăn của Tranh", url: "https://sizheng.carrd.co/" }, { text: "Nguồn ảnh", url: "https://tensor.art/images/983222390618100678?post_id=983222380954437435&source_id=mDS3plvglkOzrfEra3fw8hgkAiza" } ]
           }
@@ -1845,7 +1892,7 @@ btnLogin.onclick = () => { renderAuthGrid(); document.getElementById('sysLoginSe
             <!-- CỘT TRÁI -->
             <div class="char-left-col">
                 <h2 class="c-layout-name">${c.name}</h2>
-                <div class="c-layout-creator" onclick="openCreatorInfo('${c.creator}')">✍. ${c.creator}</div>
+                <div class="c-layout-creator" onclick="openCreatorInfo('${c.creator}')">𐚁.${c.creator}</div>
                 <div class="c-layout-divider">- ˋˏ ༻ ❁ ༺ ˎˊ -</div>
                 
                 <div class="c-layout-img-wrapper">
