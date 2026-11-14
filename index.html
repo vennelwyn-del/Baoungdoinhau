@@ -88,9 +88,18 @@
     }
 
     /* ==========================================================================
-       ✦ MENU BAR ✦
+       ✦ APP SCROLLER & MENU BAR (TRƯỢT CÙNG TRANG, KHÔNG CỐ ĐỊNH) ✦
        ========================================================================== */
-    .top-bar { position: fixed; top: 0; left: 0; width: 100%; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; gap: 10px; z-index: 50; pointer-events: none; }
+    .app-scroller {
+      position: fixed;
+      inset: 0;
+      z-index: 15;
+      overflow-y: auto;
+      overflow-x: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .top-bar { position: absolute; top: 0; left: 0; width: 100%; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; gap: 10px; z-index: 50; pointer-events: none; }
     .top-bar > * { pointer-events: auto; }
 
     .top-left-controls { display: flex; gap: 10px; opacity: 0; transform: translateX(-30px); transition: 0.5s; pointer-events: none; align-items: center; min-width: 0; }
@@ -115,7 +124,7 @@
     #authMiniAvatar { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; display: none; flex-shrink: 0; }
     .login-icon-default { font-size: 1.2rem; padding: 0 4px; line-height: 1; }
 
-    .top-right-controls { display: flex; align-items: center; gap: 12px; margin-left: auto; flex-shrink: 0; }
+    .top-right-controls { position: relative; display: flex; align-items: center; gap: 12px; margin-left: auto; flex-shrink: 0; }
     .btn-theme-toggle { display: inline-flex; align-items: center; justify-content: center; padding: 6px 14px; background: rgba(1, 13, 85, 0.5); border-radius: 40px; border: 1px solid var(--glass-border); color: var(--c-lightest); cursor: pointer; backdrop-filter: blur(12px); white-space: nowrap; }
     .vinyl-player-box { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 5px 12px 5px 6px; background: rgba(1, 13, 85, 0.5); border-radius: 40px; border: 1px solid var(--glass-border); backdrop-filter: blur(12px); white-space: nowrap; }
     .vinyl-disc { width: 34px; height: 34px; border-radius: 50%; background: conic-gradient(from 0deg, rgba(219,235,248,0.65), rgba(79,165,216,0.45), rgba(7,84,176,0.85), rgba(219,235,248,0.65), rgba(1,13,85,0.9), rgba(79,165,216,0.55)); border: 1px solid rgba(219,235,248,0.55); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: inset 0 0 8px rgba(219,235,248,0.4); }
@@ -222,76 +231,250 @@
     }
 
     /* ==========================================================================
-       ✦ FLOATING MINI PLAYER PILL (THU GỌN KHI ĐANG NGHE) ✦
+       ✦ MINI PLAYER CARD DƯỚI CHỮ RADIO (KIỂU ẢNH MẪU, CHÌM VÀO NỀN, HOVER SÁNG) ✦
        ========================================================================== */
     .music-player-pill {
-      position: fixed;
-      bottom: 22px;
-      right: 24px;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
       z-index: 60;
+      width: min(252px, calc(100vw - 28px));
+      padding: 11px;
+      border-radius: 16px;
       display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 10px 18px 10px 12px;
-      border-radius: 999px;
-      background: rgba(1, 13, 85, 0.8);
-      border: 1px solid rgba(79, 165, 216, 0.45);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      box-shadow: 0 12px 35px rgba(1, 3, 44, 0.55), inset 0 0 18px rgba(219, 235, 248, 0.08);
-      max-width: 390px;
-      min-width: 300px;
+      flex-direction: column;
+      gap: 9px;
+      background: rgba(1, 13, 85, 0.16);
+      border: 1px solid rgba(219, 235, 248, 0.1);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      box-shadow: 0 4px 18px rgba(1, 3, 44, 0.16);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transform: translateY(18px) scale(0.96);
-      transition: opacity 0.32s ease, transform 0.32s ease, visibility 0.32s ease;
+      transform: translateY(-8px) scale(0.97);
+      transition: opacity 0.35s ease, transform 0.3s ease, visibility 0.3s ease, background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
     }
     .music-player-pill.open {
-      opacity: 1;
+      opacity: 0.36;
       visibility: visible;
       pointer-events: auto;
       transform: translateY(0) scale(1);
     }
+    .music-player-pill.open:hover,
+    .music-player-pill.open:focus-within {
+      opacity: 0.98;
+      background: rgba(1, 13, 85, 0.8);
+      border-color: rgba(79, 165, 216, 0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 12px 32px rgba(1, 3, 44, 0.6), 0 0 18px rgba(79, 165, 216, 0.24);
+    }
     body.light-mode .music-player-pill {
-      background: rgba(255, 255, 255, 0.9);
-      border-color: rgba(79, 165, 216, 0.45);
-      box-shadow: 0 12px 30px rgba(1, 42, 74, 0.16), inset 0 0 16px rgba(255, 255, 255, 0.7);
+      background: rgba(240, 248, 255, 0.26);
+      border-color: rgba(1, 42, 74, 0.1);
+      box-shadow: 0 4px 16px rgba(1, 42, 74, 0.08);
+    }
+    body.light-mode .music-player-pill.open:hover,
+    body.light-mode .music-player-pill.open:focus-within {
+      opacity: 0.98;
+      background: rgba(255, 255, 255, 0.92);
+      border-color: rgba(2, 136, 209, 0.45);
+      box-shadow: 0 12px 28px rgba(1, 42, 74, 0.18);
     }
 
-    .mp-disc-wrap { position: relative; width: 62px; height: 62px; border-radius: 50%; flex-shrink: 0; cursor: pointer; }
+    .mp-cover-box {
+      position: relative;
+      width: 100%;
+      height: 112px;
+      border-radius: 11px;
+      overflow: hidden;
+      background: rgba(1, 3, 44, 0.35);
+      border: 1px solid rgba(219, 235, 248, 0.14);
+    }
+    .mp-cover-rect {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .mp-wing-trigger {
+      position: absolute;
+      bottom: 7px;
+      right: 7px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      z-index: 3;
+      transition: transform 0.25s ease, filter 0.25s ease;
+      filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.55));
+    }
+    .mp-wing-trigger:hover {
+      transform: scale(1.12);
+      filter: drop-shadow(0 0 12px rgba(79, 165, 216, 0.9));
+    }
     .mp-disc-spin { width: 100%; height: 100%; border-radius: 50%; animation: spinVinyl 8s linear infinite; animation-play-state: paused; }
     .music-player-pill.playing .mp-disc-spin { animation-play-state: running; }
 
-    .mp-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
-    .mp-meta { min-width: 0; cursor: pointer; }
-    .mp-title { font-family: var(--font-top-tag); font-size: 0.95rem; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--c-lightest); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
-    .mp-artist { font-family: var(--font-quote); font-style: italic; font-size: 0.95rem; color: var(--c-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
+    .mp-close-mini {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(1, 3, 44, 0.5);
+      color: #fff;
+      font-size: 0.95rem;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 4;
+      opacity: 0.65;
+      transition: 0.2s;
+    }
+    .mp-close-mini:hover { opacity: 1; background: rgba(200, 107, 133, 0.85); }
 
-    .mp-controls { display: flex; align-items: center; gap: 7px; }
-    .mp-icon-btn { background: none; border: none; color: var(--c-lightest); opacity: 0.8; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; transition: 0.2s; padding: 0; flex-shrink: 0; }
-    .mp-icon-btn:hover { opacity: 1; background: rgba(79, 165, 216, 0.18); }
+    .mp-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 0 2px;
+    }
+    .mp-meta { flex: 1; min-width: 0; }
+    .mp-title {
+      font-family: var(--font-ui);
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: var(--c-lightest);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.25;
+    }
+    .mp-artist {
+      font-family: var(--font-ui);
+      font-size: 0.7rem;
+      font-weight: 400;
+      color: var(--c-light);
+      opacity: 0.9;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.25;
+    }
+    .mp-dots-btn {
+      background: none;
+      border: none;
+      color: var(--c-lightest);
+      opacity: 0.78;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: 0.2s;
+    }
+    .mp-dots-btn:hover { opacity: 1; background: rgba(79, 165, 216, 0.2); }
 
-    .mp-play-btn { width: 34px; height: 34px; border-radius: 50%; border: none; background: var(--c-light); color: #fff; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; box-shadow: 0 4px 12px rgba(79, 165, 216, 0.4); transition: transform 0.2s, background 0.2s; }
-    .mp-play-btn:hover { transform: scale(1.07); background: var(--c-mid); }
-
-    .mp-spotify-link { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 50%; color: #1db954; text-decoration: none; transition: 0.2s; flex-shrink: 0; }
-    .mp-spotify-link:hover { background: rgba(29, 185, 84, 0.16); transform: scale(1.1); }
-    .mp-spotify-link.disabled { opacity: 0.28; pointer-events: none; }
-
-    .mp-divider { width: 1px; height: 20px; background: var(--glass-border); margin: 0 2px; flex-shrink: 0; }
-
-    @media (max-width: 768px) {
-      .music-player-pill { bottom: 14px; right: auto; left: 50%; width: calc(100vw - 24px); max-width: 365px; min-width: 0; padding: 8px 14px 8px 10px; gap: 11px; transform: translateX(-50%) translateY(18px) scale(0.96); }
-      .music-player-pill.open { transform: translateX(-50%) translateY(0) scale(1); }
-      .mp-disc-wrap { width: 52px; height: 52px; }
-      .mp-title { font-size: 0.86rem; }
-      .mp-artist { font-size: 0.88rem; }
-      .mp-controls { gap: 4px; }
-      .mp-icon-btn, .mp-spotify-link { width: 25px; height: 25px; }
-      .mp-play-btn { width: 31px; height: 31px; }
+    .mp-seek-wrap {
+      display: flex;
+      align-items: center;
+      padding: 0 2px;
+    }
+    .mp-seek-slider {
+      width: 100%;
+      height: 3px;
+      accent-color: var(--c-lightest);
+      cursor: pointer;
+      opacity: 0.9;
     }
 
+    .mp-bottom-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      padding: 0 2px;
+    }
+    .mp-time {
+      font-family: var(--font-ui);
+      font-size: 0.62rem;
+      color: var(--c-lightest);
+      opacity: 0.78;
+      min-width: 30px;
+      text-align: center;
+    }
+    .mp-icon-btn {
+      background: none;
+      border: none;
+      color: var(--c-lightest);
+      opacity: 0.82;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      transition: 0.2s;
+      padding: 0;
+      flex-shrink: 0;
+      font-size: 0.88rem;
+      line-height: 1;
+    }
+    .mp-icon-btn:hover { opacity: 1; background: rgba(79, 165, 216, 0.2); }
+    .mp-icon-btn.liked { color: #ff6b8b; opacity: 1; }
+
+    .mp-play-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: none;
+      background: var(--c-lightest);
+      color: var(--c-darkest);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.28);
+      transition: transform 0.2s;
+    }
+    .mp-play-btn:hover { transform: scale(1.08); }
+
+    .mp-spotify-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      color: var(--c-lightest);
+      opacity: 0.82;
+      text-decoration: none;
+      transition: 0.2s;
+      flex-shrink: 0;
+    }
+    .mp-spotify-link:hover { opacity: 1; color: #1db954; background: rgba(29, 185, 84, 0.16); transform: scale(1.08); }
+    .mp-spotify-link.disabled { opacity: 0.28; pointer-events: none; }
+
+    @media (max-width: 768px) {
+      .music-player-pill {
+        width: min(238px, calc(100vw - 28px));
+        padding: 10px;
+        gap: 8px;
+      }
+      .mp-cover-box { height: 102px; }
+    }
     /* ==========================================================================
        ✦ FULL MUSIC PLAYER / SETTING THEO SPOTIFY EMBED (ẢNH 3 + ẢNH 4) ✦
        ========================================================================== */
@@ -493,10 +676,10 @@
     .sp-song-artist { font-family: var(--font-quote); font-style: italic; font-size: 0.88rem; color: var(--c-light); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
     /* ==========================================================================
-       ✦ MÀN HÌNH 1 & 2 ✦
+       ✦ MÀN HÌNH 1 & 2 (TRONG APP SCROLLER) ✦
        ========================================================================== */
-    #landingScreen { position: absolute; inset: 0; z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 70px 20px 30px; transition: 1s ease; pointer-events: none; overflow-y: auto; }
-    #landingScreen.hidden { opacity: 0; visibility: hidden; }
+    #landingScreen { position: relative; min-height: 100%; min-height: 100dvh; z-index: 20; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 70px 20px 30px; transition: opacity 0.8s ease, visibility 0.8s ease; pointer-events: none; }
+    #landingScreen.hidden { position: fixed; inset: 0; opacity: 0; visibility: hidden; pointer-events: none; }
     #landingScreen > * { pointer-events: auto; flex-shrink: 0; }
     .floating-card-wrapper { position: relative; cursor: pointer; animation: floatSmooth 6s ease-in-out infinite; perspective: 1000px; }
     @keyframes floatSmooth { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-12px); } }
@@ -528,7 +711,7 @@
     .tap-hint { font-family: var(--font-hint); font-size: 0.6rem; letter-spacing: 4px; margin-top: 15px; animation: pulseHint 2.5s infinite; opacity: 0.8; text-align: center; }
     @keyframes pulseHint { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.9; } }
 
-    #archiveScreen { position: absolute; inset: 0; z-index: 15; padding: 80px 20px 40px; overflow-y: auto; overflow-x: hidden; pointer-events: none; opacity: 0; transform: translateY(20px); transition: 1s ease 0.2s; -webkit-overflow-scrolling: touch; }
+    #archiveScreen { display: none; position: relative; min-height: 100%; min-height: 100dvh; z-index: 15; padding: 80px 20px 40px; pointer-events: none; opacity: 0; transform: translateY(20px); transition: opacity 1s ease 0.15s, transform 1s ease 0.15s; }
     #archiveScreen.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
     @media (max-width: 600px) {
@@ -580,7 +763,6 @@
     .archive-footer { margin-top: 40px; text-align: center; display: flex; flex-direction: column; gap: 8px; opacity: 0.8; padding-bottom: 30px;}
     .footer-brand { font-family: var(--font-brand); font-size: clamp(1rem, 3vw, 1.4rem); letter-spacing: 8px; margin-left: 8px; }
     .footer-msg { font-family: var(--font-quote); font-style: italic; font-size: 1rem; color: var(--c-light); }
-
     /* ==========================================================================
        ✦ GIAO DIỆN CHUNG CỦA CÁC MODAL ✦
        ========================================================================== */
@@ -838,8 +1020,8 @@
   <div class="water-bg-layer" id="waterBg"></div>
   <canvas id="fxCanvas"></canvas>
   <div class="vignette-overlay"></div>
-
-  <header class="top-bar">
+  <div class="app-scroller" id="appScroller">
+  <header class="top-bar" id="topBar">
     <div class="top-left-controls" id="topLeftGroup">
         <button class="btn-sys" id="btnOpenCreators">
           <span class="sparkle-mini" style="color:var(--c-light)"> 𓆩ꨄ︎𓆪 </span><span> Creators of Báo ứng </span>
@@ -859,54 +1041,108 @@
         <div class="vinyl-disc" id="vinylDisc"><div class="vinyl-center-label"></div></div>
         <span class="vinyl-text" id="vinylText"> Radio </span>
       </div>
-    </div>
-  </header>
 
-  <!-- FLOATING MINI PLAYER PILL (THU GỌN KHI ĐANG NGHE) -->
-  <div class="music-player-pill" id="musicPlayerPill">
-    <div class="mp-disc-wrap" id="mpExpandFromDisc" title="Mở giao diện phát nhạc">
-      <div class="mp-disc-spin">
-        <div class="cd-blue-surface">
-          <img src="" alt="" class="cd-cover-tint" id="mpCoverImg">
-          <svg class="cd-wings-svg" viewBox="0 0 200 200" fill="none">
-            <path d="M100 58 C88 60, 82 72, 85 88 C66 78, 44 60, 34 38 C32 54, 38 72, 50 85 C34 80, 22 68, 18 54 C20 74, 34 94, 54 104 C38 106, 26 102, 20 94 C26 112, 46 126, 70 128 C78 142, 85 156, 86 172 L114 172 C115 156, 122 142, 130 128 C154 126, 174 112, 180 94 C174 102, 162 106, 146 104 C166 94, 180 74, 182 54 C178 68, 166 80, 150 85 C162 72, 168 54, 166 38 C156 60, 134 78, 115 88 C118 72, 112 60, 100 58 Z" fill="rgba(219,235,248,0.68)"/>
-          </svg>
-          <div class="cd-spindle"><div class="cd-spindle-hole"></div></div>
+      <!-- MINI PLAYER CARD NGAY DƯỚI CHỮ RADIO (KIỂU ẢNH MẪU) -->
+      <div class="music-player-pill" id="musicPlayerPill">
+        <div class="mp-cover-box">
+          <img src="" alt="" class="mp-cover-rect" id="mpCoverImg">
+          <button class="mp-close-mini" id="mpCloseBtn" title="Đóng" aria-label="Đóng">&times;</button>
+          <div class="mp-wing-trigger" id="mpExpandFromDisc" title="Ấn vào cánh để mở cửa sổ nhạc">
+            <div class="mp-disc-spin">
+              <div class="cd-blue-surface">
+                <svg class="cd-wings-svg" viewBox="0 0 200 200" fill="none">
+                  <path d="M100 58 C88 60, 82 72, 85 88 C66 78, 44 60, 34 38 C32 54, 38 72, 50 85 C34 80, 22 68, 18 54 C20 74, 34 94, 54 104 C38 106, 26 102, 20 94 C26 112, 46 126, 70 128 C78 142, 85 156, 86 172 L114 172 C115 156, 122 142, 130 128 C154 126, 174 112, 180 94 C174 102, 162 106, 146 104 C166 94, 180 74, 182 54 C178 68, 166 80, 150 85 C162 72, 168 54, 166 38 C156 60, 134 78, 115 88 C118 72, 112 60, 100 58 Z" fill="rgba(219,235,248,0.78)"/>
+                </svg>
+                <div class="cd-spindle"><div class="cd-spindle-hole"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mp-header-row">
+          <div class="mp-meta">
+            <div class="mp-title" id="mpTitle">SALVATORE</div>
+            <div class="mp-artist" id="mpArtist">Lana Del Rey</div>
+          </div>
+          <button class="mp-dots-btn" id="mpSettingBtn" title="Mở cửa sổ nhạc" aria-label="Mở cửa sổ nhạc">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+          </button>
+        </div>
+
+        <div class="mp-seek-wrap">
+          <input type="range" min="0" max="100" step="0.5" value="0" class="mp-seek-slider" id="mpSeekSlider" aria-label="Tua nhạc">
+        </div>
+
+        <div class="mp-bottom-row">
+          <span class="mp-time" id="mpCurrentTime">00:00</span>
+          <button class="mp-icon-btn" id="mpLikeBtn" title="Yêu thích" aria-label="Yêu thích">♡</button>
+          <button class="mp-icon-btn" id="mpPrevBtn" title="Bài trước" aria-label="Bài trước">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><rect x="4" y="4" width="3" height="16"/></svg>
+          </button>
+          <button class="mp-play-btn" id="mpPlayBtn" title="Phát / Tạm dừng" aria-label="Phát hoặc tạm dừng">
+            <svg id="mpPlayIcon" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+            <svg id="mpPauseIcon" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+          </button>
+          <button class="mp-mini-next mp-icon-btn" id="mpNextBtn" title="Bài tiếp theo" aria-label="Bài tiếp theo">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><rect x="17" y="4" width="3" height="16"/></svg>
+          </button>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="mp-spotify-link" id="mpSpotifyLink" title="Mở trên Spotify" aria-label="Mở trên Spotify">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          </a>
+          <span class="mp-time" id="mpDurationTime">00:00</span>
         </div>
       </div>
     </div>
-    <div class="mp-body">
-      <div class="mp-meta" id="mpExpandFromMeta" title="Mở giao diện phát nhạc">
-        <div class="mp-title" id="mpTitle">SALVATORE</div>
-        <div class="mp-artist" id="mpArtist">Lana Del Rey</div>
+  </header>
+
+  <main id="landingScreen">
+    <div class="floating-card-wrapper" id="cardWrapper">
+      <div class="floating-picture-frame"><img src="" id="centerImg" alt=""></div>
+    </div>
+    <h1 class="quote-text">“What is grief, if not love persevering?”</h1>
+    <div class="brand-title"> B Á O   Ứ N G   Đ Ờ I   N H A U </div>
+    
+    <button class="btn-action-enter" id="btnEnter">
+      <span>༄</span><span> Xem báo ứng </span>
+    </button>
+    
+    <div class="tap-hint"> 𓆝 𓆟 𓆞 C H Ạ M   Đ Ể   M Ở 𓆝 𓆟 𓆞 </div>
+  </main>
+
+  <section id="archiveScreen">
+    <div class="archive-header-box">
+      <h2 class="archive-title">SỔ LƯU TRỮ NHÂN QUẢ</h2>
+      <p class="archive-subtitle">Ting ting, phát hiện một ngoan xinh yêu đi lạc ᝰ.ᐟ</p>
+      <div class="archive-divider">❀•°•═════ஓ๑♡๑ஓ═════•°•❀</div>
+      <p class="archive-slogan">“Where your dreams are embraced”</p>
+    </div>
+
+    <div class="archive-controls">
+      <div class="search-wrapper">
+        <input type="text" id="searchInput" class="search-input" placeholder="Tìm trạm sạc năng lượng ฅ(•- •マ">
       </div>
-      <div class="mp-controls">
-        <button class="mp-icon-btn" id="mpPrevBtn" title="Bài trước" aria-label="Bài trước">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5"/></svg>
-        </button>
-        <button class="mp-play-btn" id="mpPlayBtn" title="Phát / Tạm dừng" aria-label="Phát hoặc tạm dừng">
-          <svg id="mpPlayIcon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
-          <svg id="mpPauseIcon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
-        </button>
-        <button class="mp-icon-btn" id="mpNextBtn" title="Bài tiếp theo" aria-label="Bài tiếp theo">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19"/></svg>
-        </button>
-
-        <button class="mp-icon-btn" id="mpSettingBtn" title="Mở giao diện đầy đủ" aria-label="Mở giao diện phát nhạc đầy đủ">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-        </button>
-
-        <a href="#" target="_blank" rel="noopener noreferrer" class="mp-spotify-link" id="mpSpotifyLink" title="Mở trên Spotify" aria-label="Mở trên Spotify">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-        </a>
-
-        <div class="mp-divider"></div>
-
-        <button class="mp-icon-btn" id="mpCloseBtn" title="Đóng" aria-label="Đóng trình phát">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
+      <div class="filters-row">
+        <div class="toggle-pill-group" id="typeFilter">
+          <button class="toggle-btn active" data-val="All"> All </button>
+          <button class="toggle-btn" data-val="Character"> Character </button>
+          <button class="toggle-btn" data-val="Open World"> Open World </button>
+        </div>
+        <div class="toggle-pill-group" id="creatorFilter"></div>
+      </div>
+      <div class="tags-panel">
+        <div class="tags-header"><span style="color:var(--c-light)"> ✎ᝰ. </span> Order quầy ₍⑅ᐢ..ᐢ₎ </div>
+        <div class="tags-list" id="tagsBox"></div>
       </div>
     </div>
+
+    <div class="character-grid" id="charGrid"></div>
+
+    <div class="archive-footer">
+      <div class="footer-brand">BÁO ỨNG ĐỜI NHAU</div>
+      <div class="footer-msg">Ôm ôm ngoan yêu tới với chúng tớ 𝜗𝜚</div>
+    </div>
+  </section>
+
   </div>
 
   <!-- MODAL FULL MUSIC PLAYER / SETTING THEO SPOTIFY EMBED (ẢNH 3 + ẢNH 4) -->
@@ -1009,54 +1245,6 @@
     </div>
   </div>
 
-  <main id="landingScreen">
-    <div class="floating-card-wrapper" id="cardWrapper">
-      <div class="floating-picture-frame"><img src="" id="centerImg" alt=""></div>
-    </div>
-    <h1 class="quote-text">“What is grief, if not love persevering?”</h1>
-    <div class="brand-title"> B Á O   Ứ N G   Đ Ờ I   N H A U </div>
-    
-    <button class="btn-action-enter" id="btnEnter">
-      <span>༄</span><span> Xem báo ứng </span>
-    </button>
-    
-    <div class="tap-hint"> 𓆝 𓆟 𓆞 C H Ạ M   Đ Ể   M Ở 𓆝 𓆟 𓆞 </div>
-  </main>
-
-  <section id="archiveScreen">
-    <div class="archive-header-box">
-      <h2 class="archive-title">SỔ LƯU TRỮ NHÂN QUẢ</h2>
-      <p class="archive-subtitle">Ting ting, phát hiện một ngoan xinh yêu đi lạc ᝰ.ᐟ</p>
-      <div class="archive-divider">❀•°•═════ஓ๑♡๑ஓ═════•°•❀</div>
-      <p class="archive-slogan">“Where your dreams are embraced”</p>
-    </div>
-
-    <div class="archive-controls">
-      <div class="search-wrapper">
-        <input type="text" id="searchInput" class="search-input" placeholder="Tìm trạm sạc năng lượng ฅ(•- •マ">
-      </div>
-      <div class="filters-row">
-        <div class="toggle-pill-group" id="typeFilter">
-          <button class="toggle-btn active" data-val="All"> All </button>
-          <button class="toggle-btn" data-val="Character"> Character </button>
-          <button class="toggle-btn" data-val="Open World"> Open World </button>
-        </div>
-        <div class="toggle-pill-group" id="creatorFilter"></div>
-      </div>
-      <div class="tags-panel">
-        <div class="tags-header"><span style="color:var(--c-light)"> ✎ᝰ. </span> Order quầy ₍⑅ᐢ..ᐢ₎ </div>
-        <div class="tags-list" id="tagsBox"></div>
-      </div>
-    </div>
-
-    <div class="character-grid" id="charGrid"></div>
-
-    <div class="archive-footer">
-      <div class="footer-brand">BÁO ỨNG ĐỜI NHAU</div>
-      <div class="footer-msg">Ôm ôm ngoan yêu tới với chúng tớ 𝜗𝜚</div>
-    </div>
-  </section>
-
   <!-- MODAL: CREATORS SHOWCASE -->
   <div class="ui-modal-base" id="creatorsOverlay" onclick="if(event.target === this) this.classList.remove('active')">
     <div class="creators-modal-box">
@@ -1127,7 +1315,6 @@
         </div>
     </div>
   </div>
-
   <script>
     /* ==========================================================================
        ✦ CẤU HÌNH DỮ LIỆU TÁCH BIỆT (BẢN V8) ✦
@@ -1167,22 +1354,22 @@
       /* 👉 MỤC 3: HỒ SƠ CREATORS (Hiển thị ở bảng "Creators of Báo Ứng") */
       creatorsShowcase: [
           {
-              id: "Rz", nameDisplay: "↤ ✢ RZ ✢ ↦", sign: "RZ ୨ৎ LIBRA", quote: "“Người tạo tên, tên chỉ người”", 
+              id: "Rz", nameDisplay: "↤ ✢ Lavallee De Dahli ✢ ↦", sign: "rz ୨ৎ libra", quote: "“Người tạo tên, tên chỉ người”", 
               bio: "Một ngày ngọt ngào, cảm ơn vì đã tới.<br><br>Mong rằng người đến trao cho tôi sự tôn trọng. Lời tạm biệt sẽ được gửi đến nếu tôi thấy bị kéo vào drama. Rz yêu hoà bình.",
-              banner: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800",
-              buttons: [ { text: "♡ CARRD", url: "#" }, { text: "📸 CRE ẢNH", url: "#" } ]
+              banner: "https://media.discordapp.net/attachments/1569989641325650012/1570771775346966579/TA-2026-11-12-23-24-53-artist_ma-819578102-0.png?ex=6af9a036&is=6af84eb6&hm=6c456e5e1b4f4d930f31a31acadd3a28fc7c77507f28d0a21a12a312bd3b3f5c&format=webp&quality=lossless&width=682&height=1024",
+              buttons: [ { text: "♡ Gửi người thông tin", url: "https://rrraizze.carrd.co/ " }, { text: "Nguồn ảnh", url: "#" } ]
           },
           {
-              id: "Thương Lan", nameDisplay: "↤ ✢ THƯƠNG LAN ✢ ↦", sign: "✦ SCORPIO • THIÊN YẾT", quote: "“Khối băng ngàn năm cũng có ngày tan vì một lời thề.”", 
+              id: "SD", nameDisplay: "↤ ✢ THƯƠNG LAN ✢ ↦", sign: "✦ SCORPIO • THIÊN YẾT", quote: "“Khối băng ngàn năm cũng có ngày tan vì một lời thề.”", 
               bio: "Chấp bút những khúc ca bi tráng và những cuộc tương phùng báo ứng, khắc sâu dấu vết của thời gian lên từng tạo tác.",
               banner: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800",
               buttons: [ { text: "♡ CARRD", url: "#" } ]
           },
           {
-              id: "Hải Đăng", nameDisplay: "↤ ✢ HẢI ĐĂNG ✢ ↦", sign: "✦ CANCER • CỰ GIẢI", quote: "“Ngọn đèn trong đêm bão chưa từng vì ai mà tắt lịm.”", 
-              bio: "Người trông coi những trang hồ sơ lưu trữ cổ xưa, gìn giữ ánh sáng cuối cùng nơi hải đăng trước khi triều dâng.",
-              banner: "https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800",
-              buttons: [ { text: "♡ CARRD", url: "#" }, { text: "✍️ WATTPAD", url: "#" } ]
+              id: "ysz", nameDisplay: "Yan Sizheng マ", sign: "ᥫ᭡.ִֶָ𓂃ysz | Sagitt", quote: "“Ngọn đèn trong đêm bão chưa từng vì ai mà tắt lịm。”", 
+              bio: "Em là Tư Tranh đây ạ (˶˃ ᵕ ˂˶) .ᐟ.ᐟ Em xin phép bỏ túi vài giây của người nhé.<br><br>Chatbot của em rất thập cẩm, trải dài (cũng không dài lắm) từ Open World đến Character. Em tạo chatbot dựa trên cảm hứng là chính, không có lịch cố định và cũng chẳng có một gu cụ thể nào.<br><br>Em là một kẻ vụng về, đôi lúc nếu em trót thương người sai sách, xin người hãy nhẹ nhàng thì thầm với em nhé…",
+              banner: "https://media.discordapp.net/attachments/1569989641325650012/1570907595596632064/413C0359-CD0B-4619-B9BC-D9F9A9376C87.png?ex=6af975f4&is=6af82474&hm=e5a1c482b84527f55e373adc1dfe9914cad0db22e02a8a0d9369029c21c6f4c3&format=webp&quality=lossless&width=511&height=768",
+              buttons: [ { text: "♡ Ổ chăn của Tranh", url: "https://sizheng.carrd.co/" }, { text: "Nguồn ảnh", url: "https://tensor.art/images/983222390618100678?post_id=983222380954437435&source_id=mDS3plvglkOzrfEra3fw8hgkAiza" } ]
           }
       ],
 
@@ -1191,10 +1378,10 @@
 
       characters: [
         {
-          name: "Thương Lan", title: "Lời Thề Băng Giá của Độc Túc Ngư Cơ, mong ngài đừng quên.", type: "Character", creator: "Thương Lan", tags: ["#Cổ Trang", "#Ngược", "#Fantasy"], warning: "Chứa yếu tố giam cầm và bạo lực lạnh.", lore: "Từng là người bảo hộ vùng biển phía Bắc trước khi bị bán đứng bởi chính thuyền nhân nàng từng cứu vớt. Hiện kiếp tương phùng chỉ để đòi lại mảnh hồn rách nát.", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=500&q=80", imgSource: "#", ggaiLink: "#"
+          name: "The Showrunner", title: "The Rider xuất hiện. Hắn không giết người trong bóng tối; hắn biến tội ác thành một chương trình truyền hình nhiều tập. Bằng những cuộn băng từ VHS-C đen trắng tỉ lệ 4:3 và những cỗ máy hành quyết cơ học tinh vi, hắn gõ cửa từng nhà để tuyên án sự mục rỗng của thị trấn:", type: "Open World", creator: "Rz", tags: ["#Trinh thám", "#Neo-Noir", "#Analog Horror", "Tâm lý học tội phạm"], warning: "Chứa yếu tố giêt người, bạo lực, phản địa đàng.", lore: "Sứ giả mang tin dữ, sự chuyển động không ngừng trên sóng vô tuyến, kẻ gõ cửa định mệnh luôn đi trước cảnh sát một bước.", img: "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=500&q=80", imgSource: "#", ggaiLink: "#"
         },
         {
-          name: "Vương Quốc Gầm Sóng", title: "Khám Phá Bí Ẩn Trấn Hải.", type: "Open World", creator: "Hải Đăng", tags: ["#Open World", "#Fantasy"], lore: "Một thế giới mở rộng lớn nơi người chơi có thể tự do khám phá và thay đổi số phận của các nhân vật.", img: "https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=500&q=80", ggaiLink: "#"
+          name: "Vương Quốc Gầm Sóng", title: "Khám Phá Bí Ẩn Trấn Hải.", type: "Open World", creator: "Hải Đăng", tags: ["#Open World", "#Fantasy"], lore: "Một thế giới mở rộng lớn nơi người chơi có thể tự do khám phá và thay đổi số phận của các nhân vật.", img: "https://i.pinimg.com/736x/1f/45/6e/1f456e5f977f8ec850be60f4b179ec24.jpg", ggaiLink: "#"
         }
       ]
     };
@@ -1234,8 +1421,14 @@
     document.getElementById('btnEnter').addEventListener('click', (e) => {
       e.stopPropagation();
       makeRipple(e.target.getBoundingClientRect().left + e.target.offsetWidth/2, e.target.getBoundingClientRect().top + e.target.offsetHeight/2);
-      document.getElementById('landingScreen').classList.add('hidden');
-      document.getElementById('archiveScreen').classList.add('visible');
+      const landing = document.getElementById('landingScreen');
+      const archive = document.getElementById('archiveScreen');
+      const appScroller = document.getElementById('appScroller');
+      landing.classList.add('hidden');
+      archive.style.display = 'block';
+      appScroller.scrollTop = 0;
+      requestAnimationFrame(() => archive.classList.add('visible'));
+      setTimeout(() => { if (landing.classList.contains('hidden')) landing.style.display = 'none'; }, 900);
       document.getElementById('topLeftGroup').classList.add('visible');
     });
 
@@ -1438,7 +1631,6 @@
         alert("Đã cập nhật Avatar cá nhân thành công!");
         sysUpdateLoginUI();
     }
-
     /* ==========================================================================
        ✦ THÔNG BÁO VÀ COMMENT CÂY ✦
        ========================================================================== */
@@ -1718,7 +1910,6 @@
       requestAnimationFrame(anim);
     }
     anim();
-
     /* ==========================================================================
        ✦ TRÌNH PHÁT SPOTIFY EMBED + ĐĨA XANH LAM + GIAO DIỆN SETTING SPOTIFY ✦
        ========================================================================== */
@@ -1735,6 +1926,10 @@
     const mpSpotifyLink = document.getElementById('mpSpotifyLink');
     const mpCloseBtn = document.getElementById('mpCloseBtn');
     const mpSettingBtn = document.getElementById('mpSettingBtn');
+    const mpLikeBtn = document.getElementById('mpLikeBtn');
+    const mpSeekSlider = document.getElementById('mpSeekSlider');
+    const mpCurrentTime = document.getElementById('mpCurrentTime');
+    const mpDurationTime = document.getElementById('mpDurationTime');
 
     const spModal = document.getElementById('spotifyPlayerModal');
     const spModalBox = document.getElementById('spModalBox');
@@ -1924,6 +2119,8 @@
       const isLiked = likedTracks.has(track.uri || track.title);
       spLikeBtn.classList.toggle('liked', isLiked);
       spLikeBtn.textContent = isLiked ? '♥' : '♡';
+      mpLikeBtn.classList.toggle('liked', isLiked);
+      mpLikeBtn.textContent = isLiked ? '♥' : '♡';
 
       spRepeatBtn.classList.toggle('active', repeatMode === 'one');
       spRepeatBtn.classList.toggle('repeat-one', repeatMode === 'one');
@@ -1955,6 +2152,9 @@
       spSeekSlider.value = 0;
       spCurrentTime.textContent = "00:00";
       spDurationTime.textContent = "00:00";
+      mpSeekSlider.value = 0;
+      mpCurrentTime.textContent = "00:00";
+      mpDurationTime.textContent = "00:00";
 
       if (track.needsMeta) enrichSpotifyMeta(track);
 
@@ -2015,9 +2215,15 @@
           spDurationMs = data.duration || 0;
 
           if (spDurationMs > 0) {
-            spSeekSlider.value = (spPositionMs / spDurationMs) * 100;
-            spCurrentTime.textContent = formatAudioTime(spPositionMs);
-            spDurationTime.textContent = formatAudioTime(spDurationMs);
+            const pct = (spPositionMs / spDurationMs) * 100;
+            const curStr = formatAudioTime(spPositionMs);
+            const durStr = formatAudioTime(spDurationMs);
+            spSeekSlider.value = pct;
+            spCurrentTime.textContent = curStr;
+            spDurationTime.textContent = durStr;
+            mpSeekSlider.value = pct;
+            mpCurrentTime.textContent = curStr;
+            mpDurationTime.textContent = durStr;
 
             // Tự chuyển bài hoặc lặp khi hết bài
             if (wasPlaying && data.isPaused && spPositionMs >= spDurationMs - 900) {
@@ -2074,14 +2280,18 @@
 
     document.getElementById('vinylPlayer').addEventListener('click', (e) => {
       e.stopPropagation();
-      openFullPlayer();
+      if (spModal.classList.contains('active')) {
+        closeFullPlayer();
+      } else {
+        mpPill.classList.toggle('open');
+      }
     });
 
     [mpPlayBtn, spPlayBtn].forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); toggleSpotifyPlay(); }));
     [mpPrevBtn, spPrevBtn].forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); loadSpotifyTrack(currentTrackIdx - 1, true); }));
     [mpNextBtn, spNextBtn].forEach(btn => btn.addEventListener('click', (e) => { e.stopPropagation(); loadSpotifyTrack(currentTrackIdx + 1, true); }));
 
-    [document.getElementById('mpExpandFromDisc'), document.getElementById('mpExpandFromMeta'), mpSettingBtn].forEach(el => {
+    [document.getElementById('mpExpandFromDisc'), mpSettingBtn].forEach(el => {
       el.addEventListener('click', (e) => { e.stopPropagation(); openFullPlayer(); });
     });
 
@@ -2097,19 +2307,28 @@
       updatePlayerUI();
     });
 
-    spLikeBtn.addEventListener('click', () => {
-      const t = playlist[currentTrackIdx];
-      const key = t.uri || t.title;
-      if (likedTracks.has(key)) likedTracks.delete(key); else likedTracks.add(key);
-      localStorage.setItem('baoUngLikedTracks', JSON.stringify([...likedTracks]));
-      updatePlayerUI();
+    [spLikeBtn, mpLikeBtn].forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const t = playlist[currentTrackIdx];
+        const key = t.uri || t.title;
+        if (likedTracks.has(key)) likedTracks.delete(key); else likedTracks.add(key);
+        localStorage.setItem('baoUngLikedTracks', JSON.stringify([...likedTracks]));
+        updatePlayerUI();
+      });
     });
 
-    spSeekSlider.addEventListener('input', (e) => {
-      if (spController && spDurationMs > 0) {
-        const targetSec = Math.floor(((parseFloat(e.target.value) / 100) * spDurationMs) / 1000);
-        spController.seek(targetSec);
-      }
+    [spSeekSlider, mpSeekSlider].forEach(slider => {
+      slider.addEventListener('input', (e) => {
+        e.stopPropagation();
+        const pct = parseFloat(e.target.value);
+        spSeekSlider.value = pct;
+        mpSeekSlider.value = pct;
+        if (spController && spDurationMs > 0) {
+          const targetSec = Math.floor(((pct / 100) * spDurationMs) / 1000);
+          spController.seek(targetSec);
+        }
+      });
     });
 
     updatePlayerUI();
