@@ -1446,17 +1446,17 @@
       document.getElementById('topLeftGroup').classList.add('visible');
     });
 
-    /* ==========================================================================
+   /* ==========================================================================
        ✦ RENDER BẢNG CREATORS (NỀN BLOCK TRÙNG AVATAR CREATOR) ✦
        ========================================================================== */
- const creatorsGrid = document.getElementById('creatorsGrid');
+    const creatorsGrid = document.getElementById('creatorsGrid');
     const creatorFilterGroup = document.getElementById('creatorFilter');
 
     function renderCreators() {
       creatorsGrid.innerHTML = '';
       creatorFilterGroup.innerHTML = `<button class="toggle-btn active" data-val="All"> Full báo ứng </button>`;
       MY_CONFIG.creatorsShowcase.forEach(c => {
-        const avatarImg = (dbLogin[c.id] && dbLogin[c.id].image) ? dbLogin[c.id].image : c.banner;
+        const avatarImg = (typeof dbLogin !== 'undefined' && dbLogin[c.id] && dbLogin[c.id].image) ? dbLogin[c.id].image : c.banner;
         let buttonsHtml = c.buttons.map(btn => `<a href="${btn.url}" class="carrd-btn">${btn.text}</a>`).join('');
         creatorsGrid.innerHTML += `
           <div class="creator-card">
@@ -1476,6 +1476,10 @@
     }
     renderCreators();
 
+    document.getElementById('btnOpenCreators').addEventListener('click', () => {
+      if (creatorsGrid.innerHTML.trim() === '') renderCreators();
+      document.getElementById('creatorsOverlay').classList.add('active');
+    });
     /* ==========================================================================
        ✦ LỌC & RENDER NHÂN VẬT ✦
        ========================================================================== */
