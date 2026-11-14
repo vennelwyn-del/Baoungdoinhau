@@ -1884,44 +1884,83 @@ function updateTopNotifBadge() {
         } catch (e) {}
       }
     }
+     function normalizeCmtList(raw) {
+        const arr = Array.isArray(raw) ? raw : (raw && typeof raw === 'object' ? Object.values(raw) : []);
+        return arr.filter(Boolean).map(c => ({
+            ...c,
+            likes: typeof c.likes === 'number' ? c.likes : 0,
+            replies: Array.isArray(c.replies)
+                ? c.replies.filter(Boolean)
+                : (c.replies && typeof c.replies === 'object' ? Object.values(c.replies).filter(Boolean) : [])
+        }));
+    }
 
-    function getCmtsTree(safeId) { return JSON.parse(localStorage.getItem('sysTreeCmt_v8_' + safeId)) || []; }
+    function getCmtsTree(safeId) {
+        try {
+            return normalizeCmtList(JSON.parse(localStorage.getItem('sysTreeCmt_v8_' + safeId)) || []);
+        } catch (e) {
+            return [];
+        }
+    }
+
     function saveCmtsTree(safeId, data) {
-        localStorage.setItem('sysTreeCmt_v8_' + safeId, JSON.stringify(data));
+        const cleanData = normalizeCmtList(data);
+        localStorage.setItem('sysTreeCmt_v8_' + safeId, JSON.stringify(cleanData));
         const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
         if (fb) {
             fetch(`${fb}/comments/${safeId}.json`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
+                body: JSON.stringify(cleanData)
             }).catch(() => {});
         }
     }
 
-    window.addTreeComment = function(safeId, charCreatorName, charRealName, parentId = null) {
-        let name = "Ẩn danh", avatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+    window.addTreeComment = async function(safeId, charCreatorName, charRealName, parentId = null) {
+        const randNum = Math.floor(1000 + Math.random() * 9000);
+        let name = `Ẩn danh (${randNum})`;
+        let avatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
         let isCreator = false;
         
         let textId = parentId ? `repText-${parentId}` : `cmtText-${safeId}`;
-        let text = document.getElementById(textId).value.trim();
+        let textEl = document.getElementById(textId);
+        let text = textEl ? textEl.value.trim() : '';
         if(!text) { alert("Bạn quên nhập lời nhắn rồi nè!"); return; }
 
-        if(sysCurrentUser) {
+        if(sysCurrentUser && dbLogin[sysCurrentUser]) {
             name = sysCurrentUser; avatar = dbLogin[sysCurrentUser].image; isCreator = true;
         } else {
-            let nVal = document.getElementById(parentId ? `repName-${parentId}` : `cmtName-${safeId}`).value.trim();
+            let nameInput = document.getElementById(parentId ? `repName-${parentId}` : `cmtName-${safeId}`);
+            let nVal = nameInput ? nameInput.value.trim() : '';
             if(nVal) name = nVal;
         }
 
-        let newCmt = { id: Date.now().toString(), name, avatar, isCreator, text, date: new Date().toLocaleString('vi-VN'), likes: 0, replies: [] };
         let cmts = getCmtsTree(safeId);
+        const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
+        if (fb) {
+            try {
+                const res = await fetch(`${fb}/comments/${safeId}.json`);
+                if (res.ok) {
+                    const remoteData = await res.json();
+                    if (remoteData) cmts = normalizeCmtList(remoteData);
+                }
+            } catch (e) {}
+        }
+
+        let newCmt = { id: Date.now().toString(), name, avatar, isCreator, text, date: new Date().toLocaleString('vi-VN'), likes: 0, replies: [] };
 
         if(parentId) {
             let parent = cmts.find(c => c.id === parentId);
-            if(parent) parent.replies.push(newCmt);
-        } else cmts.push(newCmt);
+            if(parent) {
+                if(!Array.isArray(parent.replies)) parent.replies = [];
+                parent.replies.push(newCmt);
+            }
+        } else {
+            cmts.push(newCmt);
+        }
         
         saveCmtsTree(safeId, cmts);
+        if (textEl) textEl.value = '';
         
         String(charCreatorName || '').split(',').map(s => s.trim()).filter(Boolean).forEach(targetId => {
             if (sysCurrentUser !== targetId) {
@@ -1939,17 +1978,27 @@ function updateTopNotifBadge() {
 
     window.likeTreeComment = function(safeId, cmtId, isReply = false, pId = null) {
         let cmts = getCmtsTree(safeId);
-        let target = isReply ? cmts.find(c => c.id === pId).replies.find(r => r.id === cmtId) : cmts.find(c => c.id === cmtId);
-        if(target) { target.likes++; saveCmtsTree(safeId, cmts); sysRenderCommentsUI(safeId, null, null, true); }
+        let target = isReply
+            ? (cmts.find(c => c.id === pId)?.replies || []).find(r => r.id === cmtId)
+            : cmts.find(c => c.id === cmtId);
+        if(target) {
+            target.likes = (target.likes || 0) + 1;
+            saveCmtsTree(safeId, cmts);
+            sysRenderCommentsUI(safeId, null, null, true);
+        }
     }
 
     window.toggleReply = function(cmtId) { document.getElementById(`repBox-${cmtId}`).classList.toggle('active'); }
+
+    function escCmtText(str) {
+        return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
 
     function sysRenderCommentsUI(safeId, creatorName, realName, skipCount = false) {
         let cmts = getCmtsTree(safeId);
         if(!skipCount) {
             let countEl = document.getElementById(`cmtCount-${safeId}`);
-            if(countEl) countEl.textContent = cmts.length + cmts.reduce((a,b)=>a+b.replies.length,0);
+            if(countEl) countEl.textContent = cmts.length + cmts.reduce((a, b) => a + (b.replies ? b.replies.length : 0), 0);
         }
 
         let html = '';
@@ -1971,25 +2020,27 @@ function updateTopNotifBadge() {
                 <img src="${c.avatar}" class="cmt-avatar">
                 <div class="cmt-body">
                     <div class="cmt-head">
-                        <div class="cmt-name">${c.name} ${badge}</div><div class="cmt-date">${c.date}</div>
+                        <div class="cmt-name">${escCmtText(c.name)} ${badge}</div><div class="cmt-date">${c.date || ''}</div>
                     </div>
-                    <div class="cmt-text">${c.text}</div>
+                    <div class="cmt-text">${escCmtText(c.text)}</div>
                     <div class="cmt-actions">
-                        <button class="cmt-act-btn" onclick="likeTreeComment('${safeId}', '${c.id}', ${isRep}, '${pId}')">❤️ ${c.likes}</button>
+                        <button class="cmt-act-btn" onclick="likeTreeComment('${safeId}', '${c.id}', ${isRep}, '${pId}')">❤️ ${c.likes || 0}</button>
                         ${repBtn}
                     </div>${repInputHTML}
                 </div>
             </div>`;
         }
 
-        cmts.forEach(c => { html += buildNode(c, false, null); if(c.replies) c.replies.forEach(r => html += buildNode(r, true, c.id)); });
+        cmts.forEach(c => {
+            html += buildNode(c, false, null);
+            if(Array.isArray(c.replies)) c.replies.forEach(r => html += buildNode(r, true, c.id));
+        });
         let listEl = document.getElementById(`cmtList-${safeId}`);
         if(listEl) listEl.innerHTML = html || `
             <div style="text-align:center; opacity:0.6; padding:15px; font-family: var(--font-quote); font-style:italic;">
                 Ngoan yêu có muốn là người đầu tiên mở hàng không nè... ૮ ˶ᵔ ᵕ ᵔ˶ ა
             </div>`;
     }
-
     // ==========================================================================
     // RENDER HỒ SƠ NHÂN VẬT (1 THANH TRƯỢT + NỀN BLOCK TRÙNG AVATAR NHÂN VẬT)
     // ==========================================================================
@@ -2083,6 +2134,13 @@ function updateTopNotifBadge() {
             sysRenderCommentsUI(safeId, c.creator, c.name);
           }
         }).catch(() => {});
+     const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
+      if (fb) {
+        fetch(`${fb}/comments/${safeId}.json`).then(r => r.json()).then(data => {
+          const normalized = normalizeCmtList(data);
+          localStorage.setItem('sysTreeCmt_v8_' + safeId, JSON.stringify(normalized));
+          sysRenderCommentsUI(safeId, c.creator, c.name);
+        }).catch(() => {});
         fetch(`${fb}/hearts/${safeId}.json`).then(r => r.json()).then(val => {
           if (typeof val === 'number') {
             window.heartsData[safeId] = val;
@@ -2091,7 +2149,6 @@ function updateTopNotifBadge() {
           }
         }).catch(() => {});
       }
-    }
 
     sysUpdateLoginUI();
 
