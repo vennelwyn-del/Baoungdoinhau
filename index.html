@@ -1097,7 +1097,6 @@
       .dash-header img { width: 54px !important; height: 54px !important; }
       .dash-tab { padding: 6px 12px; font-size: 0.8rem; }
     }
-  </style>
   /* ==========================================================================
        ✦ KHUNG ĐỀ XUẤT @TAG CREATOR KHI BÌNH LUẬN ✦
        ========================================================================== */
@@ -1146,6 +1145,7 @@
     .mention-info { min-width: 0; flex: 1; }
     .mention-id { font-size: 0.85rem; font-weight: 600; color: #ffffff; }
     .mention-sub { font-size: 0.72rem; color: #d4d7db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+ </style>    
 </head>
 <body>
 
@@ -2039,8 +2039,6 @@ function updateTopNotifBadge() {
     }
 
         sysRenderCommentsUI(safeId, charCreatorName, charRealName);
-    }
-
     window.likeTreeComment = function(safeId, cmtId, isReply = false, pId = null) {
         let cmts = getCmtsTree(safeId);
         let target = isReply
