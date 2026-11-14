@@ -1517,10 +1517,10 @@
     /* ==========================================================================
        ✦ CẤU HÌNH DỮ LIỆU TÁCH BIỆT (BẢN V8) ✦
        ========================================================================== */
-    window.sessionLikes = new Set(); 
+    window.sessionLikes = new Set(JSON.parse(localStorage.getItem('baoUngLikedChars') || '[]'));
     window.heartsData = JSON.parse(localStorage.getItem('baoUngHearts')) || {};
 
-  const MY_CONFIG = {
+    const MY_CONFIG = {
       FIREBASE_URL: 'https://baoungdoinhau-default-rtdb.asia-southeast1.firebasedatabase.app',
       
       /* 👉 MỤC 1: LINK ẢNH HỆ THỐNG - THAY LINK Ở ĐÂY NẾU MUỐN */
@@ -1583,6 +1583,7 @@
         }
       ]
     };
+
     // Khởi tạo & đồng bộ Avatar giữa loginAccs và creatorsShowcase
     if(!localStorage.getItem('sysDB_Login_v8')) localStorage.setItem('sysDB_Login_v8', JSON.stringify(MY_CONFIG.loginAccs));
     let dbLoginInit = JSON.parse(localStorage.getItem('sysDB_Login_v8'));
@@ -1609,7 +1610,7 @@
     const waterBg = document.getElementById('waterBg');
     function applyBackground() {
         const gradient = getComputedStyle(document.body).getPropertyValue('--bg-gradient').trim();
-        waterBg.style.backgroundImage = `${gradient}, url('${MY_CONFIG.ASSETS.bgImg}')`;
+        waterBg.style.backgroundImage = gradient + ", url('" + MY_CONFIG.ASSETS.bgImg + "')";
     }
     if (localStorage.getItem('baoUngTheme') === 'light') document.body.classList.add('light-mode');
     applyBackground();
@@ -1624,7 +1625,7 @@
     const cardWrapper = document.getElementById('cardWrapper');
     window.addEventListener('mousemove', (e) => {
       const x = (e.clientX / window.innerWidth) * 2 - 1, y = (e.clientY / window.innerHeight) * 2 - 1;
-      cardWrapper.style.transform = `perspective(1000px) rotateY(${x * 9}deg) rotateX(${-y * 9}deg)`;
+      cardWrapper.style.transform = 'perspective(1000px) rotateY(' + (x * 9) + 'deg) rotateX(' + (-y * 9) + 'deg)';
     });
 
     document.getElementById('btnEnter').addEventListener('click', (e) => {
@@ -1641,7 +1642,7 @@
       document.getElementById('topLeftGroup').classList.add('visible');
     });
 
-   /* ==========================================================================
+    /* ==========================================================================
        ✦ RENDER BẢNG CREATORS (NỀN BLOCK TRÙNG AVATAR CREATOR) ✦
        ========================================================================== */
     const creatorsGrid = document.getElementById('creatorsGrid');
@@ -1649,23 +1650,22 @@
 
     function renderCreators() {
       creatorsGrid.innerHTML = '';
-      creatorFilterGroup.innerHTML = `<button class="toggle-btn active" data-val="All"> Full báo ứng </button>`;
+      creatorFilterGroup.innerHTML = '<button class="toggle-btn active" data-val="All"> Full báo ứng </button>';
       MY_CONFIG.creatorsShowcase.forEach(c => {
         const avatarImg = (typeof dbLogin !== 'undefined' && dbLogin[c.id] && dbLogin[c.id].image) ? dbLogin[c.id].image : c.banner;
-        let buttonsHtml = c.buttons.map(btn => `<a href="${btn.url}" class="carrd-btn">${btn.text}</a>`).join('');
-        creatorsGrid.innerHTML += `
-          <div class="creator-card">
-            <div class="block-avatar-bg" style="background-image: url('${avatarImg}');"></div>
-            <div class="block-avatar-overlay"></div>
-            <div class="creator-banner"><img src="${avatarImg}"></div>
-            <h3 class="c-name">${c.nameDisplay}</h3>
-            <div class="c-sign">${c.sign}</div>
-            <div class="c-quote">${c.quote}</div>
-            <p class="c-bio">${c.bio}</p>
-            <div class="creator-actions">${buttonsHtml}</div>
-          </div>
-        `;
-        creatorFilterGroup.innerHTML += `<button class="toggle-btn" data-val="${c.id}">${c.id}</button>`;
+        let buttonsHtml = c.buttons.map(btn => '<a href="' + btn.url + '" class="carrd-btn" target="_blank" rel="noopener noreferrer">' + btn.text + '</a>').join('');
+        creatorsGrid.innerHTML +=
+          '<div class="creator-card">' +
+            '<div class="block-avatar-bg" style="background-image: url(\'' + avatarImg + '\');"></div>' +
+            '<div class="block-avatar-overlay"></div>' +
+            '<div class="creator-banner"><img src="' + avatarImg + '"></div>' +
+            '<h3 class="c-name">' + c.nameDisplay + '</h3>' +
+            '<div class="c-sign">' + c.sign + '</div>' +
+            '<div class="c-quote">' + c.quote + '</div>' +
+            '<p class="c-bio">' + c.bio + '</p>' +
+            '<div class="creator-actions">' + buttonsHtml + '</div>' +
+          '</div>';
+        creatorFilterGroup.innerHTML += '<button class="toggle-btn" data-val="' + c.id + '">' + c.id + '</button>';
       });
       if (typeof setupFilter === 'function') setupFilter('creatorFilter', 'creator');
     }
@@ -1675,6 +1675,7 @@
       if (creatorsGrid.innerHTML.trim() === '') renderCreators();
       document.getElementById('creatorsOverlay').classList.add('active');
     });
+
     /* ==========================================================================
        ✦ LỌC & RENDER NHÂN VẬT ✦
        ========================================================================== */
@@ -1684,7 +1685,7 @@
     MY_CONFIG.allTags.forEach(tag => {
       const isRed = (tag === '#R18' || tag === '#R21' || tag === '#Warning');
       const btn = document.createElement('button');
-      btn.className = `tag-btn ${isRed ? 'tag-red' : ''}`; btn.textContent = tag;
+      btn.className = 'tag-btn ' + (isRed ? 'tag-red' : ''); btn.textContent = tag;
       btn.onclick = () => {
         if(selectedTags.has(tag)) selectedTags.delete(tag); else selectedTags.add(tag);
         btn.classList.toggle('active'); renderCharacters();
@@ -1695,9 +1696,9 @@
     document.getElementById('searchInput').addEventListener('input', (e) => { currentSearch = e.target.value.toLowerCase(); renderCharacters(); });
 
     function setupFilter(groupId, varName) {
-      document.querySelectorAll(`#${groupId} .toggle-btn`).forEach(btn => {
+      document.querySelectorAll('#' + groupId + ' .toggle-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          document.querySelectorAll(`#${groupId} .toggle-btn`).forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('#' + groupId + ' .toggle-btn').forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           if(varName === 'type') currentType = btn.getAttribute('data-val');
           if(varName === 'creator') currentCreator = btn.getAttribute('data-val');
@@ -1728,15 +1729,14 @@
       filtered.forEach((char) => {
         const card = document.createElement('div');
         card.className = 'char-card show-anim';
-        let tagsHtml = (char.tags || []).slice(0,3).map(t => `<span>${t}</span>`).join('');
-        card.innerHTML = `
-          <div class="char-img-box"><img src="${char.img}"></div>
-          <div class="char-info-box">
-            <h3 class="char-name-outer">${char.name}</h3>
-            <div class="char-title-outer">“${char.title}”</div>
-            <div class="char-tags-mini">${tagsHtml}</div>
-          </div>
-        `;
+        let tagsHtml = (char.tags || []).slice(0,3).map(t => '<span>' + t + '</span>').join('');
+        card.innerHTML =
+          '<div class="char-img-box"><img src="' + char.img + '"></div>' +
+          '<div class="char-info-box">' +
+            '<h3 class="char-name-outer">' + char.name + '</h3>' +
+            '<div class="char-title-outer">“' + char.title + '”</div>' +
+            '<div class="char-tags-mini">' + tagsHtml + '</div>' +
+          '</div>';
         card.onclick = () => openChar(char);
         charGrid.appendChild(card);
       });
@@ -1752,7 +1752,7 @@
     const loginIcon = document.getElementById('loginIcon');
     let attemptLoginId = "";
 
-function updateTopNotifBadge() {
+    function updateTopNotifBadge() {
         const dot = document.getElementById('topNotifDot');
         if (!dot) return;
         if (!sysCurrentUser) {
@@ -1774,7 +1774,7 @@ function updateTopNotifBadge() {
         const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
         if (!fb || !sysCurrentUser) return;
         try {
-            const res = await fetch(`${fb}/notifs/${encodeURIComponent(sysCurrentUser)}.json`);
+            const res = await fetch(fb + '/notifs/' + encodeURIComponent(sysCurrentUser) + '.json');
             if (!res.ok) return;
             const data = await res.json();
             if (data && typeof data === 'object') {
@@ -1790,7 +1790,7 @@ function updateTopNotifBadge() {
         } catch (e) {}
     }
 
-       function sysUpdateLoginUI() {
+    function sysUpdateLoginUI() {
         if(sysCurrentUser && dbLogin[sysCurrentUser]) {
             authBtnText.textContent = sysCurrentUser;
             authMiniAvatar.src = dbLogin[sysCurrentUser].image;
@@ -1813,7 +1813,7 @@ function updateTopNotifBadge() {
 
     window.previewLoginBg = function(id) {
       if (loginSelectBg && dbLogin[id]) {
-        loginSelectBg.style.backgroundImage = `url('${dbLogin[id].image}')`;
+        loginSelectBg.style.backgroundImage = "url('" + dbLogin[id].image + "')";
       }
     };
 
@@ -1826,12 +1826,11 @@ function updateTopNotifBadge() {
       }
       ids.forEach(id => {
         let c = dbLogin[id];
-        authGridList.innerHTML += `
-          <div class="auth-item" onmouseenter="previewLoginBg('${id}')" ontouchstart="previewLoginBg('${id}')" onclick="promptLogin('${id}')">
-            <img src="${c.image}" class="auth-img">
-            <div class="auth-name">${id}</div>
-          </div>
-        `;
+        authGridList.innerHTML +=
+          '<div class="auth-item" onmouseenter="previewLoginBg(\'' + id + '\')" ontouchstart="previewLoginBg(\'' + id + '\')" onclick="promptLogin(\'' + id + '\')">' +
+            '<img src="' + c.image + '" class="auth-img">' +
+            '<div class="auth-name">' + id + '</div>' +
+          '</div>';
       });
     }
     renderAuthGrid();
@@ -1839,7 +1838,7 @@ function updateTopNotifBadge() {
     window.promptLogin = function(id) {
         document.getElementById('sysLoginSelect').classList.remove('active');
         attemptLoginId = id;
-        document.getElementById('pwdBgImg').style.backgroundImage = `url('${dbLogin[id].image}')`;
+        document.getElementById('pwdBgImg').style.backgroundImage = "url('" + dbLogin[id].image + "')";
         document.getElementById('pwdAvt').src = dbLogin[id].image;
         document.getElementById('pwdName').textContent = id;
         document.getElementById('pwdInput').value = "";
@@ -1868,7 +1867,7 @@ function updateTopNotifBadge() {
 
     async function openDashboard() {
         let c = dbLogin[sysCurrentUser];
-        document.getElementById('dashBgImg').style.backgroundImage = `url('${c.image}')`;
+        document.getElementById('dashBgImg').style.backgroundImage = "url('" + c.image + "')";
         document.getElementById('dashAvt').src = c.image;
         document.getElementById('dashName').textContent = sysCurrentUser;
         
@@ -1883,6 +1882,7 @@ function updateTopNotifBadge() {
         localStorage.setItem('baoUngNotifSeen_' + sysCurrentUser, (dbNotifs[sysCurrentUser] || []).length);
         updateTopNotifBadge();
     }
+
     window.switchDashTab = function(tab) {
         document.querySelectorAll('.dash-tab').forEach(b => b.classList.remove('active'));
         document.getElementById('tabNotifs').style.display = 'none';
@@ -1897,7 +1897,7 @@ function updateTopNotifBadge() {
         }
     }
 
-  window.sysSaveProfile = function() {
+    window.sysSaveProfile = function() {
         let c = dbLogin[sysCurrentUser];
         c.image = document.getElementById('setImage').value || c.image;
         c._isCustom = true;
@@ -1905,17 +1905,18 @@ function updateTopNotifBadge() {
         if(newPass.trim() !== "") c.pass = newPass;
 
         localStorage.setItem('sysDB_Login_v8', JSON.stringify(dbLogin));
-        document.getElementById('dashBgImg').style.backgroundImage = `url('${c.image}')`;
+        document.getElementById('dashBgImg').style.backgroundImage = "url('" + c.image + "')";
         document.getElementById('dashAvt').src = c.image;
         renderCreators();
         renderAuthGrid();
         alert("Đã cập nhật Avatar cá nhân thành công!");
         sysUpdateLoginUI();
     }
+
     /* ==========================================================================
        ✦ THÔNG BÁO VÀ COMMENT CÂY ✦
        ========================================================================== */
-     function sendNotif(loginID, htmlText, charName) {
+    function sendNotif(loginID, htmlText, charName) {
         if(!loginID || !dbLogin[loginID]) return;
         const notifObj = { id: Date.now(), time: new Date().toLocaleString('vi-VN'), text: htmlText, charRef: charName };
         if(!dbNotifs[loginID]) dbNotifs[loginID] = [];
@@ -1925,26 +1926,27 @@ function updateTopNotifBadge() {
 
         const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
         if (fb) {
-            fetch(`${fb}/notifs/${encodeURIComponent(loginID)}.json`, {
+            fetch(fb + '/notifs/' + encodeURIComponent(loginID) + '.json', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(notifObj)
             }).catch(() => {});
         }
     }
-        function renderNotifications() {
+
+    function renderNotifications() {
         let notifs = dbNotifs[sysCurrentUser] || [];
         document.getElementById('notifBadge').textContent = notifs.length;
         let html = "";
-        if(notifs.length === 0) html = `<div style="opacity:0.5; text-align:center; padding: 20px;">Chưa có thông báo nào.</div>`;
+        if(notifs.length === 0) html = '<div style="opacity:0.5; text-align:center; padding: 20px;">Chưa có thông báo nào.</div>';
         else {
             notifs.forEach(n => {
                 const safeCharRef = String(n.charRef || '').replace(/'/g, "\\'");
-                html += `
-                <div class="notif-item" onclick="jumpToChar('${safeCharRef}')">
-                    <div style="font-size:0.7rem; opacity:0.6; margin-bottom:4px;">${n.time}</div>
-                    <div class="notif-text">${n.text}</div>
-                </div>`;
+                html +=
+                '<div class="notif-item" onclick="jumpToChar(\'' + safeCharRef + '\')">' +
+                    '<div style="font-size:0.7rem; opacity:0.6; margin-bottom:4px;">' + n.time + '</div>' +
+                    '<div class="notif-text">' + n.text + '</div>' +
+                '</div>';
             });
         }
         document.getElementById('notifListContainer').innerHTML = html;
@@ -1965,31 +1967,40 @@ function updateTopNotifBadge() {
 
     window.addHeart = async function(safeId, charCreatorName, charRealName, event) {
       event.stopPropagation();
-      if (window.sessionLikes.has(safeId)) return;
-      window.sessionLikes.add(safeId);
-      if (!window.heartsData[safeId]) window.heartsData[safeId] = 0;
-      window.heartsData[safeId]++;
-      localStorage.setItem('baoUngHearts', JSON.stringify(window.heartsData));
+      const btn = event.currentTarget;
+      const countSpan = document.getElementById('count-' + safeId);
+      const wasLiked = window.sessionLikes.has(safeId);
+      const delta = wasLiked ? -1 : 1;
 
-      const countSpan = document.getElementById(`count-${safeId}`);
+      if (wasLiked) {
+        window.sessionLikes.delete(safeId);
+        btn.classList.remove('liked');
+        window.heartsData[safeId] = Math.max(0, (window.heartsData[safeId] || 0) - 1);
+      } else {
+        window.sessionLikes.add(safeId);
+        btn.classList.add('liked');
+        window.heartsData[safeId] = (window.heartsData[safeId] || 0) + 1;
+        String(charCreatorName || '').split(',').map(s => s.trim()).filter(Boolean).forEach(targetId => {
+          if (sysCurrentUser !== targetId) {
+            sendNotif(targetId, 'Ai đó vừa rước <b>' + charRealName + '</b> về ♡ྀི', charRealName);
+          }
+        });
+      }
+
+      localStorage.setItem('baoUngLikedChars', JSON.stringify([...window.sessionLikes]));
+      localStorage.setItem('baoUngHearts', JSON.stringify(window.heartsData));
       if (countSpan) countSpan.textContent = window.heartsData[safeId];
-      const btn = event.currentTarget; btn.classList.add('liked');
-      String(charCreatorName || '').split(',').map(s => s.trim()).filter(Boolean).forEach(targetId => {
-        if (sysCurrentUser !== targetId) {
-          sendNotif(targetId, `Ai đó vừa rước <b>${charRealName}</b> về ♡ྀི`, charRealName);
-        }
-      });
 
       const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
       if (fb) {
         try {
-          const r = await fetch(`${fb}/hearts/${safeId}.json`);
+          const r = await fetch(fb + '/hearts/' + safeId + '.json');
           const serverVal = await r.json();
-          const nextVal = (typeof serverVal === 'number' ? serverVal : 0) + 1;
+          const nextVal = Math.max(0, (typeof serverVal === 'number' ? serverVal : 0) + delta);
           window.heartsData[safeId] = nextVal;
           localStorage.setItem('baoUngHearts', JSON.stringify(window.heartsData));
           if (countSpan) countSpan.textContent = nextVal;
-          await fetch(`${fb}/hearts/${safeId}.json`, {
+          await fetch(fb + '/hearts/' + safeId + '.json', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(nextVal)
@@ -1997,7 +2008,8 @@ function updateTopNotifBadge() {
         } catch (e) {}
       }
     }
-     function normalizeCmtList(raw) {
+
+    function normalizeCmtList(raw) {
         const arr = Array.isArray(raw) ? raw : (raw && typeof raw === 'object' ? Object.values(raw) : []);
         return arr.filter(Boolean).map(c => ({
             ...c,
@@ -2021,13 +2033,14 @@ function updateTopNotifBadge() {
         localStorage.setItem('sysTreeCmt_v8_' + safeId, JSON.stringify(cleanData));
         const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
         if (fb) {
-            fetch(`${fb}/comments/${safeId}.json`, {
+            fetch(fb + '/comments/' + safeId + '.json', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(cleanData)
             }).catch(() => {});
         }
     }
+
     function getMyCmtIds() {
         try { return JSON.parse(localStorage.getItem('baoUngMyCmts') || '[]'); } catch (e) { return []; }
     }
@@ -2044,11 +2057,11 @@ function updateTopNotifBadge() {
 
     window.addTreeComment = function(safeId, charCreatorName, charRealName, parentId = null) {
         const randNum = Math.floor(1000 + Math.random() * 9000);
-        let name = `Ẩn danh (${randNum})`;
+        let name = 'Ẩn danh (' + randNum + ')';
         let avatar = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
         let isCreator = false;
         
-        let textId = parentId ? `repText-${parentId}` : `cmtText-${safeId}`;
+        let textId = parentId ? ('repText-' + parentId) : ('cmtText-' + safeId);
         let textEl = document.getElementById(textId);
         let text = textEl ? textEl.value.trim() : '';
         if(!text) { alert("Bạn quên nhập lời nhắn rồi nè!"); return; }
@@ -2056,7 +2069,7 @@ function updateTopNotifBadge() {
         if(sysCurrentUser && dbLogin[sysCurrentUser]) {
             name = sysCurrentUser; avatar = dbLogin[sysCurrentUser].image; isCreator = true;
         } else {
-            let nameInput = document.getElementById(parentId ? `repName-${parentId}` : `cmtName-${safeId}`);
+            let nameInput = document.getElementById(parentId ? ('repName-' + parentId) : ('cmtName-' + safeId));
             let nVal = nameInput ? nameInput.value.trim() : '';
             if(nVal) name = nVal;
         }
@@ -2064,7 +2077,6 @@ function updateTopNotifBadge() {
         let newCmt = { id: Date.now().toString() + '_' + randNum, name, avatar, isCreator, text, date: new Date().toLocaleString('vi-VN'), likes: 0, replies: [] };
         markMyCmtId(newCmt.id);
 
-        // 1. Hiện ngay lập tức lên màn hình cho mượt
         let cmts = getCmtsTree(safeId);
         if(parentId) {
             let parent = cmts.find(c => c.id === parentId);
@@ -2079,10 +2091,9 @@ function updateTopNotifBadge() {
         if (textEl) textEl.value = '';
         sysRenderCommentsUI(safeId, charCreatorName, charRealName);
 
-        // 2. Đồng bộ ngầm lên Firebase (gộp với comment của người khác nếu có)
         const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
         if (fb) {
-            fetch(`${fb}/comments/${safeId}.json`)
+            fetch(fb + '/comments/' + safeId + '.json')
                 .then(r => r.ok ? r.json() : null)
                 .then(remoteData => {
                     let merged = remoteData ? normalizeCmtList(remoteData) : [];
@@ -2102,15 +2113,14 @@ function updateTopNotifBadge() {
                 .catch(() => { saveCmtsTree(safeId, cmts); });
         }
 
-        // 3. Gửi thông báo cho các tác giả & người được @tag
         String(charCreatorName || '').split(',').map(s => s.trim()).filter(Boolean).forEach(targetId => {
             if (sysCurrentUser !== targetId) {
-                sendNotif(targetId, `<b>${name}</b> vừa gửi lời nhắn vào <b>${charRealName}</b>`, charRealName);
+                sendNotif(targetId, '<b>' + name + '</b> vừa gửi lời nhắn vào <b>' + charRealName + '</b>', charRealName);
             }
         });
         Object.keys(dbLogin).forEach(accID => {
-            if (text.toLowerCase().includes(`@${accID.toLowerCase()}`) && accID !== sysCurrentUser) {
-                sendNotif(accID, `<b>${name}</b> đã nhắc tới bạn trong hồ sơ <b>${charRealName}</b>`, charRealName);
+            if (text.toLowerCase().includes('@' + accID.toLowerCase()) && accID !== sysCurrentUser) {
+                sendNotif(accID, '<b>' + name + '</b> đã nhắc tới bạn trong hồ sơ <b>' + charRealName + '</b>', charRealName);
             }
         });
     }
@@ -2122,7 +2132,7 @@ function updateTopNotifBadge() {
             : cmts.find(c => c.id === cmtId);
         if (!target) return;
 
-        const likeKey = `${safeId}_${cmtId}`;
+        const likeKey = safeId + '_' + cmtId;
         const likedMap = getLikedCmtsMap();
         if (likedMap[likeKey]) {
             target.likes = Math.max(0, (target.likes || 0) - 1);
@@ -2157,7 +2167,7 @@ function updateTopNotifBadge() {
 
         const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
         if (fb) {
-            fetch(`${fb}/comments/${safeId}.json`)
+            fetch(fb + '/comments/' + safeId + '.json')
                 .then(r => r.ok ? r.json() : null)
                 .then(remoteData => {
                     if (!remoteData) return;
@@ -2177,7 +2187,7 @@ function updateTopNotifBadge() {
         }
     }
 
-    window.toggleReply = function(cmtId) { document.getElementById(`repBox-${cmtId}`).classList.toggle('active'); }
+    window.toggleReply = function(cmtId) { document.getElementById('repBox-' + cmtId).classList.toggle('active'); }
 
     function escCmtText(str) {
         return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -2193,7 +2203,7 @@ function updateTopNotifBadge() {
 
         let cmts = getCmtsTree(safeId);
         if(!skipCount) {
-            let countEl = document.getElementById(`cmtCount-${safeId}`);
+            let countEl = document.getElementById('cmtCount-' + safeId);
             if(countEl) countEl.textContent = cmts.length + cmts.reduce((a, b) => a + (b.replies ? b.replies.length : 0), 0);
         }
 
@@ -2203,53 +2213,56 @@ function updateTopNotifBadge() {
 
         let html = '';
         function buildNode(c, isRep, pId) {
-            let badge = c.isCreator ? `<span class="cmt-badge">Auth</span>` : "";
-            let isLiked = Boolean(likedMap[`${safeId}_${c.id}`]);
+            let badge = c.isCreator ? '<span class="cmt-badge">Auth</span>' : "";
+            let isLiked = Boolean(likedMap[safeId + '_' + c.id]);
             let isMine = myIds.includes(c.id) || (sysCurrentUser && c.isCreator && c.name === sysCurrentUser);
             let delBtn = (isMine || isAdmin)
-                ? `<button type="button" class="cmt-act-btn delete-btn" onclick="deleteTreeComment('${safeId}', '${c.id}', ${isRep}, '${pId}')">Xóa</button>`
+                ? '<button type="button" class="cmt-act-btn delete-btn" onclick="deleteTreeComment(\'' + safeId + '\', \'' + c.id + '\', ' + isRep + ', \'' + pId + '\')">Xóa</button>'
                 : "";
-            let repBtn = !isRep ? `<button type="button" class="cmt-act-btn" onclick="toggleReply('${c.id}')">Phản hồi</button>` : "";
+            let repBtn = !isRep ? '<button type="button" class="cmt-act-btn" onclick="toggleReply(\'' + c.id + '\')">Phản hồi</button>' : "";
             let repInputHTML = "";
             if(!isRep) {
-                let nameHtml = sysCurrentUser ? `<div style="font-size:0.75rem; opacity:0.8; margin-bottom:4px;">Trả lời bằng: <b>${sysCurrentUser}</b></div>` : `<input type="text" id="repName-${c.id}" class="cmt-input" style="padding:8px 12px; margin-bottom:6px;" placeholder="Tên (Ẩn danh)">`;
-                repInputHTML = `
-                <div class="reply-box" id="repBox-${c.id}">
-                    ${nameHtml}
-                    <textarea id="repText-${c.id}" class="cmt-textarea" rows="1" style="padding:8px 12px; margin-bottom:6px;" placeholder="Nhập phản hồi..."></textarea>
-                    <div class="cmt-submit-row">
-                        <button type="button" class="btn-icon-picker" onclick="toggleIconPicker(event, 'repText-${c.id}')" title="Chèn icon">☺</button>
-                        <button type="button" class="btn-submit-cmt" style="padding:6px 16px; float:none;" onclick="addTreeComment('${safeId}', '${useCreator}', '${useReal}', '${c.id}')">Gửi ➻❥</button>
-                    </div>
-                </div>`;
+                let nameHtml = sysCurrentUser
+                    ? '<div style="font-size:0.75rem; opacity:0.8; margin-bottom:4px;">Trả lời bằng: <b>' + sysCurrentUser + '</b></div>'
+                    : '<input type="text" id="repName-' + c.id + '" class="cmt-input" style="padding:8px 12px; margin-bottom:6px;" placeholder="Tên (Ẩn danh)">';
+                repInputHTML =
+                '<div class="reply-box" id="repBox-' + c.id + '">' +
+                    nameHtml +
+                    '<textarea id="repText-' + c.id + '" class="cmt-textarea" rows="1" style="padding:8px 12px; margin-bottom:6px;" placeholder="Nhập phản hồi..."></textarea>' +
+                    '<div class="cmt-submit-row">' +
+                        '<button type="button" class="btn-icon-picker" onclick="toggleIconPicker(event, \'repText-' + c.id + '\')" title="Chèn icon">☺</button>' +
+                        '<button type="button" class="btn-submit-cmt" style="padding:6px 16px; float:none;" onclick="addTreeComment(\'' + safeId + '\', \'' + useCreator + '\', \'' + useReal + '\', \'' + c.id + '\')">Gửi ➻❥</button>' +
+                    '</div>' +
+                '</div>';
             }
-            return `
-            <div class="cmt-item ${isRep ? 'is-reply' : ''}">
-                <img src="${c.avatar}" class="cmt-avatar">
-                <div class="cmt-body">
-                    <div class="cmt-head">
-                        <div class="cmt-name">${escCmtText(c.name)} ${badge}</div><div class="cmt-date">${c.date || ''}</div>
-                    </div>
-                    <div class="cmt-text">${escCmtText(c.text)}</div>
-                    <div class="cmt-actions">
-                        <button type="button" class="cmt-act-btn ${isLiked ? 'liked' : ''}" onclick="likeTreeComment('${safeId}', '${c.id}', ${isRep}, '${pId}')">❤️ ${c.likes || 0}</button>
-                        ${repBtn}
-                        ${delBtn}
-                    </div>${repInputHTML}
-                </div>
-            </div>`;
+            return (
+            '<div class="cmt-item ' + (isRep ? 'is-reply' : '') + '">' +
+                '<img src="' + c.avatar + '" class="cmt-avatar">' +
+                '<div class="cmt-body">' +
+                    '<div class="cmt-head">' +
+                        '<div class="cmt-name">' + escCmtText(c.name) + ' ' + badge + '</div><div class="cmt-date">' + (c.date || '') + '</div>' +
+                    '</div>' +
+                    '<div class="cmt-text">' + escCmtText(c.text) + '</div>' +
+                    '<div class="cmt-actions">' +
+                        '<button type="button" class="cmt-act-btn ' + (isLiked ? 'liked' : '') + '" onclick="likeTreeComment(\'' + safeId + '\', \'' + c.id + '\', ' + isRep + ', \'' + pId + '\')">❤️ ' + (c.likes || 0) + '</button>' +
+                        repBtn +
+                        delBtn +
+                    '</div>' + repInputHTML +
+                '</div>' +
+            '</div>');
         }
 
         cmts.forEach(c => {
             html += buildNode(c, false, null);
             if(Array.isArray(c.replies)) c.replies.forEach(r => html += buildNode(r, true, c.id));
         });
-        let listEl = document.getElementById(`cmtList-${safeId}`);
-        if(listEl) listEl.innerHTML = html || `
-            <div style="text-align:center; opacity:0.6; padding:15px; font-family: var(--font-quote); font-style:italic;">
-                Ngoan yêu có muốn là người đầu tiên mở hàng không nè... ૮ ˶ᵔ ᵕ ᵔ˶ ა
-            </div>`;
+        let listEl = document.getElementById('cmtList-' + safeId);
+        if(listEl) listEl.innerHTML = html ||
+            '<div style="text-align:center; opacity:0.6; padding:15px; font-family: var(--font-quote); font-style:italic;">' +
+                'Ngoan yêu có muốn là người đầu tiên mở hàng không nè... ૮ ˶ᵔ ᵕ ᵔ˶ ა' +
+            '</div>';
     }
+
     // ==========================================================================
     // RENDER HỒ SƠ NHÂN VẬT (1 THANH TRƯỢT + NỀN BLOCK TRÙNG AVATAR NHÂN VẬT)
     // ==========================================================================
@@ -2257,107 +2270,100 @@ function updateTopNotifBadge() {
       const safeId = getSafeId(c.name);
       const currentHearts = window.heartsData[safeId] || 0;
       const isSessionLiked = window.sessionLikes.has(safeId);
+      const creatorDisp = Array.isArray(c.creator) ? c.creator.join(' × ') : c.creator;
+      const creatorFirst = Array.isArray(c.creator) ? c.creator[0] : c.creator;
 
-      let warningHtml = c.warning ? `<div><div class="c-section-title" style="color: #ff6b8b;">゛WARNING ˎˊ˗</div><div class="c-warning-content">↳ «${c.warning}»</div></div>` : "";
-      let tagsHtml = (c.tags || []).map(t => `<span class="c-tag-item">${t}</span>`).join('');
+      let warningHtml = c.warning ? '<div><div class="c-section-title" style="color: #ff6b8b;">゛WARNING ˎˊ˗</div><div class="c-warning-content">↳ «' + c.warning + '»</div></div>' : "";
+      let tagsHtml = (c.tags || []).map(t => '<span class="c-tag-item">' + t + '</span>').join('');
       
       let mainInputNameHTML = sysCurrentUser 
-          ? `<div style="font-size:0.85rem; margin-bottom:8px; color:rgba(255,255,255,0.8); font-family:var(--font-ui);">Bình luận bằng: <b>${sysCurrentUser}</b></div>` 
-          : `<input type="text" id="cmtName-${safeId}" class="cmt-input" placeholder="Điền tên ngoan yêu (không bắt buộc)">`;
+          ? '<div style="font-size:0.85rem; margin-bottom:8px; color:rgba(255,255,255,0.8); font-family:var(--font-ui);">Bình luận bằng: <b>' + sysCurrentUser + '</b></div>'
+          : '<input type="text" id="cmtName-' + safeId + '" class="cmt-input" placeholder="Điền tên ngoan yêu (không bắt buộc)">';
 
-      modalSlabContent.innerHTML = `
-        <div class="block-avatar-bg" style="background-image: url('${c.img}');"></div>
-        <div class="block-avatar-overlay"></div>
+      modalSlabContent.innerHTML =
+        '<div class="block-avatar-bg" style="background-image: url(\'' + c.img + '\');"></div>' +
+        '<div class="block-avatar-overlay"></div>' +
 
-        <div class="modal-top-actions">
-            <button class="heart-btn-top ${isSessionLiked ? 'liked' : ''}" onclick="addHeart('${safeId}', '${c.creator}', '${c.name}', event)">
-                Rước về ♡ྀི <span id="count-${safeId}">${currentHearts}</span>
-            </button>
-            <button class="close-btn-pink" onclick="document.getElementById('charModal').classList.remove('active')">&times;</button>
-        </div>
+        '<div class="modal-top-actions">' +
+            '<button class="heart-btn-top ' + (isSessionLiked ? 'liked' : '') + '" onclick="addHeart(\'' + safeId + '\', \'' + c.creator + '\', \'' + c.name + '\', event)">' +
+                'Rước về ♡ྀི <span id="count-' + safeId + '">' + currentHearts + '</span>' +
+            '</button>' +
+            '<button class="close-btn-pink" onclick="document.getElementById(\'charModal\').classList.remove(\'active\')">&times;</button>' +
+        '</div>' +
 
-        <div class="char-content-wrapper">
-            <!-- CỘT TRÁI -->
-            <div class="char-left-col">
-                <h2 class="c-layout-name">${c.name}</h2>
-                <div class="c-layout-creator" onclick="openCreatorInfo('${Array.isArray(c.creator) ? c.creator[0] : c.creator}')">𐚁.${Array.isArray(c.creator) ? c.creator.join(' × ') : c.creator}</div>                
-                <div class="c-layout-divider">- ˋˏ ༻ ❁ ༺ ˎˊ -</div>
-                <div class="c-layout-img-wrapper">
-                    <img src="${c.img}" class="c-layout-img">
-                </div>
-                
-                <div class="c-layout-quote">${c.title}</div>
-            </div>
+        '<div class="char-content-wrapper">' +
+            '<div class="char-left-col">' +
+                '<h2 class="c-layout-name">' + c.name + '</h2>' +
+                '<div class="c-layout-creator" onclick="openCreatorInfo(\'' + creatorFirst + '\')">𐚁.' + creatorDisp + '</div>' +
+                '<div class="c-layout-divider">- ˋˏ ༻ ❁ ༺ ˎˊ -</div>' +
+                '<div class="c-layout-img-wrapper">' +
+                    '<img src="' + c.img + '" class="c-layout-img">' +
+                '</div>' +
+                '<div class="c-layout-quote">' + c.title + '</div>' +
+            '</div>' +
 
-            <!-- CỘT PHẢI -->
-            <div class="char-right-col">
-                
-                ${warningHtml}
+            '<div class="char-right-col">' +
+                warningHtml +
+                '<div>' +
+                    '<div class="c-section-title">⋮ ⌗ ┆ HASHTAGS</div>' +
+                    '<div class="c-tags-wrap">' + tagsHtml + '</div>' +
+                '</div>' +
+                '<div>' +
+                    '<div class="c-section-title">≽ ⌢ SƠ LƯỢC VỀ NHÂN VẬT ⸝⸝</div>' +
+                    '<div class="c-text-body">' + c.lore + '</div>' +
+                '</div>' +
+                '<div>' +
+                    '<div class="c-section-title">^ \'- ĐỊA CHỈ ,,</div>' +
+                    '<div class="c-list-item">↳ <a href="#">Cẩm nang nhân vật</a></div>' +
+                    (c.imgSource ? '<div class="c-list-item">↳ <a href="' + c.imgSource + '" target="_blank">Nguồn ảnh</a></div>' : '') +
+                    (c.ggaiLink ? '<div class="c-list-item">↳ <a href="' + c.ggaiLink + '" target="_blank">Book hàng ➻❥</a></div>' : '') +
+                '</div>' +
+                '<div>' +
+                    '<div class="c-section-title">◫ GÓC GIAO LƯU ,,</div>' +
+                    '<div style="font-family: var(--font-ui); font-size: 0.8rem; opacity: 0.7; margin-bottom: 15px; font-style: italic;">Nếu ngoan yêu nào tìm được nguồn ảnh chính xác hơn, mong ngoan yêu hãy comment nhắc nhở để chúng tớ bổ sung nhé. Những bình luận tiêu cực, mang tính công kích sẽ bị xoá. Iu thương ౨ৎ</div>' +
+                    '<div class="cmt-container">' +
+                        '<div style="font-size: 0.85rem; margin-bottom:10px; font-family: var(--font-char-text);">Sổ lưu trữ nhân duyên (<span id="cmtCount-' + safeId + '">0</span>)</div>' +
+                        '<div class="cmt-list" id="cmtList-' + safeId + '"></div>' +
+                        '<div style="margin-top:5px; padding-top:15px; border-top: 1px dashed rgba(255,255,255,0.2);">' +
+                            mainInputNameHTML +
+                            '<textarea id="cmtText-' + safeId + '" class="cmt-textarea" rows="2" placeholder="Lời nhắn của bạn... (@Tên để nhắc tài khoản)"></textarea>' +
+                            '<div class="cmt-submit-row">' +
+                                '<button type="button" class="btn-icon-picker" onclick="toggleIconPicker(event, \'cmtText-' + safeId + '\')" title="Chèn icon">☺ Icon</button>' +
+                                '<button type="button" class="btn-submit-cmt" onclick="addTreeComment(\'' + safeId + '\', \'' + c.creator + '\', \'' + c.name + '\')"> Gửi ➻❥ </button>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
 
-                <div>
-                    <div class="c-section-title">⋮ ⌗ ┆ HASHTAGS</div>
-                    <div class="c-tags-wrap">${tagsHtml}</div>
-                </div>
-
-                <div>
-                    <div class="c-section-title">≽ ⌢ SƠ LƯỢC VỀ NHÂN VẬT ⸝⸝</div>
-                    <div class="c-text-body">${c.lore}</div>
-                </div>
-
-                <div>
-                    <div class="c-section-title">^ '- ĐỊA CHỈ ,,</div>
-                    <div class="c-list-item">↳ <a href="#">Cẩm nang nhân vật</a></div>
-                    ${c.imgSource ? `<div class="c-list-item">↳ <a href="${c.imgSource}" target="_blank">Nguồn ảnh</a></div>` : ''}
-                    ${c.ggaiLink ? `<div class="c-list-item">↳ <a href="${c.ggaiLink}" target="_blank">Book hàng ➻❥</a></div>` : ''}
-                </div>
-                
-                <div>
-                    <div class="c-section-title">◫ GÓC GIAO LƯU ,,</div>
-                    <div style="font-family: var(--font-ui); font-size: 0.8rem; opacity: 0.7; margin-bottom: 15px; font-style: italic;">Nếu ngoan yêu nào tìm được nguồn ảnh chính xác hơn, mong ngoan yêu hãy comment nhắc nhở để chúng tớ bổ sung nhé. Những bình luận tiêu cực, mang tính công kích sẽ bị xoá. Iu thương ౨ৎ</div>
-                    
-                    <div class="cmt-container">
-                        <div style="font-size: 0.85rem; margin-bottom:10px; font-family: var(--font-char-text);">Sổ lưu trữ nhân duyên (<span id="cmtCount-${safeId}">0</span>)</div>
-                        <div class="cmt-list" id="cmtList-${safeId}"></div>
-                        
-                        <div style="margin-top:5px; padding-top:15px; border-top: 1px dashed rgba(255,255,255,0.2);">
-                            ${mainInputNameHTML}
-                            <textarea id="cmtText-${safeId}" class="cmt-textarea" rows="2" placeholder="Lời nhắn của bạn... (@Tên để nhắc tài khoản)"></textarea>
-                           <div class="cmt-submit-row">
-                                <button type="button" class="btn-icon-picker" onclick="toggleIconPicker(event, 'cmtText-${safeId}')" title="Chèn icon">☺ Icon</button>
-                                <button type="button" class="btn-submit-cmt" onclick="addTreeComment('${safeId}', '${c.creator}', '${c.name}')"> Gửi ➻❥ </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-      `;
       document.getElementById('charModal').classList.add('active');
       sysRenderCommentsUI(safeId, c.creator, c.name);
 
       const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
       if (fb) {
-        fetch(`${fb}/comments/${safeId}.json`).then(r => r.json()).then(data => {
+        fetch(fb + '/comments/' + safeId + '.json').then(r => r.json()).then(data => {
           const normalized = normalizeCmtList(data);
           localStorage.setItem('sysTreeCmt_v8_' + safeId, JSON.stringify(normalized));
           sysRenderCommentsUI(safeId, c.creator, c.name);
         }).catch(() => {});
-        fetch(`${fb}/hearts/${safeId}.json`).then(r => r.json()).then(val => {
+        fetch(fb + '/hearts/' + safeId + '.json').then(r => r.json()).then(val => {
           if (typeof val === 'number') {
             window.heartsData[safeId] = val;
-            const span = document.getElementById(`count-${safeId}`);
+            const span = document.getElementById('count-' + safeId);
             if (span) span.textContent = val;
           }
         }).catch(() => {});
       }
     }
+
     sysUpdateLoginUI();
 
     async function loadCloudHearts() {
         const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
         if (!fb) return;
         try {
-            const res = await fetch(`${fb}/hearts.json`);
+            const res = await fetch(fb + '/hearts.json');
             const data = await res.json();
             if (data && typeof data === 'object') {
                 window.heartsData = Object.assign({}, window.heartsData, data);
@@ -2367,6 +2373,7 @@ function updateTopNotifBadge() {
     }
     loadCloudHearts();
     setInterval(() => { if (sysCurrentUser) syncNotifsFromCloud(); }, 10000);
+
     /* ==========================================================================
        ✦ HIỆU ỨNG CANVAS GỐC ✦
        ========================================================================== */
@@ -2390,9 +2397,9 @@ function updateTopNotifBadge() {
         g.addColorStop(0, c1); g.addColorStop(.6, c2); g.addColorStop(.95, c3); g.addColorStop(1, 'rgba(255,255,255,0.9)');
         rc.fillStyle = g; rc.fill(); rc.restore();
       }
-      for(let i=0; i<7; i++) petal(i*Math.PI*2/7, 34, 48, 56, '#0754b0', '#4fa5d8', '#dbebf8');
-      for(let i=0; i<6; i++) petal(i*Math.PI*2/6+.45, 20, 36, 42, '#010d55', '#0754b0', '#4fa5d8');
-      for(let i=0; i<5; i++) petal(i*Math.PI*2/5+.8, 10, 25, 30, '#01032c', '#010d55', '#0754b0');
+      for(let i=0; i<7; i++) petal(i*Math.PI*2/7, 34, 48, 56, '#9aa0a8', '#d4d7db', '#ffffff');
+      for(let i=0; i<6; i++) petal(i*Math.PI*2/6+.45, 20, 36, 42, '#6e747d', '#9aa0a8', '#d4d7db');
+      for(let i=0; i<5; i++) petal(i*Math.PI*2/5+.8, 10, 25, 30, '#262b33', '#6e747d', '#9aa0a8');
     })();
 
     const flowers = Array.from({length: 22}, () => ({ x: Math.random()*w, y: Math.random()*h - h, s: 24+Math.random()*26, sy: 0.6+Math.random()*0.7, dx: 0.45+Math.random()*0.55, a: Math.random()*Math.PI*2, va: (Math.random()-.5)*0.012, f: Math.random()*Math.PI*2, vf: 0.016+Math.random()*0.02, op: 0.82+Math.random()*0.18 }));
@@ -2402,7 +2409,8 @@ function updateTopNotifBadge() {
       for (let i = ripples.length - 1; i >= 0; i--) {
         const r = ripples[i]; r.r += r.speed; r.alpha -= 0.01;
         if(r.alpha <= 0 || r.r >= r.maxR) { ripples.splice(i, 1); continue; }
-       ctx.beginPath(); ctx.arc(r.x, r.y, r.r, 0, Math.PI*2); ctx.strokeStyle = `rgba(212,215,219,${r.alpha*0.85})`; ctx.lineWidth = 2.2; ctx.stroke();       }
+        ctx.beginPath(); ctx.arc(r.x, r.y, r.r, 0, Math.PI*2); ctx.strokeStyle = 'rgba(212,215,219,' + (r.alpha*0.85) + ')'; ctx.lineWidth = 2.2; ctx.stroke();
+      }
       flowers.forEach(f => {
         f.y += f.sy; f.f += f.vf; f.x += Math.sin(f.f)*f.dx; f.a += f.va;
         if(f.y > h+50) { if(Math.random()>.5) makeRipple(f.x, h-25); f.y = -65; f.x = Math.random()*w; }
@@ -2415,7 +2423,7 @@ function updateTopNotifBadge() {
     }
     anim();
     /* ==========================================================================
-       ✦ TRÌNH PHÁT SPOTIFY EMBED + ĐĨA XANH LAM + GIAO DIỆN SETTING SPOTIFY ✦
+       ✦ TRÌNH PHÁT SPOTIFY EMBED + ĐĨA BẠC + GIAO DIỆN SETTING SPOTIFY ✦
        ========================================================================== */
     const vinylDisc = document.getElementById('vinylDisc'), vinylText = document.getElementById('vinylText');
     const mpPill = document.getElementById('musicPlayerPill');
@@ -2469,22 +2477,22 @@ function updateTopNotifBadge() {
       const str = String(input).trim();
       const uriMatch = str.match(/^spotify:(track|playlist|album|episode|show):([a-zA-Z0-9]+)$/);
       if (uriMatch) {
-        const [, type, id] = uriMatch;
+        const type = uriMatch[1], id = uriMatch[2];
         return {
-          type, id,
-          uri: `spotify:${type}:${id}`,
-          url: `https://open.spotify.com/${type}/${id}`,
-          embedUrl: `https://open.spotify.com/embed/${type}/${id}?utm_source=generator&theme=0`
+          type: type, id: id,
+          uri: 'spotify:' + type + ':' + id,
+          url: 'https://open.spotify.com/' + type + '/' + id,
+          embedUrl: 'https://open.spotify.com/embed/' + type + '/' + id + '?utm_source=generator&theme=0'
         };
       }
       const urlMatch = str.match(/open\.spotify\.com\/(?:intl-[a-zA-Z-]+\/)?(track|playlist|album|episode|show)\/([a-zA-Z0-9]+)/);
       if (urlMatch) {
-        const [, type, id] = urlMatch;
+        const type = urlMatch[1], id = urlMatch[2];
         return {
-          type, id,
-          uri: `spotify:${type}:${id}`,
-          url: `https://open.spotify.com/${type}/${id}`,
-          embedUrl: `https://open.spotify.com/embed/${type}/${id}?utm_source=generator&theme=0`
+          type: type, id: id,
+          uri: 'spotify:' + type + ':' + id,
+          url: 'https://open.spotify.com/' + type + '/' + id,
+          embedUrl: 'https://open.spotify.com/embed/' + type + '/' + id + '?utm_source=generator&theme=0'
         };
       }
       return null;
@@ -2498,7 +2506,7 @@ function updateTopNotifBadge() {
           uri: parsed ? parsed.uri : '',
           embedUrl: parsed ? parsed.embedUrl : '',
           type: parsed ? parsed.type : 'track',
-          title: parsed ? `Spotify ${parsed.type} #${idx + 1}` : `Track #${idx + 1}`,
+          title: parsed ? ('Spotify ' + parsed.type + ' #' + (idx + 1)) : ('Track #' + (idx + 1)),
           artist: 'Spotify',
           cover: MY_CONFIG.ASSETS.cardImg,
           needsMeta: Boolean(parsed)
@@ -2511,7 +2519,7 @@ function updateTopNotifBadge() {
         uri: parsed ? parsed.uri : '',
         embedUrl: parsed ? parsed.embedUrl : '',
         type: parsed ? parsed.type : 'track',
-        title: entry.title || (parsed ? `Spotify ${parsed.type} #${idx + 1}` : `Track #${idx + 1}`),
+        title: entry.title || (parsed ? ('Spotify ' + parsed.type + ' #' + (idx + 1)) : ('Track #' + (idx + 1))),
         artist: entry.artist || 'Spotify',
         cover: entry.cover || MY_CONFIG.ASSETS.cardImg,
         needsMeta: Boolean(parsed && (!entry.title || !entry.cover))
@@ -2532,7 +2540,7 @@ function updateTopNotifBadge() {
       if (!track || !track.spotify || track._metaFetched) return;
       track._metaFetched = true;
       try {
-        const res = await fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(track.spotify)}`);
+        const res = await fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(track.spotify));
         if (!res.ok) return;
         const data = await res.json();
         if (data.title && (!track.title || track.title.startsWith('Spotify '))) {
@@ -2549,7 +2557,7 @@ function updateTopNotifBadge() {
 
     let currentTrackIdx = 0;
     let isP = false;
-    let repeatMode = 'all'; // 'all' | 'one'
+    let repeatMode = 'all';
     let spController = null;
     let spApiReady = false;
     let spDurationMs = 0;
@@ -2561,7 +2569,7 @@ function updateTopNotifBadge() {
       const totalSec = Math.floor(ms / 1000);
       const m = Math.floor(totalSec / 60);
       const s = totalSec % 60;
-      return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      return String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
     }
 
     function switchPlayerTab(tabName) {
@@ -2573,19 +2581,21 @@ function updateTopNotifBadge() {
     }
 
     function renderPlaylistRows() {
-      spPlaylistRows.innerHTML = playlist.map((t, i) => `
-        <div class="sp-song-row ${i === currentTrackIdx ? 'active' : ''}" onclick="selectTrackFromList(${i})">
-          <img src="${t.cover || MY_CONFIG.ASSETS.cardImg}" onerror="this.src=MY_CONFIG.ASSETS.cardImg" class="sp-song-thumb">
-          <div class="sp-song-meta">
-            <div class="sp-song-name">${t.title || 'Spotify Track'}</div>
-            <div class="sp-song-artist">${t.artist || 'Spotify'}</div>
-          </div>
-          ${t.spotify
-            ? `<a href="${t.spotify}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="mp-spotify-link" title="Mở trên Spotify"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`
-            : ''
-          }
-        </div>
-      `).join('');
+      spPlaylistRows.innerHTML = playlist.map((t, i) => {
+        const spBtn = t.spotify
+          ? '<a href="' + t.spotify + '" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()" class="mp-spotify-link" title="Mở trên Spotify"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>'
+          : '';
+        return (
+          '<div class="sp-song-row ' + (i === currentTrackIdx ? 'active' : '') + '" onclick="selectTrackFromList(' + i + ')">' +
+            '<img src="' + (t.cover || MY_CONFIG.ASSETS.cardImg) + '" onerror="this.src=MY_CONFIG.ASSETS.cardImg" class="sp-song-thumb">' +
+            '<div class="sp-song-meta">' +
+              '<div class="sp-song-name">' + (t.title || 'Spotify Track') + '</div>' +
+              '<div class="sp-song-artist">' + (t.artist || 'Spotify') + '</div>' +
+            '</div>' +
+            spBtn +
+          '</div>'
+        );
+      }).join('');
     }
 
     window.selectTrackFromList = function(idx) {
@@ -2604,10 +2614,10 @@ function updateTopNotifBadge() {
 
       spTitle.textContent = track.title || "Spotify";
       spArtist.textContent = track.artist || "Spotify";
-      spTrackCount.textContent = `${currentTrackIdx + 1} / ${playlist.length}`;
+      spTrackCount.textContent = (currentTrackIdx + 1) + ' / ' + playlist.length;
       spCoverImg.onerror = () => { spCoverImg.src = MY_CONFIG.ASSETS.cardImg; };
       spCoverImg.src = coverUrl;
-      spBgImg.style.backgroundImage = `url('${coverUrl}')`;
+      spBgImg.style.backgroundImage = "url('" + coverUrl + "')";
 
       const hasSpotify = Boolean(track.spotify);
       [mpSpotifyLink, spTopSpotifyBtn].forEach(el => {
@@ -2645,7 +2655,7 @@ function updateTopNotifBadge() {
     function renderFallbackIframe(track) {
       const host = document.getElementById('spEmbedHost');
       if (!host || !track.embedUrl) return;
-      host.innerHTML = `<iframe src="${track.embedUrl}" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+      host.innerHTML = '<iframe src="' + track.embedUrl + '" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
     }
 
     function loadSpotifyTrack(idx, autoPlay = false) {
@@ -2680,7 +2690,6 @@ function updateTopNotifBadge() {
           return;
         } catch (e) {}
       }
-      // Nếu trình duyệt chặn IFrame API, nháy sáng khung Spotify để người dùng bấm trực tiếp
       spEmbedWrap.classList.add('highlight');
       setTimeout(() => spEmbedWrap.classList.remove('highlight'), 1000);
       openFullPlayer();
@@ -2696,7 +2705,6 @@ function updateTopNotifBadge() {
       mpPill.classList.add('open');
     };
 
-    // Khởi tạo Spotify Official IFrame API
     window.onSpotifyIframeApiReady = (IFrameAPI) => {
       spApiReady = true;
       const host = document.getElementById('spEmbedHost');
@@ -2729,7 +2737,6 @@ function updateTopNotifBadge() {
             mpCurrentTime.textContent = curStr;
             mpDurationTime.textContent = durStr;
 
-            // Tự chuyển bài hoặc lặp khi hết bài
             if (wasPlaying && data.isPaused && spPositionMs >= spDurationMs - 900) {
               if (repeatMode === 'one' || playlist.length === 1) {
                 EmbedController.seek(0);
@@ -2744,14 +2751,12 @@ function updateTopNotifBadge() {
       });
     };
 
-    // Tải script Spotify IFrame API
     (function loadSpotifyApiScript() {
       const s = document.createElement('script');
       s.src = 'https://open.spotify.com/embed/iframe-api/v1';
       s.async = true;
       document.body.appendChild(s);
 
-      // Dự phòng nếu mạng chặn script API sau 2.5s thì vẫn hiện Spotify Embed iframe thường
       setTimeout(() => {
         if (!spApiReady && !spController) {
           renderFallbackIframe(playlist[currentTrackIdx]);
@@ -2759,7 +2764,6 @@ function updateTopNotifBadge() {
       }, 2500);
     })();
 
-    // Nút dán link Spotify trực tiếp trong tab Danh sách
     function handlePasteSpotify() {
       const val = spPasteInput.value.trim();
       const parsed = parseSpotifyLink(val);
@@ -2836,7 +2840,8 @@ function updateTopNotifBadge() {
     });
 
     updatePlayerUI();
-     /* ==========================================================================
+
+    /* ==========================================================================
        ✦ GỢI Ý @TAG CREATOR KHI GÕ @ TRONG COMMENT ✦
        ========================================================================== */
     const mentionPopup = document.getElementById('mentionPopup');
@@ -2844,6 +2849,7 @@ function updateTopNotifBadge() {
     let mentionMatches = [];
     let mentionActiveIdx = 0;
     let mentionStartPos = -1;
+
     function closeMentionPopup() {
       mentionPopup.classList.remove('open');
       mentionPopup.innerHTML = '';
@@ -2874,7 +2880,7 @@ function updateTopNotifBadge() {
       const cursor = activeMentionInput.selectionStart;
       const before = val.slice(0, mentionStartPos);
       const after = val.slice(cursor);
-      const inserted = `@${accId} `;
+      const inserted = '@' + accId + ' ';
       activeMentionInput.value = before + inserted + after;
       const newPos = before.length + inserted.length;
       activeMentionInput.focus();
@@ -2887,15 +2893,15 @@ function updateTopNotifBadge() {
         closeMentionPopup();
         return;
       }
-      mentionPopup.innerHTML = mentionMatches.map((m, idx) => `
-        <div class="mention-item ${idx === mentionActiveIdx ? 'active' : ''}" data-id="${m.id}">
-          <img src="${m.image}" class="mention-avt">
-          <div class="mention-info">
-            <div class="mention-id">@${m.id}</div>
-            <div class="mention-sub">${m.displayName}</div>
-          </div>
-        </div>
-      `).join('');
+      mentionPopup.innerHTML = mentionMatches.map((m, idx) =>
+        '<div class="mention-item ' + (idx === mentionActiveIdx ? 'active' : '') + '" data-id="' + m.id + '">' +
+          '<img src="' + m.image + '" class="mention-avt">' +
+          '<div class="mention-info">' +
+            '<div class="mention-id">@' + m.id + '</div>' +
+            '<div class="mention-sub">' + m.displayName + '</div>' +
+          '</div>' +
+        '</div>'
+      ).join('');
 
       mentionPopup.querySelectorAll('.mention-item').forEach(el => {
         el.addEventListener('pointerdown', (e) => {
@@ -2924,7 +2930,7 @@ function updateTopNotifBadge() {
       const list = Object.keys(dbLogin).map(id => {
         const cInfo = (MY_CONFIG.creatorsShowcase || []).find(c => c.id === id);
         return {
-          id,
+          id: id,
           image: dbLogin[id].image,
           displayName: cInfo ? cInfo.nameDisplay : id
         };
@@ -2950,6 +2956,7 @@ function updateTopNotifBadge() {
         closeMentionPopup();
       }
     });
+
     document.addEventListener('keydown', (e) => {
       if (!mentionPopup.classList.contains('open') || !activeMentionInput) return;
       if (e.key === 'ArrowDown') {
@@ -2973,6 +2980,7 @@ function updateTopNotifBadge() {
         closeMentionPopup();
       }
     }, true);
+
     /* ==========================================================================
        ✦ BẢNG CHỌN ICON / KAOMOJI CHO BÌNH LUẬN ✦
        ========================================================================== */
@@ -2985,7 +2993,7 @@ function updateTopNotifBadge() {
     let activeIconTextareaId = null;
 
     iconPickerPopup.innerHTML = cmtIconsList.map(ic =>
-      `<button type="button" class="icon-pick-btn">${ic}</button>`
+      '<button type="button" class="icon-pick-btn">' + ic + '</button>'
     ).join('');
 
     window.toggleIconPicker = function(e, textareaId) {
