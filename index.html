@@ -2037,8 +2037,6 @@ function updateTopNotifBadge() {
             }
         });
     }
-
-        sysRenderCommentsUI(safeId, charCreatorName, charRealName);
     window.likeTreeComment = function(safeId, cmtId, isReply = false, pId = null) {
         let cmts = getCmtsTree(safeId);
         let target = isReply
@@ -2185,19 +2183,10 @@ function updateTopNotifBadge() {
             </div>
         </div>
       `;
-
       document.getElementById('charModal').classList.add('active');
       sysRenderCommentsUI(safeId, c.creator, c.name);
 
       const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
-      if (fb) {
-        fetch(`${fb}/comments/${safeId}.json`).then(r => r.json()).then(data => {
-          if (Array.isArray(data)) {
-            localStorage.setItem('sysTreeCmt_v8_' + safeId, JSON.stringify(data));
-            sysRenderCommentsUI(safeId, c.creator, c.name);
-          }
-        }).catch(() => {});
-     const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
       if (fb) {
         fetch(`${fb}/comments/${safeId}.json`).then(r => r.json()).then(data => {
           const normalized = normalizeCmtList(data);
@@ -2212,7 +2201,7 @@ function updateTopNotifBadge() {
           }
         }).catch(() => {});
       }
-
+    }
     sysUpdateLoginUI();
 
     async function loadCloudHearts() {
@@ -2812,7 +2801,6 @@ function updateTopNotifBadge() {
         closeMentionPopup();
       }
     });
-
     document.addEventListener('keydown', (e) => {
       if (!mentionPopup.classList.contains('open') || !activeMentionInput) return;
       if (e.key === 'ArrowDown') {
