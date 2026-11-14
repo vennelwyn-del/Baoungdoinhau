@@ -1145,6 +1145,67 @@
     .mention-info { min-width: 0; flex: 1; }
     .mention-id { font-size: 0.85rem; font-weight: 600; color: #ffffff; }
     .mention-sub { font-size: 0.72rem; color: #d4d7db; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cmt-act-btn.delete-btn { color: rgba(255, 107, 139, 0.85); }
+    .cmt-act-btn.delete-btn:hover { color: #ff4d6d; }
+
+    .cmt-submit-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .btn-icon-picker {
+      padding: 6px 14px;
+      background: rgba(212, 215, 219, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 20px;
+      color: #f7f7f9;
+      font-family: var(--font-ui);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-icon-picker:hover {
+      background: rgba(255, 255, 255, 0.18);
+      border-color: #ffffff;
+    }
+
+    .icon-picker-popup {
+      position: fixed;
+      z-index: 360;
+      width: min(280px, 90vw);
+      max-height: 210px;
+      overflow-y: auto;
+      background: rgba(24, 27, 33, 0.96);
+      border: 1px solid rgba(212, 215, 219, 0.38);
+      border-radius: 14px;
+      padding: 8px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: none;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .icon-picker-popup.open { display: flex; }
+    .icon-pick-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 8px;
+      color: #ffffff;
+      padding: 6px 9px;
+      font-size: 0.95rem;
+      line-height: 1.2;
+      cursor: pointer;
+      transition: 0.15s;
+    }
+    .icon-pick-btn:hover {
+      background: rgba(212, 215, 219, 0.25);
+      transform: scale(1.08);
+    } 
  </style>    
 </head>
 <body>
@@ -1450,6 +1511,8 @@
   </div>
   <!-- KHUNG GỢI Ý @TAG CREATOR -->
   <div class="mention-popup" id="mentionPopup"></div>
+  <!-- KHUNG CHỌN ICON BÌNH LUẬN -->
+  <div class="icon-picker-popup" id="iconPickerPopup"></div>
   <script>
     /* ==========================================================================
        ✦ CẤU HÌNH DỮ LIỆU TÁCH BIỆT (BẢN V8) ✦
@@ -1965,6 +2028,19 @@ function updateTopNotifBadge() {
             }).catch(() => {});
         }
     }
+    function getMyCmtIds() {
+        try { return JSON.parse(localStorage.getItem('baoUngMyCmts') || '[]'); } catch (e) { return []; }
+    }
+    function markMyCmtId(id) {
+        const arr = getMyCmtIds();
+        if (!arr.includes(id)) {
+            arr.push(id);
+            localStorage.setItem('baoUngMyCmts', JSON.stringify(arr));
+        }
+    }
+    function getLikedCmtsMap() {
+        try { return JSON.parse(localStorage.getItem('baoUngLikedCmts') || '{}'); } catch (e) { return {}; }
+    }
 
     window.addTreeComment = function(safeId, charCreatorName, charRealName, parentId = null) {
         const randNum = Math.floor(1000 + Math.random() * 9000);
@@ -1986,6 +2062,7 @@ function updateTopNotifBadge() {
         }
 
         let newCmt = { id: Date.now().toString() + '_' + randNum, name, avatar, isCreator, text, date: new Date().toLocaleString('vi-VN'), likes: 0, replies: [] };
+        markMyCmtId(newCmt.id);
 
         // 1. Hiện ngay lập tức lên màn hình cho mượt
         let cmts = getCmtsTree(safeId);
@@ -2037,15 +2114,66 @@ function updateTopNotifBadge() {
             }
         });
     }
+
     window.likeTreeComment = function(safeId, cmtId, isReply = false, pId = null) {
         let cmts = getCmtsTree(safeId);
         let target = isReply
             ? (cmts.find(c => c.id === pId)?.replies || []).find(r => r.id === cmtId)
             : cmts.find(c => c.id === cmtId);
-        if(target) {
+        if (!target) return;
+
+        const likeKey = `${safeId}_${cmtId}`;
+        const likedMap = getLikedCmtsMap();
+        if (likedMap[likeKey]) {
+            target.likes = Math.max(0, (target.likes || 0) - 1);
+            delete likedMap[likeKey];
+        } else {
             target.likes = (target.likes || 0) + 1;
-            saveCmtsTree(safeId, cmts);
-            sysRenderCommentsUI(safeId, null, null, true);
+            likedMap[likeKey] = true;
+        }
+        localStorage.setItem('baoUngLikedCmts', JSON.stringify(likedMap));
+        saveCmtsTree(safeId, cmts);
+
+        const meta = window._currentCharMeta || {};
+        sysRenderCommentsUI(safeId, meta.creatorName, meta.realName, true);
+    }
+
+    window.deleteTreeComment = function(safeId, cmtId, isReply = false, pId = null) {
+        if (!confirm('Bạn có chắc muốn xóa bình luận này không?')) return;
+
+        let cmts = getCmtsTree(safeId);
+        if (isReply) {
+            const p = cmts.find(c => c.id === pId);
+            if (p && Array.isArray(p.replies)) {
+                p.replies = p.replies.filter(r => r.id !== cmtId);
+            }
+        } else {
+            cmts = cmts.filter(c => c.id !== cmtId);
+        }
+        saveCmtsTree(safeId, cmts);
+
+        const meta = window._currentCharMeta || {};
+        sysRenderCommentsUI(safeId, meta.creatorName, meta.realName);
+
+        const fb = (MY_CONFIG.FIREBASE_URL || '').replace(/\/+$/, '');
+        if (fb) {
+            fetch(`${fb}/comments/${safeId}.json`)
+                .then(r => r.ok ? r.json() : null)
+                .then(remoteData => {
+                    if (!remoteData) return;
+                    let synced = normalizeCmtList(remoteData);
+                    if (isReply) {
+                        const p = synced.find(c => c.id === pId);
+                        if (p && Array.isArray(p.replies)) {
+                            p.replies = p.replies.filter(r => r.id !== cmtId);
+                        }
+                    } else {
+                        synced = synced.filter(c => c.id !== cmtId);
+                    }
+                    saveCmtsTree(safeId, synced);
+                    sysRenderCommentsUI(safeId, meta.creatorName, meta.realName);
+                })
+                .catch(() => {});
         }
     }
 
@@ -2056,16 +2184,32 @@ function updateTopNotifBadge() {
     }
 
     function sysRenderCommentsUI(safeId, creatorName, realName, skipCount = false) {
+        if (creatorName !== undefined && creatorName !== null) {
+            window._currentCharMeta = { safeId, creatorName, realName };
+        }
+        const meta = window._currentCharMeta || { creatorName, realName };
+        const useCreator = meta.creatorName;
+        const useReal = meta.realName;
+
         let cmts = getCmtsTree(safeId);
         if(!skipCount) {
             let countEl = document.getElementById(`cmtCount-${safeId}`);
             if(countEl) countEl.textContent = cmts.length + cmts.reduce((a, b) => a + (b.replies ? b.replies.length : 0), 0);
         }
 
+        const likedMap = getLikedCmtsMap();
+        const myIds = getMyCmtIds();
+        const isAdmin = Boolean(sysCurrentUser && dbLogin[sysCurrentUser]);
+
         let html = '';
         function buildNode(c, isRep, pId) {
             let badge = c.isCreator ? `<span class="cmt-badge">Auth</span>` : "";
-            let repBtn = !isRep ? `<button class="cmt-act-btn" onclick="toggleReply('${c.id}')">Phản hồi</button>` : "";
+            let isLiked = Boolean(likedMap[`${safeId}_${c.id}`]);
+            let isMine = myIds.includes(c.id) || (sysCurrentUser && c.isCreator && c.name === sysCurrentUser);
+            let delBtn = (isMine || isAdmin)
+                ? `<button type="button" class="cmt-act-btn delete-btn" onclick="deleteTreeComment('${safeId}', '${c.id}', ${isRep}, '${pId}')">Xóa</button>`
+                : "";
+            let repBtn = !isRep ? `<button type="button" class="cmt-act-btn" onclick="toggleReply('${c.id}')">Phản hồi</button>` : "";
             let repInputHTML = "";
             if(!isRep) {
                 let nameHtml = sysCurrentUser ? `<div style="font-size:0.75rem; opacity:0.8; margin-bottom:4px;">Trả lời bằng: <b>${sysCurrentUser}</b></div>` : `<input type="text" id="repName-${c.id}" class="cmt-input" style="padding:8px 12px; margin-bottom:6px;" placeholder="Tên (Ẩn danh)">`;
@@ -2073,7 +2217,10 @@ function updateTopNotifBadge() {
                 <div class="reply-box" id="repBox-${c.id}">
                     ${nameHtml}
                     <textarea id="repText-${c.id}" class="cmt-textarea" rows="1" style="padding:8px 12px; margin-bottom:6px;" placeholder="Nhập phản hồi..."></textarea>
-                    <div style="text-align:right;"><button class="btn-submit-cmt" style="padding:6px 16px; float:none;" onclick="addTreeComment('${safeId}', '${creatorName}', '${realName}', '${c.id}')">Gửi ➻❥</button></div>
+                    <div class="cmt-submit-row">
+                        <button type="button" class="btn-icon-picker" onclick="toggleIconPicker(event, 'repText-${c.id}')" title="Chèn icon">☺</button>
+                        <button type="button" class="btn-submit-cmt" style="padding:6px 16px; float:none;" onclick="addTreeComment('${safeId}', '${useCreator}', '${useReal}', '${c.id}')">Gửi ➻❥</button>
+                    </div>
                 </div>`;
             }
             return `
@@ -2085,8 +2232,9 @@ function updateTopNotifBadge() {
                     </div>
                     <div class="cmt-text">${escCmtText(c.text)}</div>
                     <div class="cmt-actions">
-                        <button class="cmt-act-btn" onclick="likeTreeComment('${safeId}', '${c.id}', ${isRep}, '${pId}')">❤️ ${c.likes || 0}</button>
+                        <button type="button" class="cmt-act-btn ${isLiked ? 'liked' : ''}" onclick="likeTreeComment('${safeId}', '${c.id}', ${isRep}, '${pId}')">❤️ ${c.likes || 0}</button>
                         ${repBtn}
+                        ${delBtn}
                     </div>${repInputHTML}
                 </div>
             </div>`;
@@ -2174,8 +2322,9 @@ function updateTopNotifBadge() {
                         <div style="margin-top:5px; padding-top:15px; border-top: 1px dashed rgba(255,255,255,0.2);">
                             ${mainInputNameHTML}
                             <textarea id="cmtText-${safeId}" class="cmt-textarea" rows="2" placeholder="Lời nhắn của bạn... (@Tên để nhắc tài khoản)"></textarea>
-                            <div style="text-align: right;">
-                                <button class="btn-submit-cmt" onclick="addTreeComment('${safeId}', '${c.creator}', '${c.name}')"> Gửi ➻❥ </button>
+                           <div class="cmt-submit-row">
+                                <button type="button" class="btn-icon-picker" onclick="toggleIconPicker(event, 'cmtText-${safeId}')" title="Chèn icon">☺ Icon</button>
+                                <button type="button" class="btn-submit-cmt" onclick="addTreeComment('${safeId}', '${c.creator}', '${c.name}')"> Gửi ➻❥ </button>
                             </div>
                         </div>
                     </div>
@@ -2822,6 +2971,74 @@ function updateTopNotifBadge() {
     document.addEventListener('scroll', (e) => {
       if (e.target !== mentionPopup && mentionPopup.classList.contains('open')) {
         closeMentionPopup();
+      }
+    }, true);
+    /* ==========================================================================
+       ✦ BẢNG CHỌN ICON / KAOMOJI CHO BÌNH LUẬN ✦
+       ========================================================================== */
+    const iconPickerPopup = document.getElementById('iconPickerPopup');
+    const cmtIconsList = [
+      '🤍', '❄️', '🥀', '✨', '🫶', '🥹', '😭', '🥰',
+      '😳', '👀', '🔥', '💀', '♡', 'ᰔᩚ', '౨ৎ', '𝜗𝜚',
+      '➻❥', '✧', '૮ ˶ᵔ ᵕ ᵔ˶ ა', 'ฅ(•- •マ', '(˶˃ ᵕ ˂˶)'
+    ];
+    let activeIconTextareaId = null;
+
+    iconPickerPopup.innerHTML = cmtIconsList.map(ic =>
+      `<button type="button" class="icon-pick-btn">${ic}</button>`
+    ).join('');
+
+    window.toggleIconPicker = function(e, textareaId) {
+      e.stopPropagation();
+      const isSame = iconPickerPopup.classList.contains('open') && activeIconTextareaId === textareaId;
+      if (isSame) {
+        iconPickerPopup.classList.remove('open');
+        activeIconTextareaId = null;
+        return;
+      }
+      activeIconTextareaId = textareaId;
+      const btnRect = e.currentTarget.getBoundingClientRect();
+      const wPop = Math.min(280, window.innerWidth - 20);
+      const left = Math.max(10, Math.min(btnRect.left, window.innerWidth - wPop - 10));
+      iconPickerPopup.style.width = wPop + 'px';
+      iconPickerPopup.style.left = left + 'px';
+      if (btnRect.top > 220) {
+        iconPickerPopup.style.top = 'auto';
+        iconPickerPopup.style.bottom = (window.innerHeight - btnRect.top + 8) + 'px';
+      } else {
+        iconPickerPopup.style.bottom = 'auto';
+        iconPickerPopup.style.top = (btnRect.bottom + 8) + 'px';
+      }
+      iconPickerPopup.classList.add('open');
+    };
+
+    iconPickerPopup.querySelectorAll('.icon-pick-btn').forEach(btn => {
+      btn.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const ta = document.getElementById(activeIconTextareaId);
+        if (!ta) return;
+        const ic = btn.textContent;
+        const start = ta.selectionStart ?? ta.value.length;
+        const end = ta.selectionEnd ?? ta.value.length;
+        ta.value = ta.value.slice(0, start) + ic + ta.value.slice(end);
+        const pos = start + ic.length;
+        ta.focus();
+        ta.setSelectionRange(pos, pos);
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#iconPickerPopup') && !e.target.closest('.btn-icon-picker')) {
+        iconPickerPopup.classList.remove('open');
+        activeIconTextareaId = null;
+      }
+    });
+
+    document.addEventListener('scroll', (e) => {
+      if (e.target !== iconPickerPopup && iconPickerPopup.classList.contains('open')) {
+        iconPickerPopup.classList.remove('open');
+        activeIconTextareaId = null;
       }
     }, true);
   </script>
