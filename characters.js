@@ -19,7 +19,7 @@ window.CHAR_LIST = [
     tags: ["#Open World", "#ABO", "#Học đường", "#Slice of life"],
     lore: "“Tiên phong về Trí tuệ, Pháo đài của Kỷ luật.”<br><br>(Vanguard of Intellect, Citadel of Discipline) — Khẩu hiệu khắc trên phiến đá cẩm thạch tại Cổng chính Học viện.",
     img: "./assets/OPW/nhatxuyen1.png",
-    imgSource: "https://opengen.ai/image/nhatxuyen1",
+    imgSource: "https://opengen.ai/image/",
     ggaiLink: "#"
   }
 ];
