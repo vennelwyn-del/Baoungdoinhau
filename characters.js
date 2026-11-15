@@ -7,7 +7,7 @@ window.CHAR_LIST = [
     tags: ["#Trinh thám", "#Neo-Noir", "#Analog Horror", "Tâm lý học tội phạm"],
     warning: "Chứa yếu tố giết người, bạo lực, phản địa đàng.",
     lore: "Sứ giả mang tin dữ, sự chuyển động không ngừng trên sóng vô tuyến, kẻ gõ cửa định mệnh luôn đi trước cảnh sát một bước.",
-    img: "./assets/OPW/showrunner.jpg",
+    img: "./assets/OPW/showrunner.png",
     imgSource: "#",
     ggaiLink: "#"
   },
@@ -18,8 +18,8 @@ window.CHAR_LIST = [
     creator: ["Rz", "ysz", "SD"],
     tags: ["#Open World", "#ABO", "#Học đường", "#Slice of life"],
     lore: "“Tiên phong về Trí tuệ, Pháo đài của Kỷ luật.”<br><br>(Vanguard of Intellect, Citadel of Discipline) — Khẩu hiệu khắc trên phiến đá cẩm thạch tại Cổng chính Học viện.",
-    img: "./assets/OPW/nhat-xuyen.png",
-    imgSource: "#",
+    img: "./assets/OPW/nhatxuyen1.png",
+    imgSource: "https://opengen.ai/image/nhatxuyen1",
     ggaiLink: "#"
   }
 ];
