@@ -1402,6 +1402,7 @@
     }
     .rq-card {
       position: relative;
+      display: block;
       width: clamp(84px, 13vw, 122px);
       aspect-ratio: 0.69;
       flex: 0 1 122px;
@@ -1414,7 +1415,8 @@
       -webkit-tap-highlight-color: transparent;
       transition: opacity 0.35s ease, transform 0.35s ease, filter 0.35s ease;
     }
-    .rq-card:hover:not(:disabled) {
+    .rq-card * { pointer-events: none; }
+    .rq-card:hover {
       transform: translateY(-8px) rotate(-1.5deg);
       filter: drop-shadow(0 12px 18px rgba(255, 172, 199, 0.45));
     }
@@ -2252,9 +2254,8 @@
       cardWrapper.style.transform = 'perspective(1000px) rotateY(' + (x * 9) + 'deg) rotateX(' + (-y * 9) + 'deg)';
     });
 
-    document.getElementById('btnEnter').addEventListener('click', (e) => {
-      e.stopPropagation();
-      makeRipple(e.target.getBoundingClientRect().left + e.target.offsetWidth/2, e.target.getBoundingClientRect().top + e.target.offsetHeight/2);
+    function enterArchiveFromLanding(x, y) {
+      makeRipple(x, y);
       const landing = document.getElementById('landingScreen');
       const archive = document.getElementById('archiveScreen');
       const appScroller = document.getElementById('appScroller');
@@ -2264,6 +2265,16 @@
       requestAnimationFrame(() => archive.classList.add('visible'));
       setTimeout(() => { if (landing.classList.contains('hidden')) landing.style.display = 'none'; }, 900);
       document.getElementById('topLeftGroup').classList.add('visible');
+    }
+    document.getElementById('btnEnter').addEventListener('click', (e) => {
+      e.stopPropagation();
+      const rect = e.currentTarget.getBoundingClientRect();
+      enterArchiveFromLanding(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    });
+    cardWrapper.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const rect = cardWrapper.getBoundingClientRect();
+      enterArchiveFromLanding(rect.left + rect.width / 2, rect.top + rect.height / 2);
     });
     /* ==========================================================================
        ✦ RANDOM QUOTE — DRAW ONE OF 50 QUOTES ✦
