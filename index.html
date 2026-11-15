@@ -1299,7 +1299,7 @@
       transform: scale(1.08);
     } 
   /* ======================================================================
-       ✦ RANDOM QUOTE — COMPACT CARDS + PASTEL PINK SHAKE & ZOOM OPEN ✦
+       ✦ RANDOM QUOTE — COMPACT MOBILE + LARGER DESKTOP + PASTEL PINK ZOOM ✦
        ====================================================================== */
     #randomQuoteScreen {
       display: none;
@@ -1307,7 +1307,7 @@
       min-height: 100%;
       min-height: 100dvh;
       z-index: 16;
-      padding: 68px 16px 26px;
+      padding: 96px 28px 44px;
       opacity: 0;
       transform: translateY(18px);
       pointer-events: none;
@@ -1319,22 +1319,22 @@
       pointer-events: auto;
     }
     .rq-shell {
-      width: min(760px, 100%);
+      width: min(980px, 100%);
       margin: 0 auto;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
+      gap: 22px;
     }
     .rq-back-btn {
       align-self: flex-start;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 13px;
+      gap: 8px;
+      padding: 9px 18px;
       color: var(--c-lightest);
       font-family: var(--font-button);
-      font-size: 0.92rem;
+      font-size: 1.02rem;
       background: rgba(35, 39, 48, 0.48);
       border: 1px solid var(--glass-border);
       border-radius: 30px;
@@ -1348,67 +1348,67 @@
       transform: translateX(-3px);
     }
     .rq-heading {
-      width: min(560px, 100%);
-      padding: 15px 16px 14px;
+      width: min(740px, 100%);
+      padding: 24px 28px 22px;
       text-align: center;
       background: var(--ice-bg);
       border: 1px solid var(--glass-border);
-      border-radius: 16px;
+      border-radius: 20px;
       backdrop-filter: blur(14px);
-      box-shadow: 0 10px 26px rgba(0, 0, 0, 0.24);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.24);
     }
     .rq-eyebrow {
-      margin-bottom: 5px;
+      margin-bottom: 8px;
       color: var(--c-light);
       font-family: var(--font-hint);
-      font-size: 0.72rem;
-      letter-spacing: 1.4px;
+      font-size: 0.88rem;
+      letter-spacing: 2px;
     }
     .rq-title {
       color: var(--c-lightest);
       font-family: var(--font-brand);
-      font-size: clamp(1.15rem, 3vw, 1.65rem);
+      font-size: clamp(1.45rem, 3vw, 2.15rem);
       font-weight: 600;
-      letter-spacing: 2px;
+      letter-spacing: 2.5px;
       text-shadow: 0 0 14px rgba(212, 215, 219, 0.38);
     }
     .rq-subtitle {
-      margin-top: 6px;
+      margin-top: 8px;
       color: var(--c-light);
       font-family: var(--font-quote);
-      font-size: 0.96rem;
+      font-size: 1.16rem;
       font-style: italic;
-      line-height: 1.35;
+      line-height: 1.4;
     }
     .rq-divider {
-      margin: 8px 0 6px;
+      margin: 12px 0 10px;
       color: var(--c-mid);
-      font-size: 0.88rem;
+      font-size: 1rem;
       letter-spacing: 2px;
     }
     .rq-instruction {
       color: var(--c-lightest);
       font-family: var(--font-char-text);
-      font-size: 0.96rem;
+      font-size: 1.12rem;
     }
     .rq-cards {
       width: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: clamp(12px, 3vw, 28px);
-      padding: 6px 0 4px;
+      gap: clamp(18px, 3.5vw, 42px);
+      padding: 10px 0 6px;
       perspective: 1200px;
     }
     .rq-card {
       position: relative;
       display: block;
-      width: clamp(84px, 13vw, 122px);
+      width: clamp(118px, 14vw, 168px);
       aspect-ratio: 0.69;
-      flex: 0 1 122px;
+      flex: 0 1 168px;
       padding: 0;
       border: 0;
-      border-radius: 12px;
+      border-radius: 14px;
       background: transparent;
       cursor: pointer;
       perspective: 1000px;
@@ -1417,8 +1417,8 @@
     }
     .rq-card * { pointer-events: none; }
     .rq-card:hover {
-      transform: translateY(-8px) rotate(-1.5deg);
-      filter: drop-shadow(0 12px 18px rgba(255, 172, 199, 0.45));
+      transform: translateY(-10px) rotate(-1.5deg);
+      filter: drop-shadow(0 14px 22px rgba(255, 172, 199, 0.45));
     }
     .rq-card:focus-visible {
       outline: 2px solid var(--c-lightest);
@@ -1436,7 +1436,6 @@
       transform: rotateY(180deg);
     }
 
-    /* Hiệu ứng rung lắc + chuyển hồng hường phấn khi bấm */
     @keyframes rqCardShakePink {
       0%   { transform: translate(0, 0) rotate(0deg) scale(1); }
       15%  { transform: translate(-4px, -4px) rotate(-5deg) scale(1.06); }
@@ -1461,7 +1460,7 @@
       justify-content: center;
       overflow: hidden;
       border-radius: inherit;
-      padding: 8px;
+      padding: 12px;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
       transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, color 0.35s ease;
@@ -1470,14 +1469,14 @@
       color: #7b7f86;
       background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 55%, #e9eaec 100%);
       border: 1px solid rgba(255, 255, 255, 0.95);
-      box-shadow: inset 0 0 0 4px #ffffff, inset 0 0 0 5px #d9dce0, 0 12px 24px rgba(0, 0, 0, 0.3);
+      box-shadow: inset 0 0 0 5px #ffffff, inset 0 0 0 6px #d9dce0, 0 14px 28px rgba(0, 0, 0, 0.28);
     }
     .rq-card.is-shaking .rq-card-back,
     .rq-card.is-revealed .rq-card-back {
       color: #a64d72;
       background: linear-gradient(145deg, #fff2f7 0%, #ffd9e8 55%, #ffbfd7 100%);
       border-color: #ff9ec2;
-      box-shadow: inset 0 0 0 4px #fff5f9, inset 0 0 0 5px #ffa8c8, 0 14px 30px rgba(255, 130, 175, 0.55);
+      box-shadow: inset 0 0 0 5px #fff5f9, inset 0 0 0 6px #ffa8c8, 0 14px 30px rgba(255, 130, 175, 0.55);
     }
     .rq-card-back::before,
     .rq-card-back::after {
@@ -1509,7 +1508,7 @@
       z-index: 1;
       color: #a8adb4;
       font-family: var(--font-quote);
-      font-size: clamp(0.95rem, 2.2vw, 1.35rem);
+      font-size: clamp(1.15rem, 2.4vw, 1.65rem);
       line-height: 1;
       transition: color 0.35s ease;
     }
@@ -1520,13 +1519,13 @@
     .rq-card-mark {
       position: relative;
       z-index: 1;
-      margin: 8px 0;
+      margin: 12px 0;
       padding: 0 4px;
       color: #858b94;
       font-family: var(--font-brand);
-      font-size: clamp(0.42rem, 1vw, 0.54rem);
-      letter-spacing: 1px;
-      line-height: 1.35;
+      font-size: clamp(0.55rem, 1vw, 0.7rem);
+      letter-spacing: 1.4px;
+      line-height: 1.4;
       text-align: center;
       transition: color 0.35s ease;
     }
@@ -1536,22 +1535,22 @@
     }
 
     .rq-card-quote-face {
-      gap: 8px;
-      padding: 10px;
+      gap: 10px;
+      padding: 12px;
       color: #6e2b47;
       background: linear-gradient(145deg, #fff5f8 0%, #ffdde9 55%, #ffc4da 100%);
       border: 1px solid #ff9ec2;
-      box-shadow: inset 0 0 0 4px #fff8fb, inset 0 0 0 5px #ffa6c7, 0 14px 30px rgba(255, 130, 175, 0.5);
+      box-shadow: inset 0 0 0 5px #fff8fb, inset 0 0 0 6px #ffa6c7, 0 14px 30px rgba(255, 130, 175, 0.5);
       transform: rotateY(180deg);
     }
     .rq-card-quote-face .rq-card-ornament { color: #d95d8f; }
     .rq-card-reveal-label {
       color: #8f355b;
       font-family: var(--font-hint);
-      font-size: clamp(0.42rem, 1vw, 0.52rem);
-      letter-spacing: 1px;
+      font-size: clamp(0.5rem, 1vw, 0.62rem);
+      letter-spacing: 1.2px;
       text-align: center;
-      line-height: 1.3;
+      line-height: 1.35;
     }
     .rq-card.is-muted {
       opacity: 0.32;
@@ -1562,12 +1561,12 @@
 
     .rq-result-panel {
       display: none;
-      width: min(560px, 100%);
-      padding: 16px 20px;
+      width: min(740px, 100%);
+      padding: 22px 28px;
       text-align: center;
       background: linear-gradient(145deg, rgba(255, 240, 246, 0.95) 0%, rgba(255, 214, 231, 0.94) 100%);
       border: 1px solid #ff9ec2;
-      border-radius: 16px;
+      border-radius: 18px;
       box-shadow: 0 12px 30px rgba(255, 130, 175, 0.35);
       animation: rqResultIn 0.45s ease both;
     }
@@ -1577,19 +1576,19 @@
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
     .rq-result-label {
-      margin-bottom: 8px;
+      margin-bottom: 10px;
       color: #9e3d66;
       font-family: var(--font-hint);
-      font-size: 0.76rem;
+      font-size: 0.9rem;
       font-weight: 600;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.8px;
     }
     .rq-result-quote {
       color: #4a1c30;
       font-family: var(--font-quote);
-      font-size: clamp(1.08rem, 2.5vw, 1.38rem);
+      font-size: clamp(1.2rem, 2.4vw, 1.58rem);
       font-style: italic;
-      line-height: 1.45;
+      line-height: 1.5;
       overflow-wrap: anywhere;
       user-select: text;
       -webkit-user-select: text;
@@ -1598,18 +1597,18 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 9px;
+      gap: 10px;
       margin-top: 2px;
     }
     .rq-redraw-btn {
       display: none;
-      padding: 8px 18px;
+      padding: 10px 22px;
       color: #6e2342;
       background: linear-gradient(135deg, #fff5f9 0%, #ffd6e7 100%);
       border: 1px solid #ff9ec2;
       border-radius: 30px;
       font-family: var(--font-button);
-      font-size: 0.98rem;
+      font-size: 1.06rem;
       font-weight: 600;
       cursor: pointer;
       box-shadow: 0 6px 18px rgba(255, 130, 175, 0.32);
@@ -1624,17 +1623,17 @@
     .rq-footnote {
       color: var(--c-light);
       font-family: var(--font-quote);
-      font-size: 0.88rem;
+      font-size: 1rem;
       font-style: italic;
       text-align: center;
-      opacity: 0.85;
+      opacity: 0.88;
     }
     body.light-mode .rq-back-btn {
       color: var(--c-lightest);
       background: rgba(255, 255, 255, 0.62);
     }
 
-    /* MODAL ZOOM TO THẺ HỒNG HƯỜNG PHẤN GIỮA MÀN HÌNH (ĐỌC DỄ TRÊN CẢ LAPTOP & ĐIỆN THOẠI) */
+    /* MODAL ZOOM TO THẺ HỒNG HƯỜNG PHẤN GIỮA MÀN HÌNH */
     .rq-zoom-overlay {
       position: fixed;
       inset: 0;
@@ -1658,11 +1657,11 @@
     }
     .rq-zoom-card {
       position: relative;
-      width: min(92vw, 460px);
-      max-height: 84dvh;
+      width: min(92vw, 540px);
+      max-height: 86dvh;
       overflow-y: auto;
-      padding: 28px 24px 22px;
-      border-radius: 22px;
+      padding: 34px 30px 26px;
+      border-radius: 24px;
       text-align: center;
       color: #4a1c30;
       background: linear-gradient(155deg, #fff5f8 0%, #ffe0ec 52%, #ffc4da 100%);
@@ -1671,7 +1670,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
       transform: scale(0.35) rotateY(-160deg);
       opacity: 0;
       transition: transform 0.65s cubic-bezier(0.2, 0.8, 0.25, 1), opacity 0.45s ease;
@@ -1684,13 +1683,13 @@
       position: absolute;
       top: 14px;
       right: 14px;
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       border: 1px solid #ff9ec2;
       background: rgba(255, 255, 255, 0.85);
       color: #9e3d66;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       line-height: 1;
       display: inline-flex;
       align-items: center;
@@ -1700,21 +1699,21 @@
     }
     .rq-zoom-close:hover { background: #ff9ec2; color: #fff; transform: scale(1.08); }
     .rq-zoom-ornament {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       color: #d95d8f;
       letter-spacing: 6px;
     }
     .rq-zoom-eyebrow {
       font-family: var(--font-hint);
-      font-size: 0.78rem;
+      font-size: 0.86rem;
       font-weight: 600;
-      letter-spacing: 1.4px;
+      letter-spacing: 1.6px;
       color: #9e3d66;
       text-transform: uppercase;
     }
     .rq-zoom-quote {
       font-family: var(--font-quote);
-      font-size: clamp(1.22rem, 3.2vw, 1.65rem);
+      font-size: clamp(1.28rem, 3vw, 1.78rem);
       font-style: italic;
       font-weight: 500;
       line-height: 1.55;
@@ -1726,13 +1725,13 @@
     }
     .rq-zoom-divider {
       color: #d96494;
-      font-size: 0.85rem;
+      font-size: 0.9rem;
       letter-spacing: 3px;
       opacity: 0.85;
     }
     .rq-zoom-counter {
       font-family: var(--font-ui);
-      font-size: 0.84rem;
+      font-size: 0.9rem;
       color: #8f355b;
       opacity: 0.9;
     }
@@ -1740,17 +1739,17 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
+      gap: 12px;
       margin-top: 4px;
     }
     .rq-zoom-btn {
-      padding: 8px 18px;
+      padding: 9px 20px;
       border-radius: 24px;
       border: 1px solid #ff8fb8;
       background: rgba(255, 255, 255, 0.88);
       color: #7d294d;
       font-family: var(--font-ui);
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       font-weight: 600;
       cursor: pointer;
       transition: 0.2s;
@@ -1763,32 +1762,44 @@
     }
     .rq-zoom-btn.primary:hover { filter: brightness(1.06); }
 
-    @media (max-width: 600px) {
-      #randomQuoteScreen { padding: 62px 12px 24px; }
-      .rq-shell { gap: 11px; }
-      .rq-heading { padding: 13px 12px 12px; }
-      .rq-title { letter-spacing: 1.5px; }
-      .rq-cards { gap: 10px; padding: 4px 0 2px; }
-      .rq-card { width: min(26vw, 102px); flex-basis: min(26vw, 102px); border-radius: 10px; }
-      .rq-card-back { box-shadow: inset 0 0 0 3px #ffffff, inset 0 0 0 4px #d9dce0, 0 8px 18px rgba(0, 0, 0, 0.28); }
-      .rq-card-quote-face { padding: 6px; }
-      .rq-zoom-card { width: 92vw; padding: 26px 18px 20px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .rq-card-inner, .rq-card, .rq-card.is-shaking, #randomQuoteScreen, .rq-result-panel, .rq-zoom-card { transition: none; animation: none; }
-    }
     button, input, textarea, select { font-family: var(--font-ui); }
     .archive-title { font-weight: 600; }
     .vinyl-text { font-size: 0.78rem; letter-spacing: 1.5px; }
     .brand-title { font-size: 0.88rem; letter-spacing: 5px; }
     .tap-hint { font-size: 0.76rem; letter-spacing: 3px; }
-    .rq-eyebrow, .rq-result-label { font-size: 0.8rem; letter-spacing: 2px; }
     .char-tags-mini span { font-size: 0.74rem; padding: 3px 8px; }
     .toggle-btn, .tag-btn, .search-input { font-size: 0.98rem; }
     .c-sign, .carrd-btn, .mp-artist { font-size: 0.86rem; }
     .mp-title { font-size: 0.98rem; }
     .mp-time { font-size: 0.75rem; }
     .btn-facebook-landing { font-size: 0.88rem; }
+
+    /* GIỮ ĐIỆN THOẠI GỌN TỰ NHIÊN */
+    @media (max-width: 600px) {
+      #randomQuoteScreen { padding: 68px 12px 26px; }
+      .rq-shell { gap: 12px; }
+      .rq-back-btn { padding: 6px 13px; font-size: 0.92rem; }
+      .rq-heading { padding: 14px 12px 13px; border-radius: 16px; }
+      .rq-eyebrow { font-size: 0.74rem; letter-spacing: 1.2px; }
+      .rq-title { font-size: 1.22rem; letter-spacing: 1.5px; }
+      .rq-subtitle { font-size: 0.96rem; }
+      .rq-instruction { font-size: 0.96rem; }
+      .rq-cards { gap: 10px; padding: 4px 0 2px; }
+      .rq-card { width: min(27vw, 106px); flex-basis: min(27vw, 106px); border-radius: 10px; }
+      .rq-card-ornament { font-size: 1rem; }
+      .rq-card-mark { margin: 8px 0; font-size: 0.46rem; letter-spacing: 0.9px; }
+      .rq-card-back { box-shadow: inset 0 0 0 3px #ffffff, inset 0 0 0 4px #d9dce0, 0 8px 18px rgba(0, 0, 0, 0.28); }
+      .rq-card-quote-face { padding: 6px; }
+      .rq-result-panel { padding: 15px 14px; }
+      .rq-result-label { font-size: 0.76rem; letter-spacing: 1.4px; }
+      .rq-result-quote { font-size: 1.08rem; }
+      .rq-redraw-btn { padding: 8px 15px; font-size: 0.92rem; }
+      .rq-footnote { font-size: 0.88rem; }
+      .rq-zoom-card { width: 92vw; padding: 26px 18px 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .rq-card-inner, .rq-card, .rq-card.is-shaking, #randomQuoteScreen, .rq-result-panel, .rq-zoom-card { transition: none; animation: none; }
+    }
  </style>    
 </head>
 <body>
