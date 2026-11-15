@@ -1536,7 +1536,7 @@
   <div class="mention-popup" id="mentionPopup"></div>
   <!-- KHUNG CHỌN ICON BÌNH LUẬN -->
   <div class="icon-picker-popup" id="iconPickerPopup"></div>
-  <script src="./characters.js"></script>
+  <script src="./characters.js?v=2"></script>
   <script>
     /* ==========================================================================
        ✦ CẤU HÌNH DỮ LIỆU TÁCH BIỆT (BẢN V8) ✦
@@ -1602,8 +1602,8 @@
     };
 
     // Khởi tạo & đồng bộ Avatar giữa loginAccs và creatorsShowcase
-    if(!localStorage.getItem('sysDB_Login_v8')) localStorage.setItem('sysDB_Login_v8', JSON.stringify(MY_CONFIG.loginAccs));
-    let dbLoginInit = JSON.parse(localStorage.getItem('sysDB_Login_v8'));
+    if(!localStorage.getItem('sysDB_Login_v9')) localStorage.setItem('sysDB_Login_v9', JSON.stringify(MY_CONFIG.loginAccs));
+    let dbLoginInit = JSON.parse(localStorage.getItem('sysDB_Login_v9'));
     Object.keys(MY_CONFIG.loginAccs).forEach(id => {
       const creatorMatch = MY_CONFIG.creatorsShowcase.find(c => c.id === id);
       const codeImg = creatorMatch ? creatorMatch.banner : MY_CONFIG.loginAccs[id].image;
@@ -1614,10 +1614,10 @@
         dbLoginInit[id].pass = MY_CONFIG.loginAccs[id].pass;
       }
     });
-    localStorage.setItem('sysDB_Login_v8', JSON.stringify(dbLoginInit));
+    localStorage.setItem('sysDB_Login_v9', JSON.stringify(dbLoginInit));
     if(!localStorage.getItem('sysDB_Notifs_v8')) localStorage.setItem('sysDB_Notifs_v8', JSON.stringify({"Rz":[], "SD":[], "ysz":[]}));
     
-    let dbLogin = JSON.parse(localStorage.getItem('sysDB_Login_v8'));
+    let dbLogin = JSON.parse(localStorage.getItem('sysDB_Login_v9'));
     let dbNotifs = JSON.parse(localStorage.getItem('sysDB_Notifs_v8'));
     let sysCurrentUser = localStorage.getItem('sysLoggedUser_v8') || null;
 
@@ -1921,7 +1921,7 @@
         let newPass = document.getElementById('setPass').value;
         if(newPass.trim() !== "") c.pass = newPass;
 
-        localStorage.setItem('sysDB_Login_v8', JSON.stringify(dbLogin));
+        localStorage.setItem('sysDB_Login_v9', JSON.stringify(dbLogin));
         document.getElementById('dashBgImg').style.backgroundImage = "url('" + c.image + "')";
         document.getElementById('dashAvt').src = c.image;
         renderCreators();
