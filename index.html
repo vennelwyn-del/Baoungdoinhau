@@ -725,16 +725,85 @@
       #landingScreen { justify-content: flex-start; padding-top: 68px; }
       .floating-picture-frame { width: 140px; height: 190px; }
     }
-
     .btn-action-enter { 
         display: inline-flex; align-items: center; justify-content: center; gap: 8px; 
-        padding: 10px 25px; border-radius: 4px; 
+        padding: 10px 25px; border-radius: 10px; 
         background: rgba(255, 255, 255, 0.96); border: 1px solid #d4d7db; 
         color: #262b33; font-family: var(--font-ui); font-size: 0.95rem; font-weight: 500;
         cursor: pointer; transition: 0.3s; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     }
     .btn-action-enter:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(212, 215, 219, 0.45); }
     .btn-action-enter span:first-child { color: #9aa0a8; font-size: 1.2rem; }
+
+    /* Nút Facebook trên màn hình mở đầu */
+    .btn-facebook-landing {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      z-index: 30;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 7px 16px 7px 9px;
+      margin: 0;
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      background: rgba(255, 255, 255, 0.12);
+      color: var(--c-lightest);
+      font-family: var(--font-ui);
+      font-size: 0.76rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 5px 16px rgba(0, 0, 0, 0.22);
+      transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+    }
+    .btn-facebook-landing:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.22);
+      border-color: rgba(255, 255, 255, 0.65);
+    }
+    .facebook-landing-mark {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 21px;
+      height: 21px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      color: #232730;
+      font-family: Arial, sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1;
+      text-transform: lowercase;
+    }
+    body.light-mode .btn-facebook-landing {
+      background: rgba(255, 255, 255, 0.58);
+      color: var(--c-lightest);
+      border-color: rgba(154, 160, 168, 0.42);
+    }
+    body.light-mode .facebook-landing-mark {
+      background: #262b33;
+      color: #fff;
+    }
+    @media (max-width: 600px) {
+      .btn-facebook-landing {
+        top: 14px;
+        left: 14px;
+        gap: 7px;
+        padding: 6px 11px 6px 7px;
+        font-size: 0.68rem;
+      }
+      .facebook-landing-mark {
+        width: 19px;
+        height: 19px;
+        font-size: 0.9rem;
+      }
+    }
     .tap-hint { font-family: var(--font-hint); font-size: 0.6rem; letter-spacing: 4px; margin-top: 15px; animation: pulseHint 2.5s infinite; opacity: 0.8; text-align: center; }
     @keyframes pulseHint { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.9; } }
 
@@ -1613,6 +1682,13 @@
   </header>
 
   <main id="landingScreen">
+    <a class="btn-facebook-landing"
+       href="https://www.facebook.com/BaoUngDoiNhau?locale=vi_VN"
+       target="_blank" rel="noopener noreferrer"
+       aria-label="Mở Facebook Báo Ứng Đời Nhau">
+      <span class="facebook-landing-mark" aria-hidden="true">f</span>
+      <span>Facebook Báo Ứng Đời Nhau</span>
+    </a>
     <div class="floating-card-wrapper" id="cardWrapper">
       <div class="floating-picture-frame"><img src="" id="centerImg" alt=""></div>
     </div>
