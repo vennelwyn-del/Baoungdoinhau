@@ -2349,7 +2349,7 @@
     const rqZoomCloseBtn = document.getElementById('rqZoomCloseBtn');
     const rqZoomCloseAction = document.getElementById('rqZoomCloseAction');
 
-    const DAILY_QUOTE_LIMIT = 5;
+    const DAILY_QUOTE_LIMIT = 10;
     const DAILY_QUOTE_STORAGE_KEY = 'baoUngDoiNhau_randomQuoteDailyUsage';
     let isDrawingQuote = false;
 
@@ -2394,7 +2394,7 @@
       rqResultPanel.classList.remove('show');
       btnDrawAgain.classList.remove('show');
       rqInstruction.textContent = limitReached
-        ? 'Bạn đã dùng hết 5 lượt rút hôm nay. Hãy quay lại vào ngày mai nhé!'
+        ? 'Bạn đã dùng hết 10 lượt rút hôm nay. Hãy quay lại vào ngày mai nhé!'
         : 'Hãy chọn một trong ba lá bài đang úp để nghe nốt.';
       rqFootnote.textContent = limitReached
         ? 'Tổng tài bận rồi. Hạn mức sẽ tự làm mới vào 00:00 theo giờ thiết bị của bạn.'
@@ -2477,7 +2477,7 @@
         } else {
           rqInstruction.textContent = 'Đây là lượt cuối cùng hôm nay. Định mệnh đã an bài!';
           btnDrawAgain.classList.remove('show');
-          rqFootnote.textContent = 'Bạn đã dùng hết 5/5 lượt rút quote hôm nay. Hạn mức sẽ tự làm mới vào 00:00 theo giờ thiết bị của bạn.';
+          rqFootnote.textContent = 'Bạn đã dùng hết 10/10 lượt rút quote hôm nay. Hạn mức sẽ tự làm mới vào 00:00 theo giờ thiết bị của bạn.';
           rqZoomCounter.textContent = 'Đã dùng hết ' + DAILY_QUOTE_LIMIT + '/' + DAILY_QUOTE_LIMIT + ' lượt hôm nay. Hẹn ngày mai nhé!';
           rqZoomRedrawBtn.style.display = 'none';
         }
