@@ -1229,6 +1229,303 @@
       background: rgba(212, 215, 219, 0.25);
       transform: scale(1.08);
     } 
+  /* ======================================================================
+       ✦ RANDOM QUOTE — THREE WHITE FACE-DOWN CARDS ✦
+       ====================================================================== */
+    #randomQuoteScreen {
+      display: none;
+      position: relative;
+      min-height: 100%;
+      min-height: 100dvh;
+      z-index: 16;
+      padding: 88px 20px 48px;
+      opacity: 0;
+      transform: translateY(18px);
+      pointer-events: none;
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    #randomQuoteScreen.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .rq-shell {
+      width: min(900px, 100%);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+    }
+    .rq-back-btn {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 15px;
+      color: var(--c-lightest);
+      font-family: var(--font-button);
+      font-size: 1rem;
+      background: rgba(35, 39, 48, 0.48);
+      border: 1px solid var(--glass-border);
+      border-radius: 30px;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: 0.25s ease;
+    }
+    .rq-back-btn:hover {
+      background: rgba(154, 160, 168, 0.28);
+      border-color: rgba(255, 255, 255, 0.72);
+      transform: translateX(-3px);
+    }
+    .rq-heading {
+      width: min(600px, 100%);
+      padding: 25px 20px 22px;
+      text-align: center;
+      background: var(--ice-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
+    }
+    .rq-eyebrow {
+      margin-bottom: 9px;
+      color: var(--c-light);
+      font-family: var(--font-hint);
+      font-size: 0.62rem;
+      letter-spacing: 4px;
+    }
+    .rq-title {
+      color: var(--c-lightest);
+      font-family: var(--font-brand);
+      font-size: clamp(1.45rem, 4vw, 2.2rem);
+      font-weight: 400;
+      letter-spacing: 4px;
+      text-shadow: 0 0 16px rgba(212, 215, 219, 0.4);
+    }
+    .rq-subtitle {
+      margin-top: 10px;
+      color: var(--c-light);
+      font-family: var(--font-quote);
+      font-size: 1.12rem;
+      font-style: italic;
+    }
+    .rq-divider {
+      margin: 15px 0 12px;
+      color: var(--c-mid);
+      font-size: 1rem;
+      letter-spacing: 2px;
+    }
+    .rq-instruction {
+      color: var(--c-lightest);
+      font-family: var(--font-char-text);
+      font-size: 1.08rem;
+    }
+    .rq-cards {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: clamp(13px, 4vw, 36px);
+      padding: 12px 0 8px;
+      perspective: 1200px;
+    }
+    .rq-card {
+      position: relative;
+      width: clamp(92px, 18vw, 156px);
+      aspect-ratio: 0.69;
+      flex: 0 1 156px;
+      padding: 0;
+      border: 0;
+      border-radius: 13px;
+      background: transparent;
+      cursor: pointer;
+      perspective: 1000px;
+      -webkit-tap-highlight-color: transparent;
+      transition: opacity 0.35s ease, transform 0.35s ease, filter 0.35s ease;
+    }
+    .rq-card:hover:not(:disabled) {
+      transform: translateY(-10px) rotate(-1deg);
+      filter: drop-shadow(0 13px 18px rgba(0, 0, 0, 0.34));
+    }
+    .rq-card:focus-visible {
+      outline: 2px solid var(--c-lightest);
+      outline-offset: 6px;
+    }
+    .rq-card-inner {
+      position: absolute;
+      inset: 0;
+      display: block;
+      border-radius: inherit;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.2, 0.72, 0.2, 1);
+    }
+    .rq-card.is-revealed .rq-card-inner {
+      transform: rotateY(180deg);
+    }
+    .rq-card-face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border-radius: inherit;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .rq-card-back {
+      color: #7b7f86;
+      background: linear-gradient(145deg, #ffffff 0%, #f8f8f8 55%, #e9eaec 100%);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: inset 0 0 0 5px #ffffff, inset 0 0 0 6px #d9dce0, 0 15px 30px rgba(0, 0, 0, 0.34);
+    }
+    .rq-card-back::before,
+    .rq-card-back::after {
+      content: "";
+      position: absolute;
+      width: 68%;
+      height: 68%;
+      border: 1px solid rgba(154, 160, 168, 0.35);
+      border-radius: 50%;
+      transform: rotate(45deg) scaleX(0.72);
+      pointer-events: none;
+    }
+    .rq-card-back::after {
+      width: 48%;
+      height: 48%;
+      transform: rotate(-45deg) scaleX(0.72);
+      border-color: rgba(154, 160, 168, 0.25);
+    }
+    .rq-card-ornament {
+      position: relative;
+      z-index: 1;
+      color: #a8adb4;
+      font-family: var(--font-quote);
+      font-size: clamp(1.1rem, 3vw, 1.7rem);
+      line-height: 1;
+    }
+    .rq-card-mark {
+      position: relative;
+      z-index: 1;
+      margin: 13px 0;
+      color: #858b94;
+      font-family: var(--font-brand);
+      font-size: clamp(0.52rem, 1.4vw, 0.7rem);
+      letter-spacing: 2px;
+      text-align: center;
+    }
+    .rq-card-quote-face {
+      gap: 12px;
+      padding: 12px;
+      color: #686e77;
+      background: linear-gradient(145deg, #ffffff 0%, #f3f4f5 100%);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: inset 0 0 0 5px #ffffff, inset 0 0 0 6px #d9dce0, 0 15px 30px rgba(0, 0, 0, 0.34);
+      transform: rotateY(180deg);
+    }
+    .rq-card-quote-face .rq-card-ornament { color: #999fa8; }
+    .rq-card-reveal-label {
+      color: #747b84;
+      font-family: var(--font-hint);
+      font-size: clamp(0.48rem, 1.2vw, 0.58rem);
+      letter-spacing: 1.5px;
+      text-align: center;
+    }
+    .rq-card.is-muted {
+      opacity: 0.35;
+      transform: scale(0.94);
+      filter: grayscale(0.5);
+    }
+    .rq-card:disabled { cursor: default; }
+    .rq-result-panel {
+      display: none;
+      width: min(680px, 100%);
+      padding: 24px clamp(18px, 4vw, 34px);
+      text-align: center;
+      background: var(--ice-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 18px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 12px 34px rgba(0, 0, 0, 0.3);
+      animation: rqResultIn 0.55s ease both;
+    }
+    .rq-result-panel.show { display: block; }
+    @keyframes rqResultIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .rq-result-label {
+      margin-bottom: 12px;
+      color: var(--c-light);
+      font-family: var(--font-hint);
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+    }
+    .rq-result-quote {
+      color: var(--c-lightest);
+      font-family: var(--font-quote);
+      font-size: clamp(1.2rem, 3vw, 1.75rem);
+      font-style: italic;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+      user-select: text;
+      -webkit-user-select: text;
+    }
+    .rq-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 13px;
+      margin-top: 2px;
+    }
+    .rq-redraw-btn {
+      display: none;
+      padding: 10px 20px;
+      color: #30343b;
+      background: rgba(255, 255, 255, 0.94);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      border-radius: 30px;
+      font-family: var(--font-button);
+      font-size: 1.05rem;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+      transition: 0.25s ease;
+    }
+    .rq-redraw-btn.show { display: inline-flex; }
+    .rq-redraw-btn:hover {
+      transform: translateY(-2px);
+      background: #ffffff;
+      box-shadow: 0 9px 22px rgba(212, 215, 219, 0.32);
+    }
+    .rq-footnote {
+      color: var(--c-light);
+      font-family: var(--font-quote);
+      font-size: 0.98rem;
+      font-style: italic;
+      text-align: center;
+      opacity: 0.82;
+    }
+    body.light-mode .rq-back-btn {
+      color: var(--c-lightest);
+      background: rgba(255, 255, 255, 0.62);
+    }
+    body.light-mode .rq-result-panel { box-shadow: 0 12px 30px rgba(38, 43, 51, 0.12); }
+    @media (max-width: 600px) {
+      #randomQuoteScreen { padding: 76px 14px 34px; }
+      .rq-shell { gap: 19px; }
+      .rq-heading { padding: 21px 13px 18px; }
+      .rq-title { letter-spacing: 2.5px; }
+      .rq-cards { gap: 10px; padding: 9px 0 5px; }
+      .rq-card { width: min(29vw, 126px); flex-basis: min(29vw, 126px); border-radius: 10px; }
+      .rq-card-back { box-shadow: inset 0 0 0 4px #ffffff, inset 0 0 0 5px #d9dce0, 0 10px 20px rgba(0, 0, 0, 0.3); }
+      .rq-card-quote-face { padding: 8px; }
+      .rq-result-panel { padding: 20px 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .rq-card-inner, .rq-card, #randomQuoteScreen, .rq-result-panel { transition: none; animation: none; }
+    }
  </style>    
 </head>
 <body>
@@ -1241,6 +1538,9 @@
     <div class="top-left-controls" id="topLeftGroup">
         <button class="btn-sys" id="btnOpenCreators">
           <span class="sparkle-mini" style="color:var(--c-light)"> 𓆩ꨄ︎𓆪 </span><span> Creators of Báo ứng </span>
+        </button>
+        <button class="btn-sys" id="btnOpenRandomQuote" aria-label="Thuốc Nhuận Tràng" title="Thuốc Nhuận Tràng">
+          <span class="sparkle-mini" style="color:var(--c-light)"> ✧ </span><span> Thuốc Nhuận Tràng </span>
         </button>
         <button class="btn-login-sys" id="btnLogin">
           <img src="" id="authMiniAvatar">
@@ -1359,7 +1659,31 @@
       <div class="footer-msg">Ôm ôm ngoan yêu tới với chúng tớ 𝜗𝜚</div>
     </div>
   </section>
+  <section id="randomQuoteScreen" aria-labelledby="randomQuoteTitle">
+    <div class="rq-shell">
+      <button type="button" class="rq-back-btn" id="btnBackToArchive">← Về sổ lưu trữ</button>
 
+      <div class="rq-heading">
+        <p class="rq-eyebrow">Bạn Đang Ở Văn Phòng Tổng Tài Sau Khi Bị Thư Ký Túm Lên</p>
+        <h2 class="rq-title" id="randomQuoteTitle">"NHÂN VIÊN NÀY, EM THẬT THÚ VỊ"</h2>
+        <p class="rq-subtitle">Tổng Tài Nhìn Bạn, Bằng Ánh Mắt Thâm Tình Có Thể Thấm Ra Lượng Dầu Đủ Nấu Bốn Món Ba Mặn Một Chay. ᰔᩚ</p>
+        <div class="rq-divider">✧ ───── ⋆⋅☆⋅⋆ ───── ✧</div>
+        <p class="rq-instruction" id="rqInstruction">Hãy chọn một trong ba lá bài đang úp để nghe nốt.</p>
+      </div>
+
+      <div class="rq-cards" id="rqCards" aria-label="Ba lá bài lựa chọn"></div>
+
+      <div class="rq-result-panel" id="rqResultPanel" aria-live="polite" aria-atomic="true">
+        <p class="rq-result-label">Tổng Tài Nhếch Môi Với Bạn Rồi Nói:</p>
+        <p class="rq-result-quote" id="rqResultQuote"></p>
+      </div>
+
+      <div class="rq-actions">
+        <button type="button" class="rq-redraw-btn" id="btnDrawAgain">✧ Bạn Chê Ra Mặt, Xoay Lưng Đi, Tổng Tài Hốt Hoảng Sửa Lời ✧</button>
+        <p class="rq-footnote" id="rqFootnote">Các Câu Nói Hoàn Toàn Ngẫu Nhiên Tùy Thuộc Vào Vận Khí Của Bạn Và Tâm Trạng Tổng Tài.</p>
+      </div>
+    </div>
+  </section>
   </div>
 
   <!-- MODAL FULL MUSIC PLAYER / SETTING THEO SPOTIFY EMBED (ẢNH 3 + ẢNH 4) -->
@@ -1658,7 +1982,203 @@
       setTimeout(() => { if (landing.classList.contains('hidden')) landing.style.display = 'none'; }, 900);
       document.getElementById('topLeftGroup').classList.add('visible');
     });
+    /* ==========================================================================
+       ✦ RANDOM QUOTE — DRAW ONE OF 50 QUOTES ✦
+       ========================================================================== */
+    const RANDOM_QUOTES = [
+      "Tôi là người sống có nguyên tắc: nguyên tắc đầu tiên là không có nguyên tắc.",
+      "Hôm nay tôi quyết tâm thay đổi bản thân. Đổi từ nằm nghiêng trái sang nằm nghiêng phải.",
+      "Hôm nay tổng tài tâm trạng không tốt. Đề nghị toàn bộ thế giới tự kiểm điểm.",
+      "Cái nồi này tôi đội không nổi.",
+      "Đừng hỏi tại sao tôi làm mặt lạnh. Điều hòa đang bật 16 độ.",
+      "Cái đồ bạc bẽo tuyệt tình, vô tư đến vô tâm, hứ.",
+      "Thất bại là mẹ thành công. Vậy thành công là bố thất bại à? Gia phả này căng đấy.",
+      "Người thành công là người biết đứng dậy sau khi ngã, còn người khôn sẽ nằm luôn giả chết.",
+      "Muốn đi nhanh thì đi một mình, muốn đi xa thì đi cùng đồng bọn, muốn đi tù thì đi cùng thằng ngu.",
+      "Không có gì là không thể, chỉ có thể là chưa đủ lười.",
+      "Không ai sinh ra đã ngu, nhưng có người cố gắng rất nhiều để đạt được thành tựu đó.",
+      "Đừng sống hai mặt, vì một mặt đã đủ xấu rồi.",
+      "Thất bại là mẹ thành công, nhưng mẹ thất bại đẻ hơi nhiều.",
+      "Phát ngay cho tôi cái nồi, để tôi đội lên đầu đứa khác.",
+      "Miếu nguyệt lão tôi thèm vào nhìn, trước điện thần tài tôi quỳ mãi không dậy.",
+      "Đời người có 3 lần giác ngộ, lần đầu tiên là khi nhận ra lớn lên tiền khó kiếm, lần thứ 2 là khi thấy tiền của người khác đều dễ kiếm, chỉ có tiền của mình là khó kiếm nhất, lần trưởng thành thứ 3 là khi thấy người khác kiếm tiền từ mình là dễ nhất.",
+      "Khi cuộc đời đóng một cánh cửa lại với em, thì mở nó ra đi?.",
+      "Đừng vì một người mà đánh mất chính mình. Nhưng nếu người đó có nhà, có xe, có sổ tiết kiệm, hãy cân nhắc đánh mất một chút lòng tự trọng, ví dụ là tôi-",
+      "Đời là bể khổ, qua được bể khổ thì tới bể nợ.",
+      "Gắp lửa bỏ tay tôi.",
+      "Có những người sinh ra đã ở vạch đích. Còn tôi sinh ra đã ở vạch đ-",
+      "Đừng bao giờ tin vào câu “anh sẽ thay đổi”. Hãy tin vào câu “mã OTP của bạn là…”.",
+      "Nếu bất lực là một loại thiên phú.",
+      "Đi làm và đi học vốn là hai bãi xxx. Giờ tốt rồi, hai bãi xxx nhập lại thành bãi xxx 2 sao.",
+      "Đừng bao giờ coi thường người khác, vì biết đâu ngày mai họ lại tiếp tục làm em thất vọng.",
+      "Hôm nay tôi quyết định sống tích cực. Tích cực nằm, tích cực ăn, tích cực không làm gì.",
+      "Người trưởng thành là người biết chịu trách nhiệm cho hành động của mình. Còn tôi là người biết tìm người chịu trách nhiệm thay.",
+      "Không phải ai cũng có thể trở thành người giỏi nhất, nhưng ai cũng có thể trở thành người phiền nhất.",
+      "Người ta nói kiến thức là sức mạnh. Vậy tại sao tôi biết mình nghèo mà vẫn không giàu?",
+      "Người có bản lĩnh là người biết mình sai nhưng vẫn tìm được cách khiến người khác xin lỗi.",
+      "Tôi không có năng lực đặc biệt, chỉ có khả năng biến chuyện nhỏ thành chuyện lớn.",
+      "Tôi xin chia buồn báo tin, em đã bị xinh đẹp giai đoạn cuối.",
+      "Đúng là một ngày thích hợp để gây sự.",
+      "Hey Siri, tua đến đoạn tôi giàu.",
+      "Đừng bao giờ quên em luôn là lý do để ai đó mỉm cười. Bởi vì em là một trò đùa.",
+      "Chốt đơn đi, tiền có thể kiếm lại được mà-",
+      "Tôi không thích làm chuyện lớn, chỉ thích làm lớn chuyện.",
+      "Never gonna give you up Never gonna let you down Never gonna run around And desert you Never gonna make you cry Never gonna say goodbye Never gonna tell a lie ...",
+      "Uống cốc nước đi bro, quên uống rồi phải không.",
+      "THẲNG CÁI LƯNG LÊN.",
+      "Chan bo may di.",
+      "Đời người ngắn ngủi, đừng lãng phí thời gian vào những chuyện vô nghĩa. Ví dụ như việc nghe tôi nói câu này.",
+      "Tưởng là Love, hóa ra chỉ là Super Best Friend.",
+      "Không trách được nhiều người lại tin vào huyền học. Nhìn đi, bản thân trông cũng như quỷ thì sao đoán được người khác có phải người hay không.",
+      "Mồm thì nói không để bụng nhưng trông lúc nào cũng như sắp vỡ ối.",
+      "Mỗi lần cãi nhau tôi đều đặt mình vào vị trí đối phương và tôi thấy họ sai rõ ràng.",
+      "Tất cả là tại Jenny.",
+      "Tôi học hỏi sai lầm từ những người nghe theo lời khuyên của tôi.",
+      "Sống tới từng này tuổi rồi, việc duy nhất mà tôi có thể kiên trì làm mỗi ngày chính là sạc điện thoại.",
+      "Người đẹp chịu đau quá dữ. Tổng Tài đã thấy và xúi em cắn lại."
+    ];
 
+    const randomQuoteScreen = document.getElementById('randomQuoteScreen');
+    const archiveScreen = document.getElementById('archiveScreen');
+    const appScroller = document.getElementById('appScroller');
+    const rqCards = document.getElementById('rqCards');
+    const rqInstruction = document.getElementById('rqInstruction');
+    const rqResultPanel = document.getElementById('rqResultPanel');
+    const rqResultQuote = document.getElementById('rqResultQuote');
+    const rqFootnote = document.getElementById('rqFootnote');
+    const btnDrawAgain = document.getElementById('btnDrawAgain');
+    const DAILY_QUOTE_LIMIT = 5;
+    const DAILY_QUOTE_STORAGE_KEY = 'baoUngDoiNhau_randomQuoteDailyUsage';
+
+    function getLocalDateKey() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    function getDailyQuoteUsage() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(DAILY_QUOTE_STORAGE_KEY) || 'null');
+        if (!saved || saved.date !== getLocalDateKey()) {
+          return { date: getLocalDateKey(), count: 0 };
+        }
+        return { date: saved.date, count: Math.min(DAILY_QUOTE_LIMIT, Math.max(0, Number(saved.count) || 0)) };
+      } catch (error) {
+        return { date: getLocalDateKey(), count: 0 };
+      }
+    }
+
+    function saveDailyQuoteUsage(count) {
+      try {
+        localStorage.setItem(DAILY_QUOTE_STORAGE_KEY, JSON.stringify({ date: getLocalDateKey(), count }));
+      } catch (error) {}
+    }
+
+    function resetRandomQuoteDraw() {
+      const usage = getDailyQuoteUsage();
+      const remaining = DAILY_QUOTE_LIMIT - usage.count;
+      const limitReached = remaining <= 0;
+      rqCards.innerHTML = '';
+      rqResultQuote.textContent = '';
+      rqResultPanel.classList.remove('show');
+      btnDrawAgain.classList.remove('show');
+      rqInstruction.textContent = limitReached
+        ? 'Bạn đã dùng hết 5 lượt rút hôm nay. Hãy quay lại vào ngày mai nhé!'
+        : 'Hãy chọn một trong ba lá bài đang úp để nghe nốt.';
+      rqFootnote.textContent = limitReached
+        ? 'Tổng tài bận rồi. Hạn mức sẽ tự làm mới vào 00:00 theo giờ thiết bị của bạn.'
+        : `Bạn còn ${remaining}/${DAILY_QUOTE_LIMIT} lượt nghe hôm nay.`;
+
+      const cardDecorations = ['✧', '❀', '♡'];
+      cardDecorations.forEach((decoration, index) => {
+        const card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'rq-card';
+        card.disabled = limitReached;
+        card.setAttribute('aria-label', limitReached ? 'Đã hết lượt rút quote hôm nay' : 'Chọn lá bài ' + (index + 1));
+        card.innerHTML =
+          '<span class="rq-card-inner">' +
+            '<span class="rq-card-face rq-card-back">' +
+              '<span class="rq-card-ornament">' + decoration + '</span>' +
+              '<span class="rq-card-mark">BÁO ỨNG ĐỜI NHAU</span>' +
+              '<span class="rq-card-ornament">✧</span>' +
+            '</span>' +
+            '<span class="rq-card-face rq-card-quote-face">' +
+              '<span class="rq-card-ornament">♡</span>' +
+              '<span class="rq-card-reveal-label">A MESSAGE FOR YOU</span>' +
+              '<span class="rq-card-ornament">✧</span>' +
+            '</span>' +
+          '</span>';
+        card.addEventListener('click', () => drawRandomQuote(card));
+        rqCards.appendChild(card);
+      });
+    }
+
+    function drawRandomQuote(selectedCard) {
+      if (selectedCard.disabled) return;
+
+      const usage = getDailyQuoteUsage();
+      if (usage.count >= DAILY_QUOTE_LIMIT) {
+        resetRandomQuoteDraw();
+        return;
+      }
+      const updatedCount = usage.count + 1;
+      saveDailyQuoteUsage(updatedCount);
+      const remaining = DAILY_QUOTE_LIMIT - updatedCount;
+
+      const randomIndex = Math.floor(Math.random() * RANDOM_QUOTES.length);
+      const chosenQuote = RANDOM_QUOTES[randomIndex];
+
+      rqCards.querySelectorAll('.rq-card').forEach(card => {
+        card.disabled = true;
+        if (card === selectedCard) {
+          card.classList.add('is-revealed');
+          card.setAttribute('aria-label', 'Lá bài đã được chọn');
+        } else {
+          card.classList.add('is-muted');
+          card.setAttribute('aria-label', 'Lá bài chưa được chọn');
+        }
+      });
+
+      rqInstruction.textContent = 'Định Mệnh An Bài, Thư Ký Đã Thấy Và Đánh Giá.';
+      rqResultQuote.textContent = chosenQuote;
+      rqResultPanel.classList.add('show');
+      if (remaining > 0) {
+        btnDrawAgain.classList.add('show');
+        rqFootnote.textContent = `Bạn đã nghe ${updatedCount}/${DAILY_QUOTE_LIMIT} lượt hôm nay. Còn ${remaining} lượt để nghe tiếp.`;
+      } else {
+        btnDrawAgain.classList.remove('show');
+        rqInstruction.textContent = 'Đây là lượt cuối cùng hôm nay. Định mệnh đã an bài!';
+        rqFootnote.textContent = 'Bạn đã dùng hết 5/5 lượt rút quote hôm nay. Hạn mức sẽ tự làm mới vào 00:00 theo giờ thiết bị của bạn.';
+      }
+    }
+
+    function openRandomQuoteScreen() {
+      archiveScreen.classList.remove('visible');
+      randomQuoteScreen.style.display = 'block';
+      appScroller.scrollTop = 0;
+      resetRandomQuoteDraw();
+      requestAnimationFrame(() => randomQuoteScreen.classList.add('visible'));
+      window.setTimeout(() => {
+        if (randomQuoteScreen.classList.contains('visible')) archiveScreen.style.display = 'none';
+      }, 700);
+    }
+
+    function returnToArchiveScreen() {
+      randomQuoteScreen.classList.remove('visible');
+      archiveScreen.style.display = 'block';
+      appScroller.scrollTop = 0;
+      requestAnimationFrame(() => archiveScreen.classList.add('visible'));
+      window.setTimeout(() => {
+        if (!randomQuoteScreen.classList.contains('visible')) randomQuoteScreen.style.display = 'none';
+      }, 700);
+    }
+    document.getElementById('btnOpenRandomQuote').addEventListener('click', openRandomQuoteScreen);
+    document.getElementById('btnBackToArchive').addEventListener('click', returnToArchiveScreen);
+    btnDrawAgain.addEventListener('click', resetRandomQuoteDraw);
+    resetRandomQuoteDraw();
     /* ==========================================================================
        ✦ RENDER BẢNG CREATORS (NỀN BLOCK TRÙNG AVATAR CREATOR) ✦
        ========================================================================== */
