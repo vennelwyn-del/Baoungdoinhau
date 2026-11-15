@@ -11,18 +11,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Oregano:ital@0;1&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=EB+Garamond:ital,wght@0,400..700;1,400..700&family=Cinzel:wght@400;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
     /* ==========================================================================
        ✦ TÔNG MÀU & FONT CHỮ GỐC ✦
        ========================================================================== */
-:root {
-      --font-top-tag:   'Cinzel', 'Times New Roman', serif;
+      --font-top-tag:   'EB Garamond', 'Times New Roman', Georgia, serif;
       --font-quote:     'EB Garamond', 'Times New Roman', Georgia, serif;
-      --font-brand:     'Cinzel', 'Times New Roman', serif;
+      --font-brand:     'EB Garamond', 'Times New Roman', Georgia, serif;
       --font-button:    'EB Garamond', 'Times New Roman', Georgia, serif;
-      --font-hint:      'Cinzel', 'Times New Roman', serif;
-      --font-char-name: 'Playfair Display', 'Times New Roman', serif;
-      --font-char-text: 'EB Garamond', 'Times New Roman', serif;
-      --font-ui:        'Montserrat', sans-serif;
+      --font-hint:      'EB Garamond', 'Times New Roman', Georgia, serif;
+      --font-char-name: 'EB Garamond', 'Times New Roman', Georgia, serif;
+      --font-char-text: 'EB Garamond', 'Times New Roman', Georgia, serif;
+      --font-ui:        'EB Garamond', 'Times New Roman', Georgia, serif;
 
       --c-lightest: #f7f7f9;
       --c-light:    #d4d7db;
@@ -44,7 +44,7 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; user-select: none; }
     input, textarea { user-select: text; -webkit-user-select: text; }
-    body, html { width: 100%; height: 100%; height: 100dvh; overflow: hidden; background-color: var(--c-darkest); color: var(--c-lightest); transition: background-color 0.5s, color 0.5s; }
+    body, html { width: 100%; height: 100%; height: 100dvh; overflow: hidden; background-color: var(--c-darkest); color: var(--c-lightest); font-family: 'EB Garamond', 'Times New Roman', Georgia, serif; transition: background-color 0.5s, color 0.5s; }
 
     ::-webkit-scrollbar { width: 9px; height: 9px; }
     ::-webkit-scrollbar-track { background: rgba(20, 23, 28, 0.55); border-radius: 10px; }
@@ -1595,6 +1595,18 @@
     @media (prefers-reduced-motion: reduce) {
       .rq-card-inner, .rq-card, #randomQuoteScreen, .rq-result-panel { transition: none; animation: none; }
     }
+    button, input, textarea, select { font-family: var(--font-ui); }
+    .archive-title { font-weight: 600; }
+    .vinyl-text { font-size: 0.78rem; letter-spacing: 1.5px; }
+    .brand-title { font-size: 0.88rem; letter-spacing: 5px; }
+    .tap-hint { font-size: 0.76rem; letter-spacing: 3px; }
+    .rq-eyebrow, .rq-result-label { font-size: 0.8rem; letter-spacing: 2px; }
+    .char-tags-mini span { font-size: 0.74rem; padding: 3px 8px; }
+    .toggle-btn, .tag-btn, .search-input { font-size: 0.98rem; }
+    .c-sign, .carrd-btn, .mp-artist { font-size: 0.86rem; }
+    .mp-title { font-size: 0.98rem; }
+    .mp-time { font-size: 0.75rem; }
+    .btn-facebook-landing { font-size: 0.88rem; }
  </style>    
 </head>
 <body>
