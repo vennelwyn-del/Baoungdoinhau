@@ -3421,7 +3421,7 @@
 
     const playlist = rawPlaylist.length > 0
       ? rawPlaylist.map((item, idx) => normalizeTrackEntry(item, idx))
-      : [normalizeTrackEntry("https://open.spotify.com/track/21qg0IBZf8R12qHd9A3AA4", 0)];
+      : [normalizeTrackEntry("https://open.spotify.com/playlist/4DU1rp1KuqGPZtnpPiAton?si=8epMkTurSa66FpDs6eBrhw", 0)];
 
     async function enrichSpotifyMeta(track) {
       if (!track || !track.spotify || track._metaFetched) return;
