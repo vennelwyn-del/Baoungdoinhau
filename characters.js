@@ -4,7 +4,7 @@ window.CHAR_LIST = [
     title: "The Rider xuất hiện. Hắn không giết người trong bóng tối; hắn biến tội ác thành một chương trình truyền hình nhiều tập. Bằng những cuộn băng từ VHS-C đen trắng tỉ lệ 4:3 và những cỗ máy hành quyết cơ học tinh vi, hắn gõ cửa từng nhà để tuyên án sự mục rỗng của thị trấn:",
     type: "Open World",
     creator: "Rz",
-    tags: ["#Trinh thám", "#Neo-Noir", "#Analog Horror", "Tâm lý học tội phạm"],
+    tags: ["#Warning", "#Trinh thám", "#Neo-Noir", "#Analog Horror", "Tâm lý học tội phạm"],
     warning: "Chứa yếu tố giết người, bạo lực, phản địa đàng.",
     lore: "Sứ giả mang tin dữ, sự chuyển động không ngừng trên sóng vô tuyến, kẻ gõ cửa định mệnh luôn đi trước cảnh sát một bước.",
     img: "./assets/OPW/showrunnerbg.png",
