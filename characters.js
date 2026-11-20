@@ -7,8 +7,8 @@ window.CHAR_LIST = [
     tags: ["#Trinh thám", "#Neo-Noir", "#Analog Horror", "Tâm lý học tội phạm"],
     warning: "Chứa yếu tố giết người, bạo lực, phản địa đàng.",
     lore: "Sứ giả mang tin dữ, sự chuyển động không ngừng trên sóng vô tuyến, kẻ gõ cửa định mệnh luôn đi trước cảnh sát một bước.",
-    img: "./assets/OPW/showrunner.png",
-    imgSource: "#",
+    img: "./assets/OPW/showrunnerbg.png",
+    imgSource: "https://ideogram.ai/create/image/generate/auto?asset=d9GcRBK4Vlu4jvs0abkPVw",
     webLink: "#",
     ggaiLink: "#"
   },
