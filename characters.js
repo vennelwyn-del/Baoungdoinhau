@@ -22,7 +22,7 @@ window.CHAR_LIST = [
     img: "./assets/OPW/nhatxuyen1.png",
     imgSource: "https://opengen.ai/image/",
     webLink: "https://vennelwyn-del.github.io/-Nhat-Xuyen-/",
-    ggaiLink: "#"
+    ggaiLink: "https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221hmLAGWwYaJwhFgJy6T278FRbFWy49_c6%22%5D,%22action%22:%22open%22,%22userId%22:%22115575746392317824834%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing"
   }
   // 👇 THÊM NHÂN VẬT MỚI SAU DÒNG NÀY (giữ dấu phẩy ,)
 ];

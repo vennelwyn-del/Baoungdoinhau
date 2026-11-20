@@ -2226,7 +2226,7 @@
     let dbLoginInit = JSON.parse(localStorage.getItem('sysDB_Login_v9'));
     Object.keys(MY_CONFIG.loginAccs).forEach(id => {
       const creatorMatch = MY_CONFIG.creatorsShowcase.find(c => c.id === id);
-      const codeImg = creatorMatch ? creatorMatch.banner : MY_CONFIG.loginAccs[id].image;
+      const codeImg = creatorMatch ? creatorMatch.banner : MY_CONFIG.loginAccs[id].image; 
       if (!dbLoginInit[id]) {
         dbLoginInit[id] = { pass: MY_CONFIG.loginAccs[id].pass, image: codeImg };
       } else if (!dbLoginInit[id]._isCustom) {
