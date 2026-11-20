@@ -9,6 +9,7 @@ window.CHAR_LIST = [
     lore: "Sứ giả mang tin dữ, sự chuyển động không ngừng trên sóng vô tuyến, kẻ gõ cửa định mệnh luôn đi trước cảnh sát một bước.",
     img: "./assets/OPW/showrunner.png",
     imgSource: "#",
+    webLink: "#",
     ggaiLink: "#"
   },
   {
@@ -20,6 +21,8 @@ window.CHAR_LIST = [
     lore: "“Tiên phong về Trí tuệ, Pháo đài của Kỷ luật.”<br><br>(Vanguard of Intellect, Citadel of Discipline) — Khẩu hiệu khắc trên phiến đá cẩm thạch tại Cổng chính Học viện.",
     img: "./assets/OPW/nhatxuyen1.png",
     imgSource: "https://opengen.ai/image/",
+    webLink: "https://vennelwyn-del.github.io/-Nhat-Xuyen-/",
     ggaiLink: "#"
   }
+  // 👇 THÊM NHÂN VẬT MỚI SAU DÒNG NÀY (giữ dấu phẩy ,)
 ];
