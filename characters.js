@@ -10,7 +10,7 @@ window.CHAR_LIST = [
     img: "./assets/OPW/showrunnerbg.png",
     imgSource: "https://ideogram.ai/create/image/generate/auto?asset=d9GcRBK4Vlu4jvs0abkPVw",
     webLink: "https://vennelwyn-del.github.io/The-Showrunner-rz/",
-    ggaiLink: "https://vennelwyn-del.github.io/The-Showrunner-rz/"
+    ggaiLink: "https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221rFWYe6br7VRyK3uzomjwfp1vEgnmW39B%22%5D,%22action%22:%22open%22,%22userId%22:%22115575746392317824834%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing"
   },
   {
     name: "Nhất Xuyên",
