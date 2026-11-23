@@ -9,7 +9,7 @@ window.CHAR_LIST = [
     lore: "Sứ giả mang tin dữ, sự chuyển động không ngừng trên sóng vô tuyến, kẻ gõ cửa định mệnh luôn đi trước cảnh sát một bước.",
     img: "./assets/OPW/showrunnerbg.png",
     imgSource: "https://ideogram.ai/create/image/generate/auto?asset=d9GcRBK4Vlu4jvs0abkPVw",
-    webLink: "#",
+    webLink: "https://vennelwyn-del.github.io/The-Showrunner-rz/",
     ggaiLink: "#"
   },
   {
