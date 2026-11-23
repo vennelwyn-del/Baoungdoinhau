@@ -13,6 +13,18 @@ window.CHAR_LIST = [
     ggaiLink: "https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221rFWYe6br7VRyK3uzomjwfp1vEgnmW39B%22%5D,%22action%22:%22open%22,%22userId%22:%22115575746392317824834%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing"
   },
   {
+    name: "Hệ Thống Báo Ứng",
+    title: "",
+    type: "Open World",
+    creator: "Rz",
+    tags: ["#Open World", "#Hài hước", "#Đa thể loại", "#Slice of life"],
+    lore: "",
+    img: "",
+    imgSource: "",
+    webLink: "",
+    ggaiLink: ""
+  },
+  {
     name: "Nhất Xuyên",
     title: "Trường trung học Nhất Xuyên (St. Vanguard Academy - 圣先锋学院)",
     type: "Open World",
@@ -24,5 +36,4 @@ window.CHAR_LIST = [
     webLink: "https://vennelwyn-del.github.io/-Nhat-Xuyen-/",
     ggaiLink: "https://aistudio.google.com/app/prompts?state=%7B%22ids%22:%5B%221hmLAGWwYaJwhFgJy6T278FRbFWy49_c6%22%5D,%22action%22:%22open%22,%22userId%22:%22115575746392317824834%22,%22resourceKeys%22:%7B%7D%7D&usp=sharing"
   }
-  // 👇 THÊM NHÂN VẬT MỚI SAU DÒNG NÀY (giữ dấu phẩy ,)
 ];
